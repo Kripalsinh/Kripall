@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eciton Store Full UI</title>
+  <link rel="stylesheet" href="styles/eciton.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Top Header -->
+  <div class="top-header">
+    <div class="container top-header-container">
+      <div class="language-selector">
+        <select>
+          <option>English</option>
+          <option>Spanish</option>
+          <option>French</option>
+        </select>
+      </div>
+      <div class="top-header-right">
+        <input type="text" placeholder="Search..." class="search-input" />
+        <button class="search-btn" aria-label="Search">&#128269;</button>
+        <button class="user-btn" aria-label="User">&#128100;</button>
+        <button class="cart-btn" aria-label="Cart">&#128722;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">ECITON<span class="dot">.</span></div>
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Products</a>
+        <a href="#">Blog</a>
+        <a href="#">Pages</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <div class="sale-tag">Sale up to 50%</div>
+        <h1>OVER-EAR HEADPHONES</h1>
+        <button class="btn-primary">All Products</button>
+      </div>
+      <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1512499617640-c2f9992e0b3a?auto=format&fit=crop&w=800&q=80" alt="Over-ear headphones" />
+      </div>
+      <div class="vertical-text">Scroll Down</div>
+    </div>
+  </section>
+
+  <!-- Shop By Category -->
+  <section class="shop-category">
+    <div class="container">
+      <h2 class="section-title">Shop By Category</h2>
+      <div class="category-carousel">
+        <div class="category-item">
+          <img src="https://via.placeholder.com/80?text=TV" alt="Television" />
+          <span>Television</span>
+        </div>
+        <div class="category-item">
+          <img src="https://via.placeholder.com/80?text=Speakers" alt="Speakers" />
+          <span>Speakers</span>
+        </div>
+        <div class="category-item">
+          <img src="https://via.placeholder.com/80?text=Headphones" alt="Headphones" />
+          <span>Headphones</span>
+        </div>
+        <div class="category-item">
+          <img src="https://via.placeholder.com/80?text=Tablets" alt="Tablets" />
+          <span>Tablets</span>
+        </div>
+        <div class="category-item">
+          <img src="https://via.placeholder.com/80?text=Cameras" alt="Cameras" />
+          <span>Cameras</span>
+        </div>
+        <div class="category-item">
+          <img src="https://via.placeholder.com/80?text=Cell+Phone" alt="Cell Phone" />
+          <span>Cell Phone</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promotional Banners -->
+  <section class="promo-banners container">
+    <div class="promo-item tablets">
+      <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80" alt="Tablets" />
+      <div class="promo-text">
+        <h3>Tablets</h3>
+        <button class="btn-secondary">Shop Now</button>
+      </div>
+    </div>
+    <div class="promo-item special-offer">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Special Offer" />
+      <div class="promo-text">
+        <h3>Buy 2 Get 1</h3>
+        <button class="btn-secondary">Shop Now</button>
+      </div>
+    </div>
+    <div class="promo-item headphones">
+      <img src="https://images.unsplash.com/photo-1512499617640-c2f9992e0b3a?auto=format&fit=crop&w=400&q=80" alt="Headphones" />
+      <div class="promo-text">
+        <h3>Headphones</h3>
+        <button class="btn-secondary">Shop Now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Listings with Tabs -->
+  <section class="product-listings container">
+    <div class="tabs">
+      <button class="tab active" data-tab="top-rating">Top Rating</button>
+      <button class="tab" data-tab="best-selling">Best Selling</button>
+      <button class="tab" data-tab="featured">Featured</button>
+    </div>
+    <div class="tab-content active" id="top-rating">
+      <div class="product-card">
+        <div class="product-ribbon">Sale</div>
+        <img src="https://via.placeholder.com/150x100?text=Sound+Wave" alt="Sound Wave" />
+        <h4>Sound Wave</h4>
+        <div class="price">
+          <span class="current-price">$20.00</span>
+          <span class="old-price">$30.00</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-ribbon">Sale</div>
+        <img src="https://via.placeholder.com/150x100?text=Solar+Charge" alt="Solar Charge" />
+        <h4>Solar Charge</h4>
+        <div class="price">
+          <span class="current-price">$30.00</span>
+          <span class="old-price">$40.00</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-ribbon">Sale</div>
+        <img src="https://via.placeholder.com/150x100?text=Solar+Charge" alt="Solar Charge" />
+        <h4>Solar Charge</h4>
+        <div class="price">
+          <span class="current-price">$70.00</span>
+          <span class="old-price">$90.00</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-ribbon">Sale</div>
+        <img src="https://via.placeholder.com/150x100?text=Glide+Mouse" alt="Glide Mouse" />
+        <h4>Glide Mouse</h4>
+        <div class="price">
+          <span class="current-price">$50.00</span>
+          <span class="old-price">$70.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="tab-content" id="best-selling" style="display:none;">
+      <!-- Best Selling products can be added here -->
+      <p>Best Selling products coming soon.</p>
+    </div>
+    <div class="tab-content" id="featured" style="display:none;">
+      <!-- Featured products can be added here -->
+      <p>Featured products coming soon.</p>
+    </div>
+  </section>
+
+  <!-- Exclusive Discount Banner -->
+  <section class="exclusive-banner container">
+    <div class="exclusive-content">
+      <h2>Discounts 50% On All Games</h2>
+      <button class="btn-primary">Shop Now</button>
+    </div>
+    <img src="https://images.unsplash.com/photo-1519183071298-a2962cc0a1a9?auto=format&fit=crop&w=800&q=80" alt="Camera" />
+  </section>
+
+  <!-- Blog Section -->
+  <section class="blog container">
+    <h2 class="section-title">Our Blog</h2>
+    <div class="blog-posts">
+      <article class="blog-post">
+        <div class="date">01 Mar</div>
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Blog 1" />
+        <h3>Unlock the Full Potential of Collection</h3>
+        <p>Discover the best ways to maximize your collection and enjoy it fully.</p>
+        <a href="#" class="read-more">Read more →</a>
+      </article>
+      <article class="blog-post">
+        <div class="date">05 Mar</div>
+        <img src="https://images.unsplash.com/photo-1512499617640-c2f9992e0b3a?auto=format&fit=crop&w=400&q=80" alt="Blog 2" />
+        <h3>Top Reasons Customers Love It</h3>
+        <p>Learn why our customers keep coming back for more amazing products.</p>
+        <a href="#" class="read-more">Read more →</a>
+      </article>
+      <article class="blog-post">
+        <div class="date">07 Mar</div>
+        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80" alt="Blog 3" />
+        <h3>Always Leading The Trend</h3>
+        <p>Stay ahead with the latest trends and innovations in the market.</p>
+        <a href="#" class="read-more">Read more →</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <div class="footer-columns">
+      <div class="footer-column">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="#">Custom Service</a></li>
+          <li><a href="#">F.A.Q.S</a></li>
+          <li><a href="#">Ordering Tracking</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Popular</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Your Account</a></li>
+          <li><a href="#">Advanced Search</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Account</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Delivery Information</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Discount</a></li>
+          <li><a href="#">Customer Service</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+        </ul>
+      </div>
+      <div class="footer-column newsletter">
+        <h4>Newsletters</h4>
+        <p>Join 40,000+ subscribers and get a new discount coupon every week</p>
+        <form>
+          <input type="email" placeholder="Your email address..." />
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook">F</a>
+          <a href="#" aria-label="Twitter">T</a>
+          <a href="#" aria-label="Instagram">I</a>
+          <a href="#" aria-label="YouTube">Y</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Eciton Store. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple tab switching script
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const target = tab.getAttribute('data-tab');
+        tabContents.forEach(tc => {
+          if (tc.id === target) {
+            tc.style.display = 'flex';
+            tc.classList.add('active');
+          } else {
+            tc.style.display = 'none';
+            tc.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
