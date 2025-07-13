@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product Detail - Embrace Sideboard</title>
+    <link rel="stylesheet" href="styles/product-detail.css" />
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-bar">
+            <div class="logo">FashionHub</div>
+            <ul class="nav-links">
+                <li><a href="#">Category</a></li>
+                <li><a href="#">Brand</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">FAQ’s</a></li>
+            </ul>
+            <div class="user-actions">
+                <div class="cart-icon" title="Cart (3)">🛒<span class="cart-count">3</span></div>
+                <div class="notification-icon" title="Notifications">🔔</div>
+                <div class="user-profile">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Scarlet Johnson" />
+                    <span>Good Morning! Scarlet Johnson</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+<main class="product-detail-container">
+    <nav class="breadcrumb">
+        <a href="#">Home</a> >
+        <a href="#">Decoration</a> >
+        <a href="#">Furniture</a> >
+        <a href="#">Storage</a> >
+        <span class="current">Sideboard</span>
+    </nav>
+
+    <div class="product-detail-main">
+        <div class="product-images">
+            <div class="main-image">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Embrace Sideboard" />
+            </div>
+            <div class="thumbnail-images">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=100&q=80" alt="Sideboard Thumbnail 1" class="active" />
+                <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=100&q=80" alt="Sideboard Thumbnail 2" />
+                <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=100&q=80" alt="Sideboard Thumbnail 3" />
+                <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=100&q=80" alt="Sideboard Thumbnail 4" />
+            </div>
+        </div>
+
+        <div class="product-info">
+            <div class="breadcrumbs">
+                <span>Home > Decoration > Furniture > Storage > <strong>Sideboard</strong></span>
+            </div>
+            <h1 class="product-title">Embrace Sideboard</h1>
+            <p class="product-brand">Teixeira Design Studio</p>
+
+            <div class="product-price-section">
+                <span class="current-price">$71.56</span>
+                <span class="old-price">$71.56</span>
+                <span class="rating">
+                    <span class="star">⭐ 4.8</span>
+                    <span class="reviews">67 Reviews</span>
+                </span>
+                <p class="recommendation">93% of buyers have recommended this.</p>
+            </div>
+
+            <div class="product-options">
+                <div class="color-options">
+                    <p>Choose a Color</p>
+                    <div class="colors">
+                        <span class="color selected" style="background-color: #e6d7c1;"></span>
+                        <span class="color" style="background-color: #a8c66c;"></span>
+                        <span class="color" style="background-color: #9a9ae6;"></span>
+                        <span class="color" style="background-color: #f3c6e6;"></span>
+                        <span class="color" style="background: linear-gradient(45deg, #d7b9a8 50%, #a8c66c 50%);"></span>
+                    </div>
+                </div>
+
+                <div class="size-options">
+                    <p>Choose a Size</p>
+                    <div class="sizes">
+                        <button class="size selected">Small</button>
+                        <button class="size">Medium</button>
+                        <button class="size">Large</button>
+                        <button class="size">Extra Large</button>
+                        <button class="size">XXL</button>
+                    </div>
+                </div>
+
+                <div class="quantity-selector">
+                    <button class="qty-btn" id="decrease">-</button>
+                    <input type="number" id="quantity" value="5" min="1" />
+                    <button class="qty-btn" id="increase">+</button>
+                </div>
+
+                <button class="add-to-cart-btn">
+                    🛒 Add To Cart
+                </button>
+            </div>
+
+            <div class="delivery-info">
+                <div class="delivery-item">
+                    <strong>Free Delivery</strong>
+                    <p>Enter your Postal code for Delivery Availability</p>
+                </div>
+                <div class="delivery-item">
+                    <strong>Return Delivery</strong>
+                    <p>Free 30 days Delivery Return. <a href="#">Details</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="product-tabs">
+        <div class="tabs">
+            <button class="tab-button active" data-tab="description">Description</button>
+            <button class="tab-button" data-tab="reviews">Reviews</button>
+        </div>
+
+        <div class="tab-content active" id="description">
+            <h2>Product Description</h2>
+            <p>When it's colder than the far side of the moon and spitting rain too, you've still got to look good. From water-repellent leather to a durable outsole, the Lunar Force 1 adapts AF-1 style, so you can keep your flame burning when the weather hits. Metal lace hardware and a padded tongue bring mountain boot toughness, while the star-studded toe design gives your look the edge.</p>
+
+            <h3>Benefits</h3>
+            <ul class="benefits-list">
+                <li>Durable leather is easily cleanable so you can keep your look fresh.</li>
+                <li>Water-repellent finish and internal membrane help keep your feet dry.</li>
+                <li>Toe piece with star pattern adds durability.</li>
+                <li>Synthetic insulation helps keep you warm.</li>
+                <li>Originally designed for performance hoops, the Air unit delivers lightweight cushioning.</li>
+                <li>Plush tongue wraps over the ankle to help keep out the moisture and cold.</li>
+                <li>Rubber outsole with aggressive traction pattern adds durable grip.</li>
+                <li>Durable leather is easily cleanable so you can keep your look fresh.</li>
+            </ul>
+
+            <h3>Product Details</h3>
+            <ul class="product-details-list">
+                <li>Not intended for use as Personal Protective Equipment (PPE)</li>
+                <li>Water-repellent finish and internal membrane help keep your feet dry.</li>
+            </ul>
+
+            <h3>More Details</h3>
+            <ul class="more-details-list">
+                <li>Lunarlon midsole delivers ultra-plush responsiveness</li>
+                <li>Encapsulated Air-Sole heel unit for lightweight cushioning</li>
+                <li>Colour Shown: Ale Brown/Black/Goldtone/Ale Brown</li>
+                <li>Style: 805899-202</li>
+            </ul>
+
+            <h3>Similar Items You Might Also Like</h3>
+            <div class="similar-items-carousel">
+                <div class="similar-item">
+                    <img src="https://via.placeholder.com/100x100?text=TDX+Sinkers" alt="TDX Sinkers" />
+                    <div class="item-info">
+                        <p class="item-name">TDX Sinkers</p>
+                        <p class="item-price">₹ 675.00</p>
+                        <p class="item-availability">5 types of shoes available</p>
+                        <p class="item-rating">⭐⭐⭐⭐⭐ (121)</p>
+                    </div>
+                </div>
+                <div class="similar-item">
+                    <img src="https://via.placeholder.com/100x100?text=TDX+Sinkers" alt="TDX Sinkers" />
+                    <div class="item-info">
+                        <p class="item-name">TDX Sinkers</p>
+                        <p class="item-price">₹ 675.00</p>
+                        <p class="item-availability">5 types of shoes available</p>
+                        <p class="item-rating">⭐⭐⭐⭐⭐ (121)</p>
+                    </div>
+                </div>
+                <div class="similar-item">
+                    <img src="https://via.placeholder.com/100x100?text=TDX+Sinkers" alt="TDX Sinkers" />
+                    <div class="item-info">
+                        <p class="item-name">TDX Sinkers</p>
+                        <p class="item-price">₹ 675.00</p>
+                        <p class="item-availability">5 types of shoes available</p>
+                        <p class="item-rating">⭐⭐⭐⭐⭐ (121)</p>
+                    </div>
+                </div>
+                <div class="similar-item">
+                    <img src="https://via.placeholder.com/100x100?text=TDX+Sinkers" alt="TDX Sinkers" />
+                    <div class="item-info">
+                        <p class="item-name">TDX Sinkers</p>
+                        <p class="item-price">₹ 675.00</p>
+                        <p class="item-availability">5 types of shoes available</p>
+                        <p class="item-rating">⭐⭐⭐⭐⭐ (121)</p>
+                    </div>
+                </div>
+                <div class="similar-item">
+                    <img src="https://via.placeholder.com/100x100?text=TDX+Sinkers" alt="TDX Sinkers" />
+                    <div class="item-info">
+                        <p class="item-name">TDX Sinkers</p>
+                        <p class="item-price">₹ 675.00</p>
+                        <p class="item-availability">5 types of shoes available</p>
+                        <p class="item-rating">⭐⭐⭐⭐⭐ (121)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="reviews">
+            <h2>Customers Feedback</h2>
+            <div class="rating-summary">
+                <div class="average-rating">
+                    <div class="rating-number">4.8</div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <div class="rating-text">Product Rating</div>
+                </div>
+                <div class="rating-bars">
+                    <div class="rating-bar">
+                        <span>70%</span>
+                        <div class="bar"><div class="fill" style="width: 70%;"></div></div>
+                        <span>⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span>15%</span>
+                        <div class="bar"><div class="fill" style="width: 15%;"></div></div>
+                        <span>⭐⭐⭐⭐</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span>10%</span>
+                        <div class="bar"><div class="fill" style="width: 10%;"></div></div>
+                        <span>⭐⭐⭐</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span>3%</span>
+                        <div class="bar"><div class="fill" style="width: 3%;"></div></div>
+                        <span>⭐⭐</span>
+                    </div>
+                    <div class="rating-bar">
+                        <span>2%</span>
+                        <div class="bar"><div class="fill" style="width: 2%;"></div></div>
+                        <span>⭐</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews-list">
+                <div class="review">
+                    <div class="reviewer-info">
+                        <div class="avatar">A.T</div>
+                        <div class="reviewer-name">Nicolas Cage</div>
+                        <div class="review-date">3 Days ago</div>
+                    </div>
+                    <div class="review-content">
+                        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                        <div class="review-title">Great Product</div>
+                        <div class="review-text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour</div>
+                        <div class="review-actions">
+                            <button class="like-btn">Like</button>
+                            <button class="reply-btn">Reply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review">
+                    <div class="reviewer-info">
+                        <div class="avatar">A.T</div>
+                        <div class="reviewer-name">Sr.Robert Downey</div>
+                        <div class="review-date">Days ago</div>
+                    </div>
+                    <div class="review-content">
+                        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                        <div class="review-title">The best product In Market</div>
+                        <div class="review-text">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</div>
+                        <div class="review-actions">
+                            <button class="like-btn">Like</button>
+                            <button class="reply-btn">Reply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="view-all-reviews">
+                    <a href="#">View All Reviews</a>
+                </div>
+            </div>
+
+            <div class="write-review">
+                <h3>Write a Review</h3>
+                <form>
+                    <label>What is it like to Product?</label>
+                    <div class="star-rating">
+                        <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
+                    </div>
+                    <label for="review-title">Review Title</label>
+                    <input type="text" id="review-title" name="review-title" placeholder="Great Products" />
+                    <label for="review-content">Review Content</label>
+                    <textarea id="review-content" name="review-content" rows="4" placeholder="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English."></textarea>
+                    <button type="submit" class="submit-review-btn">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+    <script src="scripts/product-detail.js"></script>
+</body>
+</html>
