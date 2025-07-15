@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sterilizer Test Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f7f7f7;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .controls input, 
+        .controls select, 
+        .controls button {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .add-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .result-pass {
+            background-color: #d4f5d4;
+            color: green;
+            font-weight: bold;
+            padding: 4px 8px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .row-warning {
+            background-color: #fff2cc;
+        }
+
+        .row-overdue {
+            background-color: #f8d7da;
+        }
+
+        .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <input type="text" placeholder="Search..." id="searchInput" onkeyup="searchTable()">
+        <select id="sterilizerFilter" onchange="filterTable()">
+            <option value="All">All Sterilizers</option>
+            <option value="Autoclave 1">Autoclave 1</option>
+            <option value="Autoclave 2">Autoclave 2</option>
+            <option value="Autoclave 3">Autoclave 3</option>
+        </select>
+        <select>
+            <option>Last 90 Days</option>
+        </select>
+        <button>List</button>
+        <button>Calendar</button>
+        <button>Export</button>
+        <button class="add-btn">+ Add</button>
+    </div>
+
+    <table id="recordsTable">
+        <thead>
+            <tr>
+                <th>Test Date</th>
+                <th>Sterilizer ID</th>
+                <th>Type</th>
+                <th>Result</th>
+                <th>Performed By</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Mar 10, 2025</td>
+                <td>Autoclave 1</td>
+                <td>Mail-in</td>
+                <td><span class="result-pass">PASS</span></td>
+                <td>Sarah Johnson</td>
+                <td>Regular weekly test</td>
+                <td class="actions"><button>✏️</button><button>👁️</button></td>
+            </tr>
+            <tr>
+                <td>Mar 3, 2025</td>
+                <td>Autoclave 2</td>
+                <td>In-office</td>
+                <td><span class="result-pass">PASS</span></td>
+                <td>Michael Chen</td>
+                <td>Completed with FastCheck</td>
+                <td class="actions"><button>✏️</button><button>👁️</button></td>
+            </tr>
+            <tr class="row-warning">
+                <td>Feb 25, 2025</td>
+                <td>Autoclave 3</td>
+                <td>Mail-in</td>
+                <td><span class="result-pass">PASS</span></td>
+                <td>Sarah Johnson</td>
+                <td>Due for retest by 03/18</td>
+                <td class="actions"><button>✏️</button><button>👁️</button></td>
+            </tr>
+            <tr class="row-overdue">
+                <td>Feb 11, 2025</td>
+                <td>Autoclave 1</td>
+                <td>Mail-in</td>
+                <td><span class="result-pass">PASS</span></td>
+                <td>Michael Chen</td>
+                <td>OVERDUE for retest</td>
+                <td class="actions"><button>✏️</button><button>👁️</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function searchTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("#recordsTable tbody tr");
+
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+
+        function filterTable() {
+            let filter = document.getElementById("sterilizerFilter").value;
+            let rows = document.querySelectorAll("#recordsTable tbody tr");
+
+            rows.forEach(row => {
+                let sterilizer = row.cells[1].innerText;
+                if (filter === "All" || sterilizer === filter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
