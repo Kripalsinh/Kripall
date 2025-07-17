@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Checkout Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8470b3;
+            --primary-light: #a992d0;
+            --text-color: #333;
+            --border-color: #eaeaea;
+            --background-color: #f6f6f8;
+            --white: #ffffff;
+            --success-color: #4caf50;
+            --error-color: #f44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .checkout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+        
+        .order-summary {
+            padding: 40px;
+            width: 40%;
+            background-color: var(--white);
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .checkout-form {
+            padding: 40px;
+            width: 60%;
+            background-color: var(--white);
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-color);
+        }
+        
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--text-color);
+        }
+        
+        .product-list {
+            margin-bottom: 30px;
+        }
+        
+        .product-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-details {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .quantity {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .price-summary {
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 22px;
+        }
+        
+        .discount {
+            color: var(--error-color);
+        }
+        
+        .free-shipping {
+            color: var(--success-color);
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        
+        .step.active .step-icon {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .step.completed .step-icon {
+            background-color: var(--primary-color);
+        }
+        
+        .step-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .step.active .step-name {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 16px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background-color: var(--border-color);
+            z-index: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(132, 112, 179, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            margin-right: 10px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        .toggle-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #715a9c;
+        }
+        
+        .btn.btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn.btn-outline:hover {
+            background-color: rgba(132, 112, 179, 0.1);
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .cvv-info {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 5px;
+            cursor: help;
+            color: #666;
+        }
+        
+        .info-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .info-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+        }
+        
+        .info-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .checkout-step {
+            display: none;
+        }
+        
+        .checkout-step.active {
+            display: block;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 992px) {
+            .checkout-container {
+                flex-direction: column;
+                max-width: 600px;
+            }
+            
+            .order-summary, .checkout-form {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .order-summary {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .order-summary, .checkout-form {
+                padding: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .product-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .step-name {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <!-- Left Column - Order Summary -->
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b9e44020-42ea-4108-8972-a103094348e3.png" alt="Women's designer handbag in beige leather with gold hardware and matching wallet" onerror="this.onerror=null; this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/62208a06-1b16-4c78-94e9-09284d0474b4.png?text=Bag';">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">Women's Stick Bag</div>
+                        <div class="product-price">
+                            <span>₦11,586</span>
+                            <span class="quantity">× 1</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/21de0901-8ec5-4e3b-ab85-9a193398c0b6.png" alt="HERORANGE Mini Makeup Set in pink packaging with cosmetic brushes and beauty products" onerror="this.onerror=null; this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c5eee388-03b7-46a4-a7be-efdebbb4c7a3.png';">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">HERORANGE Mini Makeup Set</div>
+                        <div class="product-price">
+                            <span>₦7,296</span>
+                            <span class="quantity">× 1</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f39886fc-33a4-4737-b289-7670af7fd3ec.png" alt="Bridal Wedding Necklace Set with crystal pendant and matching earrings on black display" onerror="this.onerror=null; this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cab6f6a1-a631-496f-b3d5-215b33bd647d.png';">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">Bridal Wedding Necklace Set</div>
+                        <div class="product-price">
+                            <span>₦4,644</span>
+                            <span class="quantity">× 1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="price-summary">
+                <div class="price-row">
+                    <span>Price:</span>
+                    <span>₦23,562</span>
+                </div>
+                <div class="price-row">
+                    <span>Discount:</span>
+                    <span class="discount">-₦3,027</span>
+                </div>
+                <div class="price-row">
+                    <span>Shipping:</span>
+                    <span class="free-shipping">Free</span>
+                </div>
+                
+                <div class="total-row">
+                    <span>Total:</span>
+                    <span>₦20,499</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column - Checkout Form -->
+        <div class="checkout-form">
+            <!-- Progress Steps -->
+            <div class="steps">
+                <div class="step-connector"></div>
+                
+                <div class="step completed" data-step="cart">
+                    <div class="step-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-name">Cart</div>
+                </div>
+                
+                <div class="step completed" data-step="review">
+                    <div class="step-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-name">Review</div>
+                </div>
+                
+                <div class="step active" data-step="checkout">
+                    <div class="step-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="step-name">Checkout</div>
+                </div>
+            </div>
+            
+            <!-- Checkout Steps -->
+            <div id="checkout-steps">
+                <!-- Cart Step -->
+                <div class="checkout-step" id="cart-step">
+                    <h3>Shopping Cart</h3>
+                    <p>Review your items and make any changes before proceeding to checkout.</p>
+                    
+                    <div class="navigation-buttons">
+                        <button class="btn" onclick="nextStep()">Continue to Review</button>
+                    </div>
+                </div>
+                
+                <!-- Review Step -->
+                <div class="checkout-step" id="review-step">
+                    <h3>Review Order</h3>
+                    <p>Please review your order details before proceeding to payment.</p>
+                    
+                    <div class="navigation-buttons">
+                        <button class="btn btn-outline" onclick="prevStep()">Back to Cart</button>
+                        <button class="btn" onclick="nextStep()">Continue to Payment</button>
+                    </div>
+                </div>
+                
+                <!-- Checkout Step -->
+                <div class="checkout-step active" id="checkout-step">
+                    <h3>Payment Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="cardholder-name">Cardholder Name</label>
+                        <input type="text" id="cardholder-name" class="form-control" value="Ogechi Inuwa Ani">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" class="form-control" value="•••• •••• •••• 7555">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="expiry-date">Expiration Date</label>
+                                <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="cvv">CVV 
+                                    <span class="cvv-info info-tooltip">
+                                        <i class="fas fa-question-circle"></i>
+                                        <span class="tooltip-text">The 3 or 4 digit security code on your card</span>
+                                    </span>
+                                </label>
+                                <input type="password" id="cvv" class="form-control" placeholder="•••">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="toggle-label">Save this card for future payments. Your CVV will not be saved.</span>
+                    </div>
+                    
+                    <button class="btn">Checkout</button>
+                    
+                    <div class="navigation-buttons">
+                        <button class="btn btn-outline" onclick="prevStep()">Back to Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Function to update the steps display
+        function updateSteps(currentStep) {
+            // Hide all steps
+            document.querySelectorAll('.checkout-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Show current step
+            document.getElementById(currentStep + '-step').classList.add('active');
+            
+            // Update step indicators
+            document.querySelectorAll('.step').forEach(step => {
+                const stepName = step.getAttribute('data-step');
+                step.classList.remove('active', 'completed');
+                
+                if (stepName === currentStep) {
+                    step.classList.add('active');
+                } else if (
+                    (currentStep === 'review' && stepName === 'cart') ||
+                    (currentStep === 'checkout' && (stepName === 'cart' || stepName === 'review'))
+                ) {
+                    step.classList.add('completed');
+                    step.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    if (stepName === 'cart') {
+                        step.querySelector('.step-icon').innerHTML = '<i class="fas fa-shopping-cart"></i>';
+                    } else if (stepName === 'review') {
+                        step.querySelector('.step-icon').innerHTML = '<i class="fas fa-clipboard-check"></i>';
+                    } else if (stepName === 'checkout') {
+                        step.querySelector('.step-icon').innerHTML = '<i class="fas fa-credit-card"></i>';
+                    }
+                }
+            });
+        }
+        
+        // Function to go to next step
+        function nextStep() {
+            const activeStep = document.querySelector('.checkout-step.active');
+            const currentStepId = activeStep.id.replace('-step', '');
+            
+            if (currentStepId === 'cart') {
+                updateSteps('review');
+            } else if (currentStepId === 'review') {
+                updateSteps('checkout');
+            }
+        }
+        
+        // Function to go to previous step
+        function prevStep() {
+            const activeStep = document.querySelector('.checkout-step.active');
+            const currentStepId = activeStep.id.replace('-step', '');
+            
+            if (currentStepId === 'checkout') {
+                updateSteps('review');
+            } else if (currentStepId === 'review') {
+                updateSteps('cart');
+            }
+        }
+        
+        // Initialize with checkout step active (as shown in the image)
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSteps('checkout');
+        });
+        
+        // Credit card input formatting
+        const cardNumberInput = document.getElementById('card-number');
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 16) {
+                    value = value.slice(0, 16);
+                }
+                
+                // Format with spaces every 4 digits
+                let formattedValue = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) {
+                        formattedValue += ' ';
+                    }
+                    formattedValue += value[i];
+                }
+                
+                e.target.value = formattedValue;
+            });
+        }
+        
+        // Expiry date formatting
+        const expiryDateInput = document.getElementById('expiry-date');
+        if (expiryDateInput) {
+            expiryDateInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 4) {
+                    value = value.slice(0, 4);
+                }
+                
+                // Format as MM/YY
+                if (value.length > 2) {
+                    e.target.value = value.slice(0, 2) + '/' + value.slice(2);
+                } else {
+                    e.target.value = value;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
