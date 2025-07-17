@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000;
+            --accent: #ffd426;
+            --gray: #f5f5f5;
+            --text: #333;
+            --muted: #666;
+            --border: #eee;
+            --radius: 8px;
+            --shadow: 0 2px 10px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: var(--text);
+        }
+
+        /* Header */
+        .header {
+            background: #fff;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: #fff;
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .product-image {
+            width: 120px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-meta {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-btn {
+            background: var(--gray);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background: var(--accent);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-select, .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: var(--radius);
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Cart Total */
+        .cart-total {
+            background: #fff8e7;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-top: 1.5rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Info Cards */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 3rem;
+            padding: 0 1rem;
+        }
+
+        .info-card {
+            background: #fff;
+            padding: 1rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-card {
+                flex-direction: column;
+            }
+
+            .product-image {
+                width: 100%;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">🛍️ Store</div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search...">
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon">🛒</button>
+                <button class="btn-icon">👤</button>
+                <button class="btn-icon">⚙️</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Products Section -->
+        <div class="products-section">
+            <h2>Shopping Bag (2 items)</h2>
+            
+            <div class="product-card">
+                <img src="dress1.jpg" alt="Floral Dress" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Floral Print Wrap Dress</h3>
+                    <div class="product-meta">
+                        Color: Blue • Size: 42
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">2</span>
+                        <button class="quantity-btn plus">+</button>
+                        <span class="price">$20.50</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="dress2.jpg" alt="Floral Dress" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">Floral Print Wrap Dress</h3>
+                    <div class="product-meta">
+                        Color: Blue • Size: 42
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                        <span class="price">$30.50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Calculated Shipping</h3>
+            <div class="form-group">
+                <select class="form-select">
+                    <option>Select Country</option>
+                </select>
+                <select class="form-select">
+                    <option>Select State/City</option>
+                </select>
+                <input type="text" class="form-input" placeholder="ZIP Code">
+                <button class="btn">Update</button>
+            </div>
+
+            <div class="form-group">
+                <h3>Coupon Code</h3>
+                <input type="text" class="form-input" placeholder="Enter coupon code">
+                <button class="btn">Apply</button>
+            </div>
+
+            <div class="cart-total">
+                <div class="total-row">
+                    <span>Cart Subtotal</span>
+                    <span>$71.50</span>
+                </div>
+                <div class="total-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                <div class="total-row">
+                    <span>Discount</span>
+                    <span>-$4.00</span>
+                </div>
+                <div class="total-row">
+                    <strong>Cart Total</strong>
+                    <strong>$67.50</strong>
+                </div>
+                <button class="btn">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards">
+        <div class="info-card">
+            <h4>Free Shipping</h4>
+            <p>For orders above $50</p>
+        </div>
+        <div class="info-card">
+            <h4>Call Us Anytime</h4>
+            <p>24/7 Support</p>
+        </div>
+        <div class="info-card">
+            <h4>Chat With Us</h4>
+            <p>Live chat support</p>
+        </div>
+        <div class="info-card">
+            <h4>Gift Cards</h4>
+            <p>For your loved ones</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Quantity controls
+            $('.plus').click(function() {
+                let quantity = $(this).siblings('.quantity');
+                let currentVal = parseInt(quantity.text());
+                quantity.text(currentVal + 1);
+                updateTotal();
+            });
+
+            $('.minus').click(function() {
+                let quantity = $(this).siblings('.quantity');
+                let currentVal = parseInt(quantity.text());
+                if (currentVal > 1) {
+                    quantity.text(currentVal - 1);
+                    updateTotal();
+                }
+            });
+
+            // Update total function
+            function updateTotal() {
+                let total = 0;
+                $('.product-card').each(function() {
+                    let price = parseFloat($(this).find('.price').text().replace('$', ''));
+                    let quantity = parseInt($(this).find('.quantity').text());
+                    total += price * quantity;
+                });
+                $('.cart-total .total-row:first-child span:last-child').text('$' + total.toFixed(2));
+                
+                // Update final total
+                let discount = 4.00; // Static discount
+                let finalTotal = total - discount;
+                $('.cart-total .total-row:last-child strong:last-child').text('$' + finalTotal.toFixed(2));
+            }
+
+            // Apply coupon
+            $('.sidebar .btn').click(function() {
+                updateTotal();
+            });
+        });
+    </script>
+</body>
+</html>
