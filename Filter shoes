@@ -1,0 +1,987 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Men's Shoes - Constructor</title>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f6fb;
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      padding: 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    /* Container */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    /* Header */
+    header {
+      position: relative;
+      overflow: hidden;
+    }
+    header img.bg-image {
+      width: 100%;
+      height: 36rem;
+      object-fit: cover;
+      display: block;
+    }
+    @media (max-width: 1024px) {
+      header img.bg-image {
+        height: 32rem;
+      }
+    }
+    @media (max-width: 768px) {
+      header img.bg-image {
+        height: 28rem;
+      }
+    }
+    @media (max-width: 640px) {
+      header img.bg-image {
+        height: 24rem;
+      }
+    }
+    header .overlay-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 0%, #f4f6fb 100%);
+      pointer-events: none;
+    }
+    nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 10;
+    }
+    nav .left,
+    nav .right {
+      display: flex;
+      align-items: center;
+    }
+    nav .left > *:not(:last-child) {
+      margin-right: 24px;
+    }
+    nav .right > *:not(:last-child) {
+      margin-right: 24px;
+    }
+    nav .menu-button {
+      font-size: 20px;
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      margin-right: 16px;
+    }
+    nav .logo {
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+    nav .nav-links {
+      display: flex;
+      gap: 24px;
+      font-weight: 400;
+      font-size: 12px;
+    }
+    nav .nav-links a {
+      color: white;
+      white-space: nowrap;
+    }
+    nav .nav-links a:hover {
+      text-decoration: underline;
+    }
+    nav .right > div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    nav .right i {
+      font-size: 14px;
+    }
+    @media (max-width: 640px) {
+      nav .menu-button {
+        display: block;
+      }
+      nav .nav-links,
+      nav .right {
+        display: none;
+      }
+    }
+    /* Title and button on image */
+    .header-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: 600;
+      font-size: 32px;
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+      z-index: 5;
+      padding: 0 16px;
+      text-align: center;
+    }
+    @media (min-width: 640px) {
+      .header-content {
+        font-size: 40px;
+      }
+    }
+    @media (min-width: 768px) {
+      .header-content {
+        font-size: 48px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .header-content {
+        font-size: 56px;
+      }
+    }
+    .header-content button {
+      margin-top: 24px;
+      background-color: white;
+      color: #4b5563;
+      border-radius: 9999px;
+      padding: 8px 24px;
+      font-weight: 600;
+      font-size: 12px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .header-content button:hover {
+      background-color: #e5e7eb;
+    }
+    /* SVG wave shape */
+    .wave-svg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      pointer-events: none;
+    }
+    /* Main content */
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 16px 64px;
+      margin-top: -40px;
+    }
+    @media (max-width: 640px) {
+      main {
+        margin-top: -24px;
+      }
+    }
+    /* Top bar with title, filters, mail */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 12px;
+      color: #4b5563;
+      margin-bottom: 24px;
+      gap: 12px;
+    }
+    .top-bar h2 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .top-bar .filter-buttons {
+      display: flex;
+      gap: 24px;
+      font-weight: 400;
+      font-size: 10px;
+      color: #7c3aed;
+    }
+    .top-bar .filter-buttons button {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0;
+      font-weight: 600;
+    }
+    .top-bar .filter-buttons button:hover {
+      text-decoration: underline;
+    }
+    .top-bar .filter-buttons button.inactive {
+      color: #6b7280;
+      font-weight: 400;
+    }
+    .top-bar .mail {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: #6b7280;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    /* Layout for filters and products */
+    .content-wrapper {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    /* Filters sidebar */
+    aside.filters {
+      flex-shrink: 0;
+      width: 240px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    aside.filters section {
+      margin-bottom: 32px;
+    }
+    aside.filters section > div.title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    aside.filters section > div.title-row button {
+      font-weight: 400;
+      font-size: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6b7280;
+      padding: 0;
+    }
+    aside.filters ul.category-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    aside.filters ul.category-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    aside.filters ul.category-list li button {
+      font-size: 10px;
+      color: #6b7280;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    aside.filters ul.category-list li button:hover {
+      text-decoration: underline;
+    }
+    aside.filters ul.category-list li.active button {
+      color: #4b5563;
+      font-weight: 600;
+    }
+    aside.filters ul.category-list li span {
+      font-size: 10px;
+      color: #6b7280;
+      min-width: 24px;
+      text-align: right;
+    }
+    /* Price radio buttons */
+    aside.filters form.price-filters label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      color: #6b7280;
+    }
+    aside.filters form.price-filters label input[type="radio"] {
+      accent-color: #7c3aed;
+      cursor: pointer;
+    }
+    aside.filters form.price-filters label input[type="radio"]:checked + span {
+      color: #7c3aed;
+      font-weight: 600;
+    }
+    /* Colors */
+    aside.filters .colors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    aside.filters .colors button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid #d1d5db;
+      cursor: pointer;
+      padding: 0;
+      background-clip: content-box;
+    }
+    aside.filters .colors button[aria-label="White color"] {
+      background-color: #fff;
+    }
+    aside.filters .colors button[aria-label="Light gray color"] {
+      background-color: #e9e6e1;
+    }
+    aside.filters .colors button[aria-label="Beige color"] {
+      background-color: #d6cfc1;
+    }
+    aside.filters .colors button[aria-label="Red color"] {
+      background-color: #f87171;
+    }
+    aside.filters .colors button[aria-label="Pink color"] {
+      background-color: #fbb6ce;
+    }
+    aside.filters .colors button[aria-label="Orange color"] {
+      background-color: #fbbf24;
+    }
+    aside.filters .colors button[aria-label="Yellow color"] {
+      background-color: #fde68a;
+    }
+    aside.filters .colors button[aria-label="Green color"] {
+      background-color: #22c55e;
+    }
+    aside.filters .colors button[aria-label="Blue color"] {
+      background-color: #3b82f6;
+    }
+    aside.filters .colors button[aria-label="Purple color"] {
+      background-color: #a78bfa;
+    }
+    /* Sizes grid */
+    aside.filters .sizes {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #6b7280;
+    }
+    aside.filters .sizes button {
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 4px 0;
+      cursor: pointer;
+      background: white;
+    }
+    /* Products grid */
+    section.products {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    article.product-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    article.product-card .image-wrapper {
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 180px;
+    }
+    article.product-card .image-wrapper img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    article.product-card .image-wrapper.bg-c3d1b3 {
+      background-color: #c3d1b3;
+    }
+    article.product-card .image-wrapper.bg-8db9d0 {
+      background-color: #8db9d0;
+    }
+    article.product-card .image-wrapper.bg-8a89b3 {
+      background-color: #8a89b3;
+    }
+    article.product-card .image-wrapper.bg-a3a9bf {
+      background-color: #a3a9bf;
+    }
+    article.product-card .image-wrapper.bg-cfc9ca {
+      background-color: #cfc9ca;
+    }
+    article.product-card .image-wrapper.bg-a3b0a3 {
+      background-color: #a3b0a3;
+    }
+    article.product-card .image-wrapper.bg-d6d3b9 {
+      background-color: #d6d3b9;
+    }
+    article.product-card .image-wrapper.bg-f3a0a0 {
+      background-color: #f3a0a0;
+    }
+    article.product-card .content {
+      padding: 12px 16px 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    article.product-card h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #4b5563;
+      margin: 0 0 4px 0;
+    }
+    article.product-card p {
+      font-size: 10px;
+      color: #7c7c7c;
+      margin: 0 0 8px 0;
+    }
+    article.product-card .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4b5563;
+    }
+    article.product-card .bottom-row span {
+      user-select: none;
+    }
+    article.product-card .bottom-row button {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 9999px;
+      padding: 6px 8px;
+      color: #9ca3af;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    article.product-card .bottom-row button:hover {
+      color: #7c3aed;
+      border-color: #7c3aed;
+    }
+    /* Footer */
+    footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 16px 64px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    footer .footer-top {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 24px 48px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 24px;
+    }
+    footer .footer-top div {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    footer .footer-top a {
+      font-size: 12px;
+      color: #6b7280;
+      text-decoration: none;
+    }
+    footer .footer-top a:hover {
+      text-decoration: underline;
+    }
+    footer .footer-bottom {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      font-weight: 600;
+    }
+    footer .footer-bottom address {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 10px;
+      color: #6b7280;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    footer .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    footer .footer-links a {
+      color: #6b7280;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    footer .footer-links a:hover {
+      text-decoration: underline;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+      aside.filters {
+        width: 100%;
+        order: 2;
+      }
+      section.products {
+        width: 100%;
+        order: 1;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+      }
+      nav {
+        padding: 12px 16px;
+      }
+      footer .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img
+      src="https://storage.googleapis.com/a1aa/image/98ce08e4-86a7-4d77-acf7-2a5935451f12.jpg"
+      alt="Close-up of men's shoes on floor with jeans"
+      class="bg-image"
+      width="1920"
+      height="600"
+    />
+    <div class="overlay-gradient"></div>
+    <nav>
+      <div class="left">
+        <button aria-label="Open menu" class="menu-button">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a href="#" class="logo">Constructor</a>
+        <div class="nav-links">
+          <a href="#">Woman</a>
+          <a href="#">Men</a>
+          <a href="#">Children</a>
+        </div>
+      </div>
+      <div class="right">
+        <div><i class="fas fa-search"></i> Search</div>
+        <div><i class="fas fa-user"></i> Account</div>
+        <div><i class="fas fa-shopping-bag"></i> Bag</div>
+      </div>
+    </nav>
+    <div class="header-content">
+      <h1>Men's Shoes</h1>
+      <button>Shop Now</button>
+    </div>
+    <svg
+      class="wave-svg"
+      viewBox="0 0 1440 80"
+      fill="none"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M0 80H1440V0C1200 40 900 40 720 40C540 40 240 40 0 0V80Z"
+        fill="#f4f6fb"
+      />
+    </svg>
+  </header>
+  <main>
+    <div class="top-bar container">
+      <h2>Mens Shoes &amp; Sneakers</h2>
+      <div class="filter-buttons">
+        <button class="active">Newest</button>
+        <button class="inactive">Highest Rated</button>
+        <button class="inactive">Low Price to High</button>
+        <button class="inactive">High Price to Low</button>
+      </div>
+      <div class="mail">
+        <i class="far fa-envelope"></i>
+        <span>Your Mail</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </div>
+    <div class="content-wrapper container">
+      <aside class="filters" aria-label="Product filters">
+        <section>
+          <div class="title-row">
+            <span>Categories</span>
+            <button aria-label="Toggle categories">-</button>
+          </div>
+          <ul class="category-list">
+            <li class="active">
+              <button>Lifestyle</button>
+              <span>367</span>
+            </li>
+            <li>
+              <button>Running</button>
+              <span>76</span>
+            </li>
+            <li>
+              <button>Basketball</button>
+              <span>65</span>
+            </li>
+            <li>
+              <button>Football</button>
+              <span>21</span>
+            </li>
+            <li>
+              <button>Soccer</button>
+              <span>12</span>
+            </li>
+            <li>
+              <button>Training &amp; Gym</button>
+              <span>54</span>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <div class="title-row">
+            <span>Price</span>
+            <button aria-label="Toggle price">-</button>
+          </div>
+          <form class="price-filters" aria-label="Price range filters">
+            <label>
+              <input type="radio" name="price" checked />
+              <span>Under 50</span>
+            </label>
+            <label>
+              <input type="radio" name="price" />
+              <span>50 to 100</span>
+            </label>
+            <label>
+              <input type="radio" name="price" />
+              <span>100 to 150</span>
+            </label>
+            <label>
+              <input type="radio" name="price" />
+              <span>150 to 200</span>
+            </label>
+            <label>
+              <input type="radio" name="price" />
+              <span>250 to 300</span>
+            </label>
+            <label>
+              <input type="radio" name="price" />
+              <span>Over 300</span>
+            </label>
+          </form>
+        </section>
+        <section>
+          <div class="title-row">Colors</div>
+          <div class="colors" role="list">
+            <button aria-label="White color" style="background-color:#fff;"></button>
+            <button aria-label="Light gray color" style="background-color:#e9e6e1;"></button>
+            <button aria-label="Beige color" style="background-color:#d6cfc1;"></button>
+            <button aria-label="Red color" style="background-color:#f87171;"></button>
+            <button aria-label="Pink color" style="background-color:#fbb6ce;"></button>
+            <button aria-label="Orange color" style="background-color:#fbbf24;"></button>
+            <button aria-label="Yellow color" style="background-color:#fde68a;"></button>
+            <button aria-label="Green color" style="background-color:#22c55e;"></button>
+            <button aria-label="Blue color" style="background-color:#3b82f6;"></button>
+            <button aria-label="Purple color" style="background-color:#a78bfa;"></button>
+          </div>
+        </section>
+        <section>
+          <div class="title-row">Size</div>
+          <div class="sizes" role="list">
+            <button>4</button>
+            <button>4.5</button>
+            <button>5</button>
+            <button>5.5</button>
+            <button>6</button>
+            <button>6.5</button>
+            <button>7</button>
+            <button>7.5</button>
+            <button>8</button>
+            <button>8.5</button>
+            <button>9</button>
+            <button>9.5</button>
+            <button>10</button>
+            <button>10.5</button>
+            <button>11</button>
+            <button>11.5</button>
+            <button>12</button>
+            <button>12.5</button>
+            <button>13</button>
+            <button>13.5</button>
+            <button>14</button>
+            <button>14.5</button>
+            <button>15</button>
+            <button>15.5</button>
+            <button>16</button>
+            <button>3.5Y</button>
+            <button>4Y</button>
+            <button>5Y</button>
+            <button>6Y</button>
+            <button>6.5Y</button>
+            <button>7Y</button>
+          </div>
+        </section>
+      </aside>
+      <section class="products" aria-label="Product listings">
+        <article class="product-card">
+          <div class="image-wrapper bg-c3d1b3">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/10178c11-4cd2-4871-67a4-382104a8887c.jpg"
+              alt="Nike Air Max 270 black men's shoe on light green background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Air Max 270</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$180</span>
+              <button aria-label="Add Nike Air Max 270 to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="image-wrapper bg-8db9d0">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/e494f378-327d-4b73-4acd-cbfeda959374.jpg"
+              alt="Nike Air VaporMax Utility blue men's shoe on light blue background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Air VaporMax Utility</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$150</span>
+              <button aria-label="Add Nike Air VaporMax Utility to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="image-wrapper bg-8a89b3">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/32d56b6e-4adc-4178-8597-49b6a446b84c.jpg"
+              alt="Nike Air VaporMax Utility purple men's shoe on muted purple background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Air VaporMax Utility</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$210</span>
+              <button aria-label="Add Nike Air VaporMax Utility to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="image-wrapper bg-a3a9bf">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/f52613de-b068-43f9-040e-a8283222ab89.jpg"
+              alt="Nike Free RN Flyknit 3.0 brown men's shoe on muted blue background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Free RN Flyknit 3.0</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$180</span>
+              <button aria-label="Add Nike Free RN Flyknit 3.0 to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="image-wrapper bg-cfc9ca">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/365e367c-b6a2-4fdb-bc62-c357e8eb21d7.jpg"
+              alt="Nike Free RN Flyknit 3.0 black men's shoe on muted gray background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Free RN Flyknit 3.0</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$180</span>
+              <button aria-label="Add Nike Free RN Flyknit 3.0 to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="image-wrapper bg-a3b0a3">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/6d9ec228-a393-464f-4e53-61c06152ad3c.jpg"
+              alt="Nike Free RN Flyknit 3.0 black men's shoe on muted green background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Free RN Flyknit 3.0</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$180</span>
+              <button aria-label="Add Nike Free RN Flyknit 3.0 to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="image-wrapper bg-d6d3b9">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/cd41e9b1-7749-42e7-8d77-87bb24b482fa.jpg"
+              alt="Nike Free RN Flyknit 3.0 brown men's shoe on muted beige background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Free RN Flyknit 3.0</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$180</span>
+              <button aria-label="Add Nike Free RN Flyknit 3.0 to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="image-wrapper bg-f3a0a0">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/8ace2b2b-438d-44db-c166-8862ec0ee948.jpg"
+              alt="Nike Free RN Flyknit 3.0 red men's shoe on muted pink background"
+              width="300"
+              height="180"
+            />
+          </div>
+          <div class="content">
+            <h3>Nike Free RN Flyknit 3.0</h3>
+            <p>Men's Shoe</p>
+            <div class="bottom-row">
+              <span>$180</span>
+              <button aria-label="Add Nike Free RN Flyknit 3.0 to cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div class="footer-top container">
+      <div>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+      </div>
+      <div>
+        <a href="#">Services</a>
+        <a href="#">Reviews</a>
+      </div>
+      <div>
+        <a href="#">Customer Service</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Store Policies</a>
+      </div>
+      <div>
+        <a href="#">Shipping Rates</a>
+        <a href="#">Returns &amp; Exchanges</a>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <div>
+        Constructor
+        <address>
+          12 Water St, Vancouver, BC<br />
+          USA 132 United States
+        </address>
+      </div>
+      <div class="footer-links">
+        <span>2030 Company. All Rights Reserved.</span>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">
+          Email <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
