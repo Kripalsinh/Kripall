@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Multi-Step Checkout</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Sticky header */
+  header {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-weight: 800;
+    font-size: 1.75rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  nav {
+    display: flex;
+    gap: 2rem;
+  }
+  nav a {
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: left 0.3s ease;
+    z-index: -1;
+  }
+  nav a:hover::before,
+  nav a:focus::before {
+    left: 0;
+  }
+  nav a:hover,
+  nav a:focus {
+    color: white;
+    outline: none;
+    transform: translateY(-2px);
+  }
+  .header-icons {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 1.4rem;
+    color: #555;
+  }
+  .header-icons span {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+  .header-icons span:hover {
+    background: rgba(102, 126, 234, 0.1);
+    transform: scale(1.1);
+  }
+  .header-icons .notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 12px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  /* Main container */
+  main {
+    max-width: 1000px;
+    margin: 2rem auto 3rem;
+    padding: 0 1rem;
+    position: relative;
+  }
+
+  /* Step cards */
+  .step-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    display: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .step-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  .step-card.active {
+    display: block;
+    animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .step-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  .step-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+  }
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Step progress bar */
+  .step-progress {
+    max-width: 1000px;
+    margin: 0 auto 3rem;
+    padding: 0 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+  }
+  .step-progress ol {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+    position: relative;
+  }
+  .step-progress ol::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    right: 10%;
+    height: 4px;
+    background: #e0e7ff;
+    border-radius: 2px;
+    z-index: 0;
+  }
+  .progress-line {
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+    z-index: 1;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+  .step-progress li {
+    flex: 1 1 0;
+    text-align: center;
+    position: relative;
+    font-weight: 600;
+    color: #64748b;
+    cursor: default;
+    z-index: 2;
+  }
+  .step-progress li.active {
+    color: #667eea;
+    font-weight: 700;
+  }
+  .step-progress li.completed {
+    color: #10b981;
+    font-weight: 700;
+  }
+  .step-progress li .step-number {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 3px solid transparent;
+  }
+  .step-progress li.active .step-number {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    animation: stepPulse 2s infinite;
+  }
+  .step-progress li.completed .step-number {
+    background: #10b981;
+    color: white;
+    transform: scale(1.05);
+  }
+  .step-progress li.completed .step-number::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    font-weight: 900;
+  }
+  .step-progress li .step-label {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    transition: all 0.3s ease;
+  }
+  .step-progress li.active .step-label {
+    font-size: 0.9rem;
+    transform: translateY(-2px);
+  }
+  @keyframes stepPulse {
+    0%, 100% { box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+    50% { box-shadow: 0 8px 35px rgba(102, 126, 234, 0.6); }
+  }
+
+  /* Review Step */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+  }
+  thead th {
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+    padding: 0.75rem 0.5rem;
+    font-weight: 600;
+    color: #555;
+  }
+  tbody td {
+    padding: 0.75rem 0.5rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .quantity-control button {
+    background: #007bff;
+    border: none;
+    color: white;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  .quantity-control button:hover,
+  .quantity-control button:focus {
+    background: #0056b3;
+    outline: none;
+  }
+
+  /* Order summary */
+  .order-summary {
+    max-width: 320px;
+    margin-left: auto;
+    background: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: sticky;
+    top: 120px;
+  }
+  .order-summary h3 {
+    margin-top: 0;
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+  .summary-row.total {
+    font-size: 1.15rem;
+    color: #222;
+    border-top: 2px solid #ddd;
+    padding-top: 0.6rem;
+  }
+
+  /* Buttons */
+  .btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 25px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transition: left 0.3s ease;
+  }
+  .btn:hover::before,
+  .btn:focus::before {
+    left: 0;
+  }
+  .btn:hover,
+  .btn:focus {
+    outline: none;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  }
+  .btn-secondary {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+  }
+  .btn-secondary::before {
+    background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+  }
+  .btn-secondary:hover,
+  .btn-secondary:focus {
+    box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4);
+  }
+  .btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Shipping Address Step */
+  .address-list {
+    margin-bottom: 2rem;
+  }
+  .address-item {
+    background: rgba(248, 250, 252, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .address-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    transition: left 0.3s ease;
+  }
+  .address-item:hover::before,
+  .address-item:focus-within::before {
+    left: 0;
+  }
+  .address-item:hover,
+  .address-item:focus-within {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+  }
+  .address-item input[type="radio"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+  }
+  .address-details {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    color: #444;
+  }
+  .address-form {
+    background: rgba(248, 250, 252, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 2rem;
+  }
+  .address-form h4 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.2rem;
+  }
+  .address-form .form-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .address-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .address-form input[type="text"],
+  .address-form input[type="email"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid rgba(226, 232, 240, 0.8);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+  }
+  .address-form input[type="text"]:focus,
+  .address-form input[type="email"]:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+  }
+  .address-form .form-group {
+    flex: 1 1 200px;
+    min-width: 150px;
+    margin-bottom: 1rem;
+  }
+
+  /* Payment Step */
+  .payment-methods {
+    margin-bottom: 2rem;
+  }
+  .payment-method {
+    background: rgba(248, 250, 252, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .payment-method::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    transition: left 0.3s ease;
+  }
+  .payment-method:hover::before,
+  .payment-method:focus-within::before {
+    left: 0;
+  }
+  .payment-method:hover,
+  .payment-method:focus-within {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+  }
+  .payment-method input[type="radio"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+  }
+  .payment-method label {
+    font-weight: 600;
+    font-size: 1rem;
+    user-select: none;
+  }
+  .payment-form {
+    background: rgba(248, 250, 252, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .payment-form .form-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .payment-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .payment-form input[type="text"],
+  .payment-form input[type="tel"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid rgba(226, 232, 240, 0.8);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+  }
+  .payment-form input[type="text"]:focus,
+  .payment-form input[type="tel"]:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+  }
+  .payment-form .form-group {
+    flex: 1 1 220px;
+    min-width: 180px;
+    margin-bottom: 1rem;
+  }
+
+  /* Final order summary on payment step */
+  .final-summary {
+    max-width: 320px;
+    background: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-left: auto;
+    position: sticky;
+    top: 120px;
+  }
+  .final-summary h3 {
+    margin-top: 0;
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .final-summary .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+  .final-summary .summary-row.total {
+    font-size: 1.15rem;
+    color: #222;
+    border-top: 2px solid #ddd;
+    padding-top: 0.6rem;
+  }
+
+  /* Responsive layout */
+  @media (min-width: 768px) {
+    .step-content {
+      display: flex;
+      gap: 2rem;
+    }
+    .step-main {
+      flex: 1 1 600px;
+    }
+  }
+  @media (max-width: 767px) {
+    .order-summary,
+    .final-summary {
+      max-width: 100%;
+      margin-left: 0;
+      margin-top: 1.5rem;
+    }
+  }
+
+  /* Hover and focus transitions */
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  button:focus,
+  a:focus {
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-container" role="banner">
+    <div class="logo" tabindex="0">ShopLogo</div>
+    <nav role="navigation" aria-label="Primary">
+      <a href="#" tabindex="0">Home</a>
+      <a href="#" tabindex="0">Shop</a>
+      <a href="#" tabindex="0">About</a>
+      <a href="#" tabindex="0">Contact</a>
+    </nav>
+    <div class="header-icons" aria-label="User menu">
+      <span title="Cart" aria-label="Cart" tabindex="0">&#128722;</span>
+      <span title="Notifications" aria-label="Notifications" tabindex="0" style="position:relative;">
+        &#128276;
+        <span class="notification-badge" aria-hidden="true">3</span>
+      </span>
+    </div>
+  </div>
+</header>
+<main>
+  <nav aria-label="Progress" class="step-progress">
+    <ol>
+      <li class="active" aria-current="step">
+        <span class="step-number">1</span>
+        <span class="step-label">Review</span>
+      </li>
+      <li>
+        <span class="step-number">2</span>
+        <span class="step-label">Shipping Address</span>
+      </li>
+      <li>
+        <span class="step-number">3</span>
+        <span class="step-label">Payment</span>
+      </li>
+    </ol>
+  </nav>
+  <!-- Step 1: Review -->
+  <section id="step-review" class="step-card active" aria-labelledby="step-review-title" role="region">
+    <h2 id="step-review-title" class="step-title">1. Review Your Order</h2>
+    <div class="step-content">
+      <div class="step-main">
+        <table aria-describedby="order-products-desc">
+          <caption id="order-products-desc" class="sr-only">List of products in your order</caption>
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Name</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Unit Price</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody id="product-list">
+            <!-- Products inserted by JS -->
+          </tbody>
+        </table>
+      </div>
+      <aside class="order-summary" aria-label="Order summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row"><span>Subtotal:</span> <span id="summary-subtotal">$0.00</span></div>
+        <div class="summary-row"><span>Shipping Fee:</span> <span id="summary-shipping">$5.00</span></div>
+        <div class="summary-row"><span>Coupon Discount:</span> <span id="summary-discount">-$0.00</span></div>
+        <div class="summary-row total"><span>Grand Total:</span> <span id="summary-total">$0.00</span></div>
+        <button id="btn-to-address" class="btn" aria-label="Proceed to Shipping Address Step">Next</button>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Step 2: Shipping Address -->
+  <section id="step-address" class="step-card" aria-labelledby="step-address-title" role="region">
+    <h2 id="step-address-title" class="step-title">2. Shipping Address</h2>
+    <form id="address-form" novalidate>
+      <div class="address-list" role="list" aria-label="Saved addresses">
+        <!-- Saved addresses inserted by JS -->
+      </div>
+      <div class="address-form" aria-label="Add new address form">
+        <h4>Add New Address</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first-name">First Name <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+            <input type="text" id="first-name" name="firstName" required autocomplete="given-name" />
+          </div>
+          <div class="form-group">
+            <label for="last-name">Last Name <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+            <input type="text" id="last-name" name="lastName" required autocomplete="family-name" />
+          </div>
+          <div class="form-group" style="flex: 1 1 100%;">
+            <label for="street">Street <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+            <input type="text" id="street" name="street" required autocomplete="address-line1" />
+          </div>
+          <div class="form-group">
+            <label for="apartment">Apartment Number</label>
+            <input type="text" id="apartment" name="apartment" autocomplete="address-line2" />
+          </div>
+          <div class="form-group">
+            <label for="state">State <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+            <input type="text" id="state" name="state" required autocomplete="address-level1" />
+          </div>
+          <div class="form-group">
+            <label for="zip">Zip Code <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+            <input type="text" id="zip" name="zip" required autocomplete="postal-code" pattern="\\d{5}(-\\d{4})?" />
+          </div>
+          <div class="form-group" style="flex: 1 1 100%;">
+            <label for="email">Email (for order confirmation) <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" />
+          </div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button type="button" id="btn-back-to-review" class="btn btn-secondary" aria-label="Back to Review Step">Back</button>
+        <button type="button" id="btn-to-payment" class="btn" aria-label="Proceed to Payment Step">Next</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Step 3: Payment -->
+  <section id="step-payment" class="step-card" aria-labelledby="step-payment-title" role="region">
+    <h2 id="step-payment-title" class="step-title">3. Payment</h2>
+    <div class="step-content">
+      <div class="step-main">
+        <form id="payment-form" novalidate>
+          <div class="payment-methods" role="radiogroup" aria-label="Payment methods">
+            <div class="payment-method" tabindex="0">
+              <input type="radio" id="pm-card" name="paymentMethod" value="card" checked required />
+              <label for="pm-card">Credit / Debit Card</label>
+            </div>
+            <div class="payment-method" tabindex="0">
+              <input type="radio" id="pm-paypal" name="paymentMethod" value="paypal" disabled />
+              <label for="pm-paypal" style="color:#999;">PayPal (Coming Soon)</label>
+            </div>
+            <div class="payment-method" tabindex="0">
+              <input type="radio" id="pm-bank" name="paymentMethod" value="bank" disabled />
+              <label for="pm-bank" style="color:#999;">Bank Transfer (Coming Soon)</label>
+            </div>
+          </div>
+          <div class="payment-form" aria-label="Card payment details">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cardholder-name">Cardholder Name <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+                <input type="text" id="cardholder-name" name="cardholderName" required autocomplete="cc-name" />
+              </div>
+              <div class="form-group">
+                <label for="card-number">Card Number <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+                <input type="text" id="card-number" name="cardNumber" required autocomplete="cc-number" pattern="\\d{13,19}" maxlength="19" inputmode="numeric" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="expiry-date">Expiry Date (MM/YY) <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+                <input type="text" id="expiry-date" name="expiryDate" required autocomplete="cc-exp" pattern="(0[1-9]|1[0-2])\\/\\d{2}" placeholder="MM/YY" maxlength="5" />
+              </div>
+              <div class="form-group">
+                <label for="cvv">CVV <span aria-hidden="true" style="color:#dc3545;">*</span></label>
+                <input type="text" id="cvv" name="cvv" required autocomplete="cc-csc" pattern="\\d{3,4}" maxlength="4" inputmode="numeric" />
+              </div>
+            </div>
+          </div>
+          <div class="btn-group" style="margin-top: 1.5rem;">
+            <button type="button" id="btn-back-to-address" class="btn btn-secondary" aria-label="Back to Shipping Address Step">Back</button>
+            <button type="submit" id="btn-place-order" class="btn" aria-label="Place Order">Place Order</button>
+          </div>
+        </form>
+      </div>
+      <aside class="final-summary" aria-label="Final order summary">
+        <h3>Final Order Summary</h3>
+        <div class="summary-row"><span>Subtotal:</span> <span id="final-subtotal">$0.00</span></div>
+        <div class="summary-row"><span>Shipping Fee:</span> <span id="final-shipping">$5.00</span></div>
+        <div class="summary-row"><span>Coupon Discount:</span> <span id="final-discount">-$0.00</span></div>
+        <div class="summary-row total"><span>Grand Total:</span> <span id="final-total">$0.00</span></div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script>
+$(function() {
+  // Sample product data
+  const products = [
+    {
+      id: 1,
+      name: "Wireless Headphones",
+      image: "https://via.placeholder.com/60?text=Headphones",
+      unitPrice: 59.99,
+      quantity: 1
+    },
+    {
+      id: 2,
+      name: "Smart Watch",
+      image: "https://via.placeholder.com/60?text=Watch",
+      unitPrice: 129.99,
+      quantity: 2
+    },
+    {
+      id: 3,
+      name: "Bluetooth Speaker",
+      image: "https://via.placeholder.com/60?text=Speaker",
+      unitPrice: 39.99,
+      quantity: 1
+    }
+  ];
+
+  const shippingFee = 5.00;
+  let couponDiscount = 0.00; // For demo, no coupon applied
+
+  // Saved addresses sample data
+  const savedAddresses = [
+    {
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      street: "123 Main St",
+      apartment: "Apt 4B",
+      state: "CA",
+      zip: "90001",
+      email: "john.doe@example.com"
+    },
+    {
+      id: 2,
+      firstName: "Jane",
+      lastName: "Smith",
+      street: "456 Oak Ave",
+      apartment: "",
+      state: "NY",
+      zip: "10001",
+      email: "jane.smith@example.com"
+    }
+  ];
+
+  // Initialize product list in review step
+  function renderProductList() {
+    const $tbody = $("#product-list");
+    $tbody.empty();
+    products.forEach(p => {
+      const totalPrice = (p.unitPrice * p.quantity).toFixed(2);
+      const $tr = $(`
+        <tr data-id="${p.id}">
+          <td><img src="${p.image}" alt="${p.name}" class="product-image" /></td>
+          <td>${p.name}</td>
+          <td>
+            <div class="quantity-control" aria-label="Adjust quantity for ${p.name}">
+              <button class="qty-decrease" aria-label="Decrease quantity">−</button>
+              <input type="text" class="qty-input" value="${p.quantity}" aria-live="polite" aria-atomic="true" aria-label="Quantity" />
+              <button class="qty-increase" aria-label="Increase quantity">+</button>
+            </div>
+          </td>
+          <td>$${p.unitPrice.toFixed(2)}</td>
+          <td class="product-total">$${totalPrice}</td>
+        </tr>
+      `);
+      $tbody.append($tr);
+    });
+  }
+
+  // Calculate and update order summary
+  function updateOrderSummary() {
+    let subtotal = 0;
+    products.forEach(p => {
+      subtotal += p.unitPrice * p.quantity;
+    });
+    subtotal = parseFloat(subtotal.toFixed(2));
+    const grandTotal = parseFloat((subtotal + shippingFee - couponDiscount).toFixed(2));
+
+    $("#summary-subtotal").text(`$${subtotal.toFixed(2)}`);
+    $("#summary-shipping").text(`$${shippingFee.toFixed(2)}`);
+    $("#summary-discount").text(`-$${couponDiscount.toFixed(2)}`);
+    $("#summary-total").text(`$${grandTotal.toFixed(2)}`);
+
+    $("#final-subtotal").text(`$${subtotal.toFixed(2)}`);
+    $("#final-shipping").text(`$${shippingFee.toFixed(2)}`);
+    $("#final-discount").text(`-$${couponDiscount.toFixed(2)}`);
+    $("#final-total").text(`$${grandTotal.toFixed(2)}`);
+  }
+
+  // Render saved addresses in address step
+  function renderSavedAddresses() {
+    const $list = $(".address-list");
+    $list.empty();
+    savedAddresses.forEach(addr => {
+      const apartmentText = addr.apartment ? `, ${addr.apartment}` : "";
+      const $item = $(`
+        <label class="address-item" tabindex="0">
+          <input type="radio" name="savedAddress" value="${addr.id}" />
+          <div class="address-details">
+            ${addr.firstName} ${addr.lastName}<br />
+            ${addr.street}${apartmentText}<br />
+            ${addr.state}, ${addr.zip}<br />
+            <small>${addr.email}</small>
+          </div>
+        </label>
+      `);
+      $list.append($item);
+    });
+  }
+
+  // Show step by id with animation
+  function showStep(stepId) {
+    $(".step-card.active").fadeOut(300, function() {
+      $(this).removeClass("active");
+      $(`#${stepId}`).fadeIn(300).addClass("active");
+      // Focus first input or button in new step for accessibility
+      $(`#${stepId}`).find("input, button, [tabindex='0']").first().focus();
+    });
+  }
+
+  // Validate address form
+  function validateAddressForm() {
+    let valid = true;
+    const $form = $("#address-form");
+    // Check if a saved address is selected or new address form is valid
+    const savedSelected = $form.find("input[name='savedAddress']:checked").length > 0;
+    if (!savedSelected) {
+      // Validate new address fields
+      $form.find("input[required]").each(function() {
+        if (!$(this).val().trim()) {
+          valid = false;
+          $(this).addClass("input-error");
+        } else {
+          $(this).removeClass("input-error");
+        }
+      });
+      // Additional pattern validation for zip and email
+      const zip = $("#zip").val().trim();
+      const zipPattern = /^\d{5}(-\d{4})?$/;
+      if (zip && !zipPattern.test(zip)) {
+        valid = false;
+        $("#zip").addClass("input-error");
+      }
+      const email = $("#email").val().trim();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (email && !emailPattern.test(email)) {
+        valid = false;
+        $("#email").addClass("input-error");
+      }
+    } else {
+      // Remove error highlights if saved address selected
+      $form.find("input").removeClass("input-error");
+    }
+    return valid;
+  }
+
+  // Validate payment form
+  function validatePaymentForm() {
+    let valid = true;
+    const $form = $("#payment-form");
+    $form.find("input[required]").each(function() {
+      if (!$(this).val().trim()) {
+        valid = false;
+        $(this).addClass("input-error");
+      } else {
+        $(this).removeClass("input-error");
+      }
+    });
+    // Validate card number pattern
+    const cardNumber = $("#card-number").val().trim();
+    const cardPattern = /^\d{13,19}$/;
+    if (cardNumber && !cardPattern.test(cardNumber)) {
+      valid = false;
+      $("#card-number").addClass("input-error");
+    }
+    // Validate expiry date pattern MM/YY
+    const expiry = $("#expiry-date").val().trim();
+    const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (expiry && !expiryPattern.test(expiry)) {
+      valid = false;
+      $("#expiry-date").addClass("input-error");
+    }
+    // Validate CVV pattern 3 or 4 digits
+    const cvv = $("#cvv").val().trim();
+    const cvvPattern = /^\d{3,4}$/;
+    if (cvv && !cvvPattern.test(cvv)) {
+      valid = false;
+      $("#cvv").addClass("input-error");
+    }
+    return valid;
+  }
+
+  // Update product quantity and prices
+  $("#product-list").on("click", ".qty-increase", function() {
+    const $tr = $(this).closest("tr");
+    const id = parseInt($tr.data("id"));
+    const product = products.find(p => p.id === id);
+    if (product) {
+      product.quantity++;
+      $tr.find(".qty-input").val(product.quantity);
+      updateProductTotal($tr, product);
+      updateOrderSummary();
+    }
+  });
+  $("#product-list").on("click", ".qty-decrease", function() {
+    const $tr = $(this).closest("tr");
+    const id = parseInt($tr.data("id"));
+    const product = products.find(p => p.id === id);
+    if (product && product.quantity > 1) {
+      product.quantity--;
+      $tr.find(".qty-input").val(product.quantity);
+      updateProductTotal($tr, product);
+      updateOrderSummary();
+    }
+  });
+  $("#product-list").on("input", ".qty-input", function() {
+    const $tr = $(this).closest("tr");
+    const id = parseInt($tr.data("id"));
+    const product = products.find(p => p.id === id);
+    let val = $(this).val();
+    val = val.replace(/\D/g, ''); // Remove non-digits
+    if (val === "" || val === "0") val = "1";
+    $(this).val(val);
+    if (product) {
+      product.quantity = parseInt(val);
+      updateProductTotal($tr, product);
+      updateOrderSummary();
+    }
+  });
+
+  function updateProductTotal($tr, product) {
+    const total = (product.unitPrice * product.quantity).toFixed(2);
+    $tr.find(".product-total").text(`$${total}`);
+  }
+
+  // Navigation buttons
+  $("#btn-to-address").click(function() {
+    showStep("step-address");
+  });
+  $("#btn-back-to-review").click(function() {
+    showStep("step-review");
+  });
+  $("#btn-to-payment").click(function() {
+    if (validateAddressForm()) {
+      showStep("step-payment");
+    } else {
+      alert("Please fill in all required address fields correctly.");
+    }
+  });
+  $("#btn-back-to-address").click(function() {
+    showStep("step-address");
+  });
+
+  // Place order button
+  $("#payment-form").submit(function(e) {
+    e.preventDefault();
+    if (validatePaymentForm()) {
+      alert("Order placed successfully! Thank you for your purchase.");
+      // Reset or redirect could be done here
+    } else {
+      alert("Please fill in all required payment fields correctly.");
+    }
+  });
+
+  // Remove input error class on input
+  $("input").on("input", function() {
+    $(this).removeClass("input-error");
+  });
+
+  // Initial render
+  renderProductList();
+  updateOrderSummary();
+  renderSavedAddresses();
+});
+</script>
+</body>
+</html>
