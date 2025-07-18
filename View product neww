@@ -1,0 +1,654 @@
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Product Page</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  body {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    background: #fff;
+    color: #1a202c;
+  }
+  /* Top notification bar */
+  .top-bar {
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    padding: 4px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .top-bar .login-signup {
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  /* Header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 16px;
+  }
+  .logo {
+    font-weight: 800;
+    font-size: 18px;
+    user-select: none;
+  }
+  nav {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    nav {
+      display: flex;
+      gap: 32px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+    nav > div {
+      position: relative;
+      cursor: pointer;
+    }
+    nav > div i {
+      font-size: 8px;
+      margin-left: 4px;
+    }
+  }
+  .header-right {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .header-right button {
+    background: none;
+    border: none;
+    color: #4a5568;
+    cursor: pointer;
+    font-size: 16px;
+    position: relative;
+  }
+  .header-right button:hover {
+    color: #000;
+  }
+  .cart-badge {
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    background: #facc15;
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+  }
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: #a0aec0;
+    padding: 8px 16px;
+    user-select: none;
+  }
+  .breadcrumb span:last-child {
+    font-weight: 600;
+    color: #4a5568;
+  }
+  .breadcrumb i {
+    font-size: 8px;
+  }
+  /* Main content */
+  main {
+    max-width: 960px;
+    margin: 16px auto;
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 768px) {
+    main {
+      grid-template-columns: repeat(12, 1fr);
+    }
+  }
+  /* Left image column */
+  .image-column {
+    grid-column: span 12;
+    display: flex;
+    justify-content: center;
+  }
+  @media (min-width: 768px) {
+    .image-column {
+      grid-column: span 6;
+    }
+  }
+  .image-column img {
+    max-width: 100%;
+    height: auto;
+  }
+  /* Right details column */
+  .details-column {
+    grid-column: span 12;
+    font-size: 12px;
+    color: #1a202c;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  @media (min-width: 768px) {
+    .details-column {
+      grid-column: span 6;
+    }
+  }
+  .brand-tag {
+    display: flex;
+    gap: 4px;
+    color: #a0aec0;
+    font-weight: 300;
+    user-select: none;
+  }
+  .brand-tag .highlight {
+    font-weight: 600;
+    color: #facc15;
+  }
+  .product-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1a202c;
+  }
+  .price-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .price-current {
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .price-old {
+    text-decoration: line-through;
+    color: #a0aec0;
+    font-size: 10px;
+  }
+  .price-discount {
+    background: #facc15;
+    color: #000;
+    font-weight: 600;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    user-select: none;
+  }
+  .rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #cbd5e0;
+    border-radius: 9999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4a5568;
+    user-select: none;
+  }
+  .rating i {
+    color: #facc15;
+    font-size: 12px;
+  }
+  .rating .count {
+    color: #a0aec0;
+    font-size: 10px;
+  }
+  .discount-info {
+    background: #ebf4ff;
+    color: #2c5282;
+    font-size: 10px;
+    border-radius: 6px;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+  .discount-info img {
+    height: 12px;
+    width: auto;
+  }
+  .discount-icons {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+  }
+  .discount-icons img {
+    height: 12px;
+    width: auto;
+  }
+  .coupon-box {
+    border: 1px solid #9ae6b4;
+    background: #f0fff4;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 10px;
+    color: #276749;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    user-select: none;
+  }
+  .coupon-top {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+  }
+  .coupon-top i {
+    color: #38a169;
+  }
+  .coupon-code {
+    margin-left: auto;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .coupon-subtext {
+    color: #a0aec0;
+  }
+  .coupon-show-more {
+    color: #4a5568;
+    text-align: right;
+    cursor: pointer;
+  }
+  .color-label {
+    font-weight: 600;
+    font-size: 12px;
+    user-select: none;
+  }
+  .color-name {
+    font-weight: 400;
+  }
+  .color-options {
+    display: flex;
+    gap: 8px;
+  }
+  .color-button {
+    border: 2px solid #cbd5e0;
+    border-radius: 8px;
+    padding: 4px;
+    cursor: pointer;
+    background: #fff;
+  }
+  .color-button.selected {
+    border-color: #a0aec0;
+  }
+  .color-button img {
+    width: 48px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .size-options {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .size-button {
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    background: #fff;
+  }
+  .size-guide {
+    margin-left: auto;
+    font-size: 12px;
+    color: #4a5568;
+    cursor: pointer;
+    user-select: none;
+  }
+  .action-buttons {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+  }
+  .btn-add-cart {
+    flex: 1;
+    background: #000;
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+  .btn-add-cart i {
+    font-size: 14px;
+  }
+  .btn-buy-now {
+    flex: 1;
+    background: #facc15;
+    color: #000;
+    font-weight: 600;
+    font-size: 12px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  /* Delivery check */
+  .delivery-check {
+    margin-top: 16px;
+    font-size: 12px;
+  }
+  .delivery-check label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    user-select: none;
+  }
+  .delivery-check input[type="text"] {
+    width: 100%;
+    max-width: 280px;
+    padding: 6px 12px;
+    font-size: 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+  }
+  .delivery-check button {
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .delivery-info {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #4a5568;
+    font-size: 12px;
+    user-select: none;
+  }
+  .delivery-info div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .delivery-info i {
+    font-size: 16px;
+  }
+  /* Offers */
+  .offers {
+    margin-top: 16px;
+    font-size: 12px;
+    user-select: none;
+  }
+  .offers-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .offer-box {
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .offer-box img {
+    width: 32px;
+    height: 32px;
+  }
+  .offer-text {
+    flex: 1;
+    font-size: 10px;
+    color: #4a5568;
+  }
+  .offer-text strong {
+    font-weight: 600;
+  }
+  .offer-button {
+    font-size: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    user-select: none;
+    background: #fff;
+  }
+  .more-offers {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #3182ce;
+    cursor: pointer;
+    user-select: none;
+    text-align: right;
+  }
+  /* Product details */
+  .product-details {
+    margin-top: 16px;
+    font-size: 12px;
+    user-select: none;
+  }
+  .product-details > div {
+    margin-bottom: 16px;
+  }
+  .product-details .section-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .product-details .section-title i {
+    font-size: 12px;
+  }
+  .product-details .section-subtitle {
+    font-size: 10px;
+    color: #a0aec0;
+    margin-bottom: 8px;
+  }
+  .specifications-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 24px;
+    color: #4a5568;
+  }
+  .spec-item {
+    font-size: 10px;
+  }
+  .spec-item strong {
+    display: block;
+    font-weight: 600;
+    font-size: 11px;
+    color: #1a202c;
+    margin-bottom: 2px;
+  }
+</style>
+</head>
+<body>
+  <div class="top-bar">
+    <div>Free Shipping Sitewide on Every Order, Don’t Miss Out!!</div>
+    <div class="login-signup">LOG IN / SIGNUP</div>
+  </div>
+  <header>
+    <div style="display:flex; align-items:center; gap:24px;">
+      <div class="logo">BEYOUNG.</div>
+      <nav>
+        <div>TOPWEAR <i class="fas fa-chevron-down"></i></div>
+        <div>BOTTOMWEAR <i class="fas fa-chevron-down"></i></div>
+        <div>COMBOS</div>
+        <div>NEW ARRIVALS</div>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button aria-label="Search"><i class="fas fa-search"></i></button>
+      <button aria-label="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge">2</span>
+      </button>
+    </div>
+  </header>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <span>HOME</span>
+    <i class="fas fa-chevron-right"></i>
+    <span>MENS CLOTHING</span>
+    <i class="fas fa-chevron-right"></i>
+    <span>JEANS FOR MEN</span>
+    <i class="fas fa-chevron-right"></i>
+    <span>NAVY BLUE REGULAR FIT MENS JEANS</span>
+  </nav>
+  <main>
+    <section class="image-column">
+      <img src="https://storage.googleapis.com/a1aa/image/7cf77881-4aba-4a5d-8f0c-56dcac8dad6f.jpg" alt="Front view of man wearing navy blue jeans and red striped t-shirt, standing with hands in pockets, beige sneakers" width="400" height="600" />
+    </section>
+    <section class="details-column">
+      <div class="brand-tag">
+        <span>everyday</span><span class="highlight">basics</span>
+      </div>
+      <h1 class="product-title">Navy Blue Regular Fit Mens Jeans</h1>
+      <div class="price-row">
+        <span class="price-current">₹ 998</span>
+        <span class="price-old">₹ 2499</span>
+        <span class="price-discount">60% OFF</span>
+      </div>
+      <div class="rating" aria-label="Rating 4.9 stars from 32 reviews">
+        <span>4.9</span>
+        <i class="fas fa-star"></i>
+        <span class="count">(32)</span>
+      </div>
+      <div class="discount-info" aria-label="Additional Prepaid Discount At Checkout">
+        <img src="https://storage.googleapis.com/a1aa/image/8fe95e85-9644-42c4-07b1-ef32ed142d36.jpg" alt="Icon representing additional prepaid discount at checkout" />
+        <span>Additional Prepaid Discount At Checkout</span>
+        <div class="discount-icons">
+          <img src="https://storage.googleapis.com/a1aa/image/cf7f294e-0503-4f2a-979a-5881d0002d62.jpg" alt="UPI payment icon" />
+          <img src="https://storage.googleapis.com/a1aa/image/1ca44dc8-ec55-41fc-db00-e8079dfd9526.jpg" alt="PhonePe payment icon" />
+          <img src="https://storage.googleapis.com/a1aa/image/0123afbd-e7a0-41a2-d7d3-179efa3d64ee.jpg" alt="Amazon Pay payment icon" />
+          <img src="https://storage.googleapis.com/a1aa/image/b4b8f77c-7c27-4716-36e5-042a93d45608.jpg" alt="Razorpay payment icon" />
+          <img src="https://storage.googleapis.com/a1aa/image/5b50c3d7-47af-4631-9917-d778877e9c00.jpg" alt="Citi payment icon" />
+        </div>
+      </div>
+      <div class="coupon-box" aria-label="Coupon offer">
+        <div class="coupon-top">
+          <i class="fas fa-gift"></i>
+          <span>Buy Any 2, Extra <strong>₹250</strong> OFF</span>
+          <span class="coupon-code">JEANS250</span>
+        </div>
+        <div class="coupon-subtext">Apply coupon at checkout</div>
+        <div class="coupon-show-more">Show more offers &gt;</div>
+      </div>
+      <div class="color-label">Color: <span class="color-name">(Navy Blue)</span></div>
+      <div class="color-options" role="list">
+        <button class="color-button selected" aria-label="Navy Blue">
+          <img src="https://storage.googleapis.com/a1aa/image/c25c86e8-56c3-4b38-f498-faa857cfbec1.jpg" alt="Navy blue jeans front view with red striped t-shirt" width="48" height="64" />
+        </button>
+        <button class="color-button" aria-label="Black Jeans">
+          <img src="https://storage.googleapis.com/a1aa/image/d5074e16-1c7d-4dc3-57eb-74a1c9d6461d.jpg" alt="Black jeans front view with black t-shirt" width="48" height="64" />
+        </button>
+        <button class="color-button" aria-label="Navy Blue Side">
+          <img src="https://storage.googleapis.com/a1aa/image/ee3c669e-9acf-4b29-a2f7-de3c24c5cd52.jpg" alt="Navy blue jeans side view" width="48" height="64" />
+        </button>
+        <button class="color-button" aria-label="Green Jeans">
+          <img src="https://storage.googleapis.com/a1aa/image/66d6b4be-88dd-4eef-98a8-4e1d8dff1553.jpg" alt="Green jeans front view" width="48" height="64" />
+        </button>
+        <button class="color-button" aria-label="Light Blue Jeans">
+          <img src="https://storage.googleapis.com/a1aa/image/8aa71d45-99b9-4a55-7172-4f49238eefb9.jpg" alt="Light blue jeans front view" width="48" height="64" />
+        </button>
+      </div>
+      <div class="size-options" role="list">
+        <button class="size-button" aria-label="Size 30">30</button>
+        <button class="size-button" aria-label="Size 32">32</button>
+        <button class="size-button" aria-label="Size 34">34</button>
+        <button class="size-button" aria-label="Size 36">36</button>
+        <button class="size-button" aria-label="Size 38">38</button>
+        <span class="size-guide" tabindex="0">Size Guide &gt;</span>
+      </div>
+      <div class="action-buttons">
+        <button class="btn-add-cart" type="button"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+        <button class="btn-buy-now" type="button">Buy Now</button>
+      </div>
+      <div class="delivery-check">
+        <label for="pincode">Check Delivery Date</label>
+        <div style="display:flex; max-width:280px;">
+          <input type="text" id="pincode" placeholder="Enter Your city Pincode" />
+          <button type="button">Check</button>
+        </div>
+        <div class="delivery-info">
+          <div><i class="fas fa-truck"></i> Free Shipping</div>
+          <div><i class="fas fa-money-bill-wave"></i> Cash On Delivery Available</div>
+        </div>
+      </div>
+      <div class="offers">
+        <div class="offers-title">Save extra with Offers</div>
+        <div class="offer-box">
+          <img src="https://storage.googleapis.com/a1aa/image/03f99680-3357-4fae-e160-253dfd123d44.jpg" alt="Snapmint logo icon" />
+          <div class="offer-text">
+            <div><strong>SNAPMINT</strong></div>
+            <div>Or Pay <strong>₹333</strong> now, rest later via Beyoung Pay Later</div>
+          </div>
+          <button class="offer-button" type="button">Buy on EMI</button>
+        </div>
+        <div class="more-offers">More offers</div>
+      </div>
+      <div class="product-details">
+        <div>
+          <div class="section-title">Product Details</div>
+        </div>
+        <div>
+          <div class="section-title" tabindex="0">Specifications <i class="fas fa-chevron-down"></i></div>
+          <div class="section-subtitle">Technical details and features</div>
+          <div class="specifications-grid">
+            <div class="spec-item"><strong>Fabric</strong>Cotton Lycra</div>
+            <div class="spec-item"><strong>Weave Type</strong>Twill</div>
+            <div class="spec-item"><strong>Fit</strong>Regular Fit</div>
+            <div class="spec-item"><strong>Pocket</strong>5 Pockets</div>
+            <div class="spec-item"><strong>Waist Rise</strong>Mid-Rise</div>
+            <div class="spec-item"><strong>Style</strong>Everyday Casuals</div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title" tabindex="0">Description <i class="fas fa-chevron-down"></i></div>
+          <div class="section-subtitle">Product overview and details</div>
+        </div>
+        <div>
+          <div class="section-title" tabindex="0">Returns, Exchange, & Refund Policy <i class="fas fa-chevron-down"></i></div>
+          <div class="section-subtitle">7 days easy returns and exchange</div>
+        </div>
+        <div>
+          <div class="section-title" tabindex="0">Marketed By <i class="fas fa-chevron-down"></i></div>
+          <div class="section-subtitle">Company and distributor information</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
