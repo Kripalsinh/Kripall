@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Interactive Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6366f1;
+            --secondary: #a5b4fc;
+            --accent: #8b5cf6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e0e7ff);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(167, 139, 250, 0.1) 0%, rgba(167, 139, 250, 0) 20%), 
+                        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0) 20%);
+            z-index: -1;
+        }
+        
+        header {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .navbar {
+            transition: transform 0.3s ease;
+        }
+        
+        .card-container {
+            perspective: 1000px;
+            transition: transform 0.2s;
+        }
+        
+        .card {
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            box-shadow: 0 25px 60px rgba(50, 50, 93, 0.15);
+        }
+        
+        .card-content {
+            transform: translateZ(30px);
+        }
+        
+        .card-image {
+            transition: transform 0.5s;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+        
+        .card:hover .card-image img {
+            transform: scale(1.05);
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .wave-wrap {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+        
+        .wave-wrap svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 150px;
+        }
+        
+        .wave-shape {
+            fill: rgba(255, 255, 255, 0.85);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--accent);
+        }
+        
+        .count-increment {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <!-- Header -->
+    <header class="fixed w-full z-50 py-4">
+        <nav class="navbar mx-auto px-6 py-3 max-w-6xl flex justify-between items-center">
+            <div class="flex items-center space-x-1">
+                <i class="fas fa-fingerprint text-xl text-indigo-600"></i>
+                <span class="font-bold text-xl ml-1">NeomDesign</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-10">
+                <a href="#" class="font-medium hover:text-indigo-600 transition">Home</a>
+                <a href="#features" class="font-medium hover:text-indigo-600 transition">Features</a>
+                <a href="#testimonials" class="font-medium hover:text-indigo-600 transition">Testimonials</a>
+                <a href="#contact" class="font-medium hover:text-indigo-600 transition">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 text-sm rounded-lg bg-white shadow hover:bg-gray-50 transition">Sign In</button>
+                <button class="btn-gradient px-5 py-2 text-sm rounded-lg text-white font-medium">
+                    Sign Up
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-12 md:mb-0 md:pr-10">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                    Transform Ideas Into <span class="text-indigo-600">Digital Reality</span>
+                </h1>
+                <p class="text-lg text-gray-600 mb-8 max-w-xl">
+                    Modern solutions for innovative businesses. We craft beautiful digital experiences that drive engagement and growth.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="btn-gradient px-6 py-3 rounded-lg text-white font-medium">Get Started</button>
+                    <button class="bg-white shadow-md px-6 py-3 rounded-lg font-medium text-gray-700 transition hover:bg-gray-50">
+                        <i class="fas fa-play-circle mr-2"></i> Watch Demo
+                    </button>
+                </div>
+                
+                <div class="mt-10 flex items-center">
+                    <div class="flex -space-x-3">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/694c2c76-f0fc-46ba-be96-95f926e949b3.png" alt="Team member profile" class="w-10 h-10 rounded-full border-2 border-white">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/035280af-4814-46d2-b20f-443ef0c1800a.png" alt="Team member profile" class="w-10 h-10 rounded-full border-2 border-white">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/11d0f5af-719d-464e-9858-ad093773bb5f.png" alt="Team member profile" class="w-10 h-10 rounded-full border-2 border-white">
+                    </div>
+                    <p class="ml-3 text-gray-600 font-medium">Join our <span class="text-indigo-600">community</span> of designers</p>
+                </div>
+            </div>
+            
+            <div class="md:w-1/2 flex justify-center relative">
+                <div class="floating max-w-lg w-full">
+                    <div class="card">
+                        <div class="rounded-2xl overflow-hidden relative">
+                            <div class="card-image">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c89f0681-34e8-48c0-81be-87a5bf80d069.png" alt="Showcase of modern web design interface with intuitive dashboard and elegant color scheme">
+                            </div>
+                            <div class="card-content absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-6">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">Interface Dashboard</h3>
+                                        <p class="text-gray-300 mt-1">Modern analytics interface</p>
+                                    </div>
+                                    <button class="bg-white rounded-full h-10 w-10 flex items-center justify-center text-indigo-600">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wave separator -->
+        <div class="wave-wrap">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="wave-shape"></path>
+            </svg>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-20">
+                <h2 class="text-3xl font-bold mb-4">How We Can Help Your Business</h2>
+                <p class="text-gray-600">
+                    We provide the best digital solutions to transform your business operations and customer experiences.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-item card p-8 rounded-2xl hover:shadow-xl transition">
+                    <div class="feature-icon w-14 h-14 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 mb-6">
+                        <i class="fas fa-bezier-curve text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">UI/UX Design</h3>
+                    <p class="text-gray-600 mb-4">
+                        Creating intuitive and beautiful interfaces that enhance user experiences and drive engagement.
+                    </p>
+                    <div class="relative inline-block group">
+                        <a href="#" class="text-indigo-600 font-medium flex items-center">
+                            Learn more
+                            <i class="fas fa-arrow-right ml-2 transition-transform transform group-hover:translate-x-1"></i>
+                        </a>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></div>
+                    </div>
+                </div>
+                
+                <div class="feature-item card p-8 rounded-2xl hover:shadow-xl transition">
+                    <div class="feature-icon w-14 h-14 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 mb-6">
+                        <i class="fas fa-mobile-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Mobile Apps</h3>
+                    <p class="text-gray-600 mb-4">
+                        Developing cross-platform mobile applications with cutting-edge technologies and superior performance.
+                    </p>
+                    <div class="relative inline-block group">
+                        <a href="#" class="text-indigo-600 font-medium flex items-center">
+                            Learn more
+                            <i class="fas fa-arrow-right ml-2 transition-transform transform group-hover:translate-x-1"></i>
+                        </a>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></div>
+                    </div>
+                </div>
+                
+                <div class="feature-item card p-8 rounded-2xl hover:shadow-xl transition">
+                    <div class="feature-icon w-14 h-14 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 mb-6">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Analytics</h3>
+                    <p class="text-gray-600 mb-4">
+                        Unlocking insights through data visualization and analysis for informed decision making.
+                    </p>
+                    <div class="relative inline-block group">
+                        <a href="#" class="text-indigo-600 font-medium flex items-center">
+                            Learn more
+                            <i class="fas fa-arrow-right ml-2 transition-transform transform group-hover:translate-x-1"></i>
+                        </a>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all group-hover:w-full"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div class="text-center">
+                    <span id="counter1" class="text-4xl font-bold text-indigo-600 count-increment">1542</span>
+                    <p class="text-gray-600 mt-2">Projects Completed</p>
+                </div>
+                
+                <div class="text-center">
+                    <span id="counter2" class="text-4xl font-bold text-indigo-600 count-increment">892</span>
+                    <p class="text-gray-600 mt-2">Happy Clients</p>
+                </div>
+                
+                <div class="text-center">
+                    <span id="counter3" class="text-4xl font-bold text-indigo-600 count-increment">14</span>
+                    <p class="text-gray-600 mt-2">Years Experience</p>
+                </div>
+                
+                <div class="text-center">
+                    <span id="counter4" class="text-4xl font-bold text-indigo-600 count-increment">32</span>
+                    <p class="text-gray-600 mt-2">Team Members</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center max-w-xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold mb-4">Client Success Stories</h2>
+                <p class="text-gray-600">
+                    Hear what our clients have to say about their experience working with us.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-md">
+                    <div class="flex items-start mb-4">
+                        <div class="mr-4">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f6bcc98d-c0e7-435c-9296-2786b9a77472.png" alt="Portrait of Sarah Johnson, Marketing Director" class="w-14 h-14 rounded-full border-2 border-gray-200">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Sarah Johnson</h4>
+                            <p class="text-gray-600">Marketing Director</p>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-700 italic">
+                        "Working with this team transformed our digital presence. The attention to detail and user experience design significantly improved our conversion rates."
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-md">
+                    <div class="flex items-start mb-4">
+                        <div class="mr-4">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a2bc0ba9-c2e0-4bd4-b10d-b3d2c0044a3a.png" alt="Portrait of Michael Chen, Startup Founder" class="w-14 h-14 rounded-full border-2 border-gray-200">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Michael Chen</h4>
+                            <p class="text-gray-600">Startup Founder</p>
+                        </div>
+                    </div>
+                    <div class="flex mb-3">
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-700 italic">
+                        "Their approach to mobile app development is exceptional. They understood our vision and delivered beyond expectations."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="md:flex gap-12">
+                <div class="md:w-1/2 mb-12 md:mb-0">
+                    <h2 class="text-3xl font-bold mb-6">Get in Touch Today</h2>
+                    <p class="text-gray-600 mb-8 max-w-md">
+                        Have questions or want to learn more? Reach out to our team for a personalized consultation.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-10 text-indigo-600 mr-4">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-1">Email Us</h3>
+                                <a href="mailto:contact@neomdesign.com" class="text-gray-600 hover:text-indigo-600">contact@neomdesign.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 text-indigo-600 mr-4">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-1">Our Office</h3>
+                                <p class="text-gray-600">123 Innovation Drive, San Francisco, CA</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 text-indigo-600 mr-4">
+                                <i class="fas fa-phone-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-1">Call Us</h3>
+                                <a href="tel:+11234567890" class="text-gray-600 hover:text-indigo-600">+1 (123) 456-7890</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2">
+                    <form class="bg-gray-50 p-8 rounded-2xl shadow-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+                                <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-gradient w-full py-3 rounded-lg text-white font-medium">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-1 mb-4">
+                        <i class="fas fa-fingerprint text-xl text-indigo-400"></i>
+                        <span class="font-bold text-xl text-white ml-1">NeomDesign</span>
+                    </div>
+                    <p class="mb-4 max-w-xs">
+                        Creating beautiful digital experiences that transform businesses and delight users.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition">Our Team</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Web Design</a></li>
+                        <li><a href="#" class="hover:text-white transition">App Development</a></li>
+                        <li><a href="#" class="hover:text-white transition">UI/UX Design</a></li>
+                        <li><a href="#" class="hover:text-white transition">Digital Strategy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Analytics</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Newsletter</h4>
+                    <p class="mb-4">Subscribe to receive the latest tips and industry insights.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email address" class="px-4 py-3 rounded-l-lg w-full bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button class="bg-indigo-600 hover:bg-indigo-700 transition text-white px-4 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-8 text-sm text-center">
+                <p>© 2023 NeomDesign. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Count-up animation for stats
+        document.addEventListener('DOMContentLoaded', function() {
+            function animateValue(id, start, end, duration) {
+                const obj = document.getElementById(id);
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const value = Math.floor(progress * (end - start) + start);
+                    obj.innerHTML = value;
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+            
+            setTimeout(() => {
+                animateValue("counter1", 0, 1542, 2000);
+                animateValue("counter2", 0, 892, 2000);
+                animateValue("counter3", 0, 14, 2000);
+                animateValue("counter4", 0, 32, 2000);
+            }, 1000);
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Sticky header effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-md');
+                    navbar.classList.add('py-2');
+                    navbar.classList.remove('py-3');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.classList.add('py-3');
+                    navbar.classList.remove('py-2');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
