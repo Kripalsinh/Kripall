@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step Checkout Experience</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.5; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px;
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%);
+            background-size: 20px 20px;
+            animation: shimmer 2s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            text-align: center;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 25px; /* Align with circle center */
+            left: calc(50% + 25px); /* Start after current circle */
+            width: calc(100% - 50px); /* Adjust width based on circle size */
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: -1;
+        }
+
+        .progress-step.completed:not(:last-child)::after {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .step-circle.completed {
+            background: rgba(255, 255, 255, 0.9);
+            color: #8B5CF6;
+            animation: pulse 1s ease-in-out;
+        }
+
+        .step-circle.current {
+            background: #10B981;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+            to { box-shadow: 0 0 30px rgba(16, 185, 129, 0.9); }
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .checkout-step {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .checkout-step.active {
+            display: grid; /* Or block, depending on layout */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8B5CF6, #06B6D4, #10B981);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        /* Product Item Styles (reused for Cart & Order Summary) */
+        .product-list .product-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #E5E7EB;
+            transition: all 0.3s ease;
+            animation: fadeInLeft 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .product-list .product-item:nth-child(2) { animation-delay: 0.1s; }
+        .product-list .product-item:nth-child(3) { animation-delay: 0.2s; }
+        .product-list .product-item:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .product-list .product-item:hover {
+            transform: translateX(5px);
+            background: #F9FAFB;
+            border-radius: 10px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            margin-right: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-list .product-item:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #8B5CF6;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .quantity-controls button {
+            background: #E5E7EB;
+            border: none;
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .quantity-controls button:hover {
+            background: #D1D5DB;
+        }
+
+        .quantity-controls input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #D1D5DB;
+            border-radius: 5px;
+            margin: 0 5px;
+            padding: 5px 0;
+            font-size: 16px;
+        }
+
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: #EF4444;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .remove-item-btn:hover {
+            color: #B91C1C;
+        }
+
+        .product-subtotal {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #E5E7EB;
+        }
+
+        .cart-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 16px;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .cart-summary-row:nth-child(1) { animation-delay: 0.4s; }
+        .cart-summary-row:nth-child(2) { animation-delay: 0.5s; }
+        .cart-summary-row:nth-child(3) { animation-delay: 0.6s; }
+        .cart-summary-row:nth-child(4) { animation-delay: 0.7s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cart-summary-row.discount .value {
+            color: #EF4444;
+        }
+
+        .cart-summary-row.shipping .value {
+            color: #10B981;
+        }
+
+        .cart-summary-row.final {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+            padding-top: 15px;
+            border-top: 2px solid #8B5CF6;
+        }
+
+        .coupon-section {
+            display: flex;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .coupon-section input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .coupon-section button {
+            padding: 10px 20px;
+            background: #8B5CF6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .coupon-section button:hover {
+            background: #764ba2;
+        }
+
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .cart-actions .btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .cart-actions .btn-primary {
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+            color: white;
+            border: none;
+        }
+
+        .cart-actions .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .cart-actions .btn-secondary {
+            background: transparent;
+            color: #8B5CF6;
+            border: 2px solid #8B5CF6;
+        }
+
+        .cart-actions .btn-secondary:hover {
+            background: #8B5CF6;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Form Styles (reused for Review & Checkout) */
+        .form-group {
+            margin-bottom: 25px;
+            animation: fadeInRight 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.2s; }
+        .form-group:nth-child(4) { animation-delay: 0.3s; }
+        .form-group:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #F9FAFB;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .cvv-info {
+            display: inline-flex;
+            align-items: center;
+            color: #6B7280;
+            cursor: help;
+            margin-left: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            accent-color: #8B5CF6;
+        }
+
+        .radio-group {
+            margin-bottom: 20px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-group label:hover {
+            background: #F9FAFB;
+            border-color: #8B5CF6;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 15px;
+            accent-color: #8B5CF6;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-group label span {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .radio-group label small {
+            color: #6B7280;
+            margin-left: auto;
+        }
+
+        /* Review Section Specifics */
+        .review-section-block {
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .review-section-block h3 {
+            font-size: 18px;
+            color: #1F2937;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-section-block h3 .edit-btn {
+            background: none;
+            border: none;
+            color: #8B5CF6;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .review-section-block h3 .edit-btn:hover {
+            color: #764ba2;
+        }
+
+        .review-section-block p {
+            color: #4B5563;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .review-section-block .product-item {
+            padding: 10px 0;
+            border-bottom: 1px dashed #E5E7EB;
+        }
+        .review-section-block .product-item:last-child {
+            border-bottom: none;
+        }
+        .review-section-block .product-item .product-price {
+            font-size: 16px;
+        }
+        .review-section-block .product-item .quantity {
+            font-size: 12px;
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .navigation-buttons .btn {
+            flex: 1;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navigation-buttons .btn-next {
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+            color: white;
+            border: none;
+        }
+
+        .navigation-buttons .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .navigation-buttons .btn-next::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .navigation-buttons .btn-next:hover::before {
+            left: 100%;
+        }
+
+        .navigation-buttons .btn-back {
+            background: transparent;
+            color: #8B5CF6;
+            border: 2px solid #8B5CF6;
+        }
+
+        .navigation-buttons .btn-back:hover {
+            background: #8B5CF6;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .navigation-buttons .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        .navigation-buttons .btn:disabled::before {
+            display: none;
+        }
+
+        /* Checkout Specifics (reused from original) */
+        .save-card {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: #D1D5DB;
+            border-radius: 25px;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #8B5CF6;
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::before {
+            transform: translateX(25px);
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .security-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+
+        /* Loading animation */
+        .loading {
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* New Sections for Vacant Space */
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .sidebar-card h3 {
+            font-size: 20px;
+            color: #1F2937;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: 10px;
+        }
+
+        .recommended-product {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .recommended-product img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .recommended-product-info {
+            flex: 1;
+        }
+
+        .recommended-product-info .name {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .recommended-product-info .price {
+            font-size: 14px;
+            color: #8B5CF6;
+            font-weight: bold;
+        }
+
+        .recommended-product button {
+            background: #10B981;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .recommended-product button:hover {
+            background: #0F9D58;
+        }
+
+        .promo-banner {
+            background: linear-gradient(45deg, #F6AD55, #F6E05E);
+            color: #7B341E;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(246, 173, 85, 0.3);
+        }
+
+        .coupon-list p {
+            background: #F3F4F6;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .coupon-list .code {
+            font-weight: bold;
+            color: #8B5CF6;
+        }
+
+        .trust-badge-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #4B5563;
+            font-size: 15px;
+        }
+
+        .trust-badge-item svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            color: #10B981;
+        }
+
+        .delivery-card {
+            background: #ECFDF5;
+            border: 1px solid #A7F3D0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .delivery-card p {
+            margin-bottom: 5px;
+            font-size: 15px;
+            color: #065F46;
+        }
+
+        .delivery-card strong {
+            color: #047857;
+        }
+
+        .testimonial-item {
+            background: #F9FAFB;
+            border-left: 4px solid #8B5CF6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-item .quote {
+            font-style: italic;
+            color: #4B5563;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-item .author {
+            font-weight: 600;
+            color: #1F2937;
+            text-align: right;
+        }
+
+        .stars {
+            color: #F6E05E;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        /* Success Modal Enhancements */
+        .success-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            animation: modalBounce 0.8s ease-out; /* Changed animation */
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, #10B981, #059669);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .success-modal-content .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #10B981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: checkmarkScale 0.5s ease-out forwards;
+        }
+
+        .success-modal-content .checkmark-circle svg {
+            width: 50px;
+            height: 50px;
+            color: white;
+            stroke-width: 3;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawCheckmark 0.6s ease-out 0.3s forwards;
+        }
+
+        @keyframes checkmarkScale {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes drawCheckmark {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes modalBounce {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        .success-modal-content h2 {
+            color: #1F2937;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .success-modal-content p {
+            color: #6B7280;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .success-modal-details {
+            background: #F9FAFB;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+            font-size: 14px;
+            color: #4B5563;
+        }
+
+        .success-modal-details strong {
+            color: #1F2937;
+        }
+
+        .success-modal-details p {
+            margin-bottom: 8px;
+        }
+
+        .success-modal-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        .success-modal-content button {
+            margin-top: 25px;
+            padding: 12px 25px;
+            background: #8B5CF6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .success-modal-content button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .progress-bar {
+                padding: 20px;
+            }
+            
+            .progress-step {
+                font-size: 12px;
+            }
+            
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+            .progress-step:not(:last-child)::after {
+                top: 20px;
+                left: calc(50% + 20px);
+                width: calc(100% - 40px);
+            }
+            .cart-actions, .navigation-buttons {
+                flex-direction: column;
+            }
+            .sidebar-content {
+                margin-top: 20px; /* Add space between main content and sidebar on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particles"></div>
+    
+    <div class="container checkout_page">
+        <div class="progress-bar">
+            <div class="progress-step" data-step="1">
+                <div class="step-circle">🛒</div>
+                <span>Cart</span>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">📝</div>
+                <span>Review</span>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-circle">💳</div>
+                <span>Checkout</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Cart Step -->
+            <div id="cart-step" class="checkout-step active">
+                <div class="section-card">
+                    <h2 class="section-title">Your Shopping Cart</h2>
+                    <div id="cart-items" class="product-list">
+                        <!-- Cart items will be dynamically loaded here -->
+                    </div>
+
+                    <div class="coupon-section">
+                        <input type="text" id="coupon-code" class="form-input" placeholder="Enter coupon code">
+                        <button id="apply-coupon-btn">Apply</button>
+                    </div>
+
+                    <div class="cart-summary">
+                        <div class="cart-summary-row">
+                            <span>Subtotal:</span>
+                            <span class="value" id="cart-subtotal">₦0</span>
+                        </div>
+                        <div class="cart-summary-row discount">
+                            <span>Discount:</span>
+                            <span class="value" id="cart-discount">-₦0</span>
+                        </div>
+                        <div class="cart-summary-row">
+                            <span>Shipping:</span>
+                            <span class="value" id="cart-shipping">Calculated at next step</span>
+                        </div>
+                        <div class="cart-summary-row final">
+                            <span>Total:</span>
+                            <span class="value" id="cart-total">₦0</span>
+                        </div>
+                    </div>
+
+                    <div class="cart-actions">
+                        <a href="#" class="btn btn-secondary" id="continue-shopping-btn">Continue Shopping</a>
+                        <button class="btn btn-secondary" id="clear-cart-btn">Clear Cart</button>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="btn btn-next" id="cart-next-btn">Proceed to Review</button>
+                </div>
+            </div>
+
+            <!-- Review Step -->
+            <div id="review-step" class="checkout-step">
+                <div class="section-card">
+                    <h2 class="section-title">Review Your Order</h2>
+
+                    <div class="review-section-block">
+                        <h3>Shipping Address <button class="edit-btn" data-target-step="1">Edit</button></h3>
+                        <div id="review-shipping-address">
+                            <p>No shipping address entered.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="shipping-name">Full Name</label>
+                            <input type="text" id="shipping-name" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="shipping-address1">Address Line 1</label>
+                            <input type="text" id="shipping-address1" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="shipping-address2">Address Line 2 (Optional)</label>
+                            <input type="text" id="shipping-address2" class="form-input">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="shipping-city">City</label>
+                                <input type="text" id="shipping-city" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="shipping-state">State/Province</label>
+                                <input type="text" id="shipping-state" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="shipping-zip">Zip/Postal Code</label>
+                                <input type="text" id="shipping-zip" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="shipping-phone">Phone Number</label>
+                            <input type="tel" id="shipping-phone" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="review-section-block">
+                        <h3>Billing Address <button class="edit-btn" data-target-step="1">Edit</button></h3>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="same-as-shipping" checked>
+                            <label for="same-as-shipping">Same as shipping address</label>
+                        </div>
+                        <div id="billing-address-fields" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label" for="billing-name">Full Name</label>
+                                <input type="text" id="billing-name" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="billing-address1">Address Line 1</label>
+                                <input type="text" id="billing-address1" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="billing-address2">Address Line 2 (Optional)</label>
+                                <input type="text" id="billing-address2" class="form-input">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-city">City</label>
+                                    <input type="text" id="billing-city" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-state">State/Province</label>
+                                    <input type="text" id="billing-state" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="billing-zip">Zip/Postal Code</label>
+                                    <input type="text" id="billing-zip" class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="billing-phone">Phone Number</label>
+                                <input type="tel" id="billing-phone" class="form-input">
+                            </div>
+                        </div>
+                        <div id="review-billing-address">
+                            <p>Same as shipping address.</p>
+                        </div>
+                    </div>
+
+                    <div class="review-section-block">
+                        <h3>Shipping Method <button class="edit-btn" data-target-step="1">Edit</button></h3>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="shipping-method" value="standard" checked>
+                                <span>Standard Shipping</span>
+                                <small>3-5 business days (Free)</small>
+                            </label>
+                            <label>
+                                <input type="radio" name="shipping-method" value="express">
+                                <span>Express Shipping</span>
+                                <small>1-2 business days (₦2,500)</small>
+                            </label>
+                        </div>
+                        <div id="review-shipping-method">
+                            <p>Standard Shipping (Free)</p>
+                        </div>
+                    </div>
+
+                    <div class="review-section-block">
+                        <h3>Order Summary <button class="edit-btn" data-target-step="1">Edit</button></h3>
+                        <div id="review-order-summary" class="product-list">
+                            <!-- Products from cart will be reviewed here -->
+                        </div>
+                        <div class="cart-summary">
+                            <div class="cart-summary-row">
+                                <span>Subtotal:</span>
+                                <span class="value" id="review-subtotal">₦0</span>
+                            </div>
+                            <div class="cart-summary-row discount">
+                                <span>Discount:</span>
+                                <span class="value" id="review-discount">-₦0</span>
+                            </div>
+                            <div class="cart-summary-row shipping">
+                                <span>Shipping:</span>
+                                <span class="value" id="review-shipping-cost">₦0</span>
+                            </div>
+                            <div class="cart-summary-row final">
+                                <span>Total:</span>
+                                <span class="value" id="review-total">₦0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="order-notes">Order Notes (Optional)</label>
+                        <textarea id="order-notes" class="form-textarea" rows="3" placeholder="Add any special instructions or gift messages here..."></textarea>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms-conditions" required>
+                        <label for="terms-conditions">I agree to the <a href="#" style="color: #8B5CF6; text-decoration: none;">Terms and Conditions</a></label>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="btn btn-back" data-target-step="1">Back to Cart</button>
+                    <button class="btn btn-next" id="review-next-btn">Proceed to Checkout</button>
+                </div>
+            </div>
+
+            <!-- Checkout Step (from original context) -->
+            <div id="checkout-step" class="checkout-step">
+                <div class="section-card">
+                    <h2 class="section-title">Payment Details</h2>
+                    
+                    <form id="payment-form">
+                        <div class="form-group">
+                            <label class="form-label" for="cardholder-name">Cardholder Name</label>
+                            <input type="text" id="cardholder-name" class="form-input" value="Ogechi Inwua Ani" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="card-number">Card Number</label>
+                            <input type="text" id="card-number" class="form-input" placeholder="•••• •••• •••• 7555" maxlength="19" required>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div>
+                                    <label class="form-label" for="expiry">Expiration Date</label>
+                                    <input type="text" id="expiry" class="form-input" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="cvv">CVV <span class="cvv-info">ℹ️</span></label>
+                                    <input type="text" id="cvv" class="form-input" placeholder="•••" maxlength="3" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="save-card">
+                            <div class="toggle-switch" id="save-toggle"></div>
+                            <span>Save this card for future payments. Your CVV will not be saved.</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-next" id="checkout-btn">
+                            Complete Purchase
+                        </button>
+                    </form>
+
+                    <div class="navigation-buttons">
+                        <button class="btn btn-back" data-target-step="2">Back to Review</button>
+                    </div>
+
+                    <div class="security-badge">
+                        <svg class="security-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                        </svg>
+                        256-bit SSL secured checkout
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Content for Cart and Review Steps -->
+            <div class="sidebar-content" id="sidebar-content">
+                <!-- Recommended Offers/Deals -->
+                <div class="sidebar-card">
+                    <h3>🎁 Recommended for You</h3>
+                    <div class="promo-banner">
+                        Buy 2, Get 1 Free on selected items!
+                    </div>
+                    <div class="recommended-product">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/496f2f20-9cf3-4d18-b971-82db23b2ba40.png" alt="Recommended Product 1">
+                        <div class="recommended-product-info">
+                            <div class="name">Stylish Handbag</div>
+                            <div class="price">₦8,500</div>
+                        </div>
+                        <button data-product-id="prod4">Add</button>
+                    </div>
+                    <div class="recommended-product">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef6ab721-ad8a-4630-9844-87e7c508aab2.png" alt="Recommended Product 2">
+                        <div class="recommended-product-info">
+                            <div class="name">Luxury Watch</div>
+                            <div class="price">₦15,000</div>
+                        </div>
+                        <button data-product-id="prod5">Add</button>
+                    </div>
+                </div>
+
+                <!-- Special Coupons Section -->
+                <div class="sidebar-card">
+                    <h3>💳 Today's Coupon Codes</h3>
+                    <div class="coupon-list">
+                        <p>Apply <span class="code">MEGA20</span> to get 20% OFF</p>
+                        <p>Use <span class="code">FREESHIP</span> for Free Shipping on orders above ₦10,000</p>
+                        <p>New User? Get <span class="code">WELCOME10</span> for ₦1,000 OFF</p>
+                    </div>
+                </div>
+
+                <!-- Estimated Delivery Cards -->
+                <div class="sidebar-card">
+                    <h3>📦 Estimated Delivery</h3>
+                    <div class="delivery-card">
+                        <p><strong>Express Delivery:</strong> Get it by <span id="express-delivery-date">July 22</span></p>
+                        <p>Order before 2 PM for same-day dispatch.</p>
+                    </div>
+                    <div class="delivery-card">
+                        <p><strong>Standard Delivery:</strong> In 5-7 business days</p>
+                        <p>Free for orders above ₦5,000.</p>
+                    </div>
+                </div>
+
+                <!-- Customer Trust Section -->
+                <div class="sidebar-card">
+                    <h3>🌟 Why Shop With Us?</h3>
+                    <div class="trust-badges">
+                        <div class="trust-badge-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.001 12.001 0 002 12c0 2.757 1.125 5.224 2.937 7.078A11.999 11.999 0 0012 22c2.912 0 5.633-1.15 7.618-3.04A12.001 12.001 0 0022 12c0-2.757-1.125-5.224-2.937-7.078z" />
+                            </svg>
+                            100% Secure Payment
+                        </div>
+                        <div class="trust-badge-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h10m-9 4h8a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Easy Returns & Refunds
+                        </div>
+                        <div class="trust-badge-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 0A9.953 9.953 0 0112 12c-2.503 0-4.847-.804-6.788-2.172m0 0L5.636 18.364m12.728-12.728l-3.536 3.536m0 0A9.953 9.953 0 0012 12c2.503 0 4.847.804 6.788 2.172m0 0L18.364 5.636M12 6v6m0 0v6" />
+                            </svg>
+                            24/7 Customer Support
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Testimonials or Ratings -->
+                <div class="sidebar-card">
+                    <h3>💬 Customer Reviews</h3>
+                    <div class="testimonial-item">
+                        <div class="stars">★★★★★</div>
+                        <p class="quote">"Absolutely love my new bag! The quality is superb and delivery was super fast. Highly recommend this store!"</p>
+                        <p class="author">- Sarah K.</p>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="stars">★★★★★</div>
+                        <p class="quote">"Great products and even better customer service. The checkout process was smooth and secure."</p>
+                        <p class="author">- David L.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Global State & Data ---
+        let currentStep = 1;
+        const totalSteps = 3;
+        const products = [
+            {
+                id: 'prod1',
+                name: "Women's Stick Bag",
+                price: 11586,
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/496f2f20-9cf3-4d18-b971-82db23b2ba40.png",
+                description: "Elegant women's black leather stick bag with minimalist design perfect for professional and casual wear"
+            },
+            {
+                id: 'prod2',
+                name: "HERORANGE Mini Makeup Set",
+                price: 7296,
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef6ab721-ad8a-4630-9844-87e7c508aab2.png",
+                description: "HERORANGE mini makeup set with lipstick, eyeshadow palette, and brush tools in black packaging with silver accents"
+            },
+            {
+                id: 'prod3',
+                name: "Bridal Wedding Necklace Set",
+                price: 4644,
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b43483b6-aa0e-4609-9755-5001dbb01eed.png",
+                description: "Elegant bridal wedding necklace set with crystal pendant and matching earrings in silver finish displayed in pink gift box"
+            },
+            {
+                id: 'prod4',
+                name: "Stylish Handbag",
+                price: 8500,
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/496f2f20-9cf3-4d18-b971-82db23b2ba40.png", // Reusing image for demo
+                description: "A chic and versatile handbag for everyday use."
+            },
+            {
+                id: 'prod5',
+                name: "Luxury Watch",
+                price: 15000,
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef6ab721-ad8a-4630-9844-87e7c508aab2.png", // Reusing image for demo
+                description: "An elegant timepiece for sophisticated style."
+            }
+        ];
+
+        let cart = [
+            { productId: 'prod1', quantity: 1 },
+            { productId: 'prod2', quantity: 1 },
+            { productId: 'prod3', quantity: 1 }
+        ];
+
+        let appliedCoupon = { code: 'SAVEBIG', discount: 3027 }; // Example coupon
+        let selectedShippingMethod = 'standard'; // 'standard' or 'express'
+
+        // --- Utility Functions ---
+        function formatCurrency(amount) {
+            return `₦${amount.toLocaleString('en-NG')}`;
+        }
+
+        function getProductById(productId) {
+            return products.find(p => p.id === productId);
+        }
+
+        function calculateCartTotals() {
+            let subtotal = 0;
+            cart.forEach(item => {
+                const product = getProductById(item.productId);
+                if (product) {
+                    subtotal += product.price * item.quantity;
+                }
+            });
+
+            let discount = appliedCoupon ? appliedCoupon.discount : 0;
+            if (discount > subtotal) discount = subtotal; // Discount cannot exceed subtotal
+
+            let shippingCost = 0;
+            if (selectedShippingMethod === 'express') {
+                shippingCost = 2500;
+            }
+
+            const total = subtotal - discount + shippingCost;
+
+            return { subtotal, discount, shippingCost, total };
+        }
+
+        // --- UI Update Functions ---
+
+        function updateProgressBar() {
+            document.querySelectorAll('.progress-step').forEach(stepEl => {
+                const stepNum = parseInt(stepEl.dataset.step);
+                stepEl.classList.remove('completed', 'current');
+                if (stepNum < currentStep) {
+                    stepEl.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    stepEl.classList.add('current');
+                }
+            });
+        }
+
+        function showStep(stepNumber) {
+            document.querySelectorAll('.checkout-step').forEach(stepEl => {
+                stepEl.classList.remove('active');
+            });
+            document.getElementById(getStepId(stepNumber)).classList.add('active');
+            currentStep = stepNumber;
+            updateProgressBar();
+            updateNavigationButtons();
+            initInputAnimations(); // Re-apply animations for new step's inputs
+
+            // Show/hide sidebar based on step
+            const sidebar = document.getElementById('sidebar-content');
+            if (stepNumber === 1 || stepNumber === 2) {
+                sidebar.style.display = 'flex'; // Show sidebar for Cart and Review
+            } else {
+                sidebar.style.display = 'none'; // Hide sidebar for Checkout
+            }
+        }
+
+        function getStepId(stepNumber) {
+            switch (stepNumber) {
+                case 1: return 'cart-step';
+                case 2: return 'review-step';
+                case 3: return 'checkout-step';
+                default: return '';
+            }
+        }
+
+        function updateNavigationButtons() {
+            const nextBtn = document.querySelector(`#${getStepId(currentStep)} .btn-next`);
+            const backBtn = document.querySelector(`#${getStepId(currentStep)} .btn-back`);
+
+            if (nextBtn) {
+                nextBtn.disabled = !validateCurrentStep(false); // Validate without showing alerts
+            }
+            if (backBtn) {
+                backBtn.style.display = currentStep > 1 ? 'flex' : 'none'; // Use flex for button display
+            }
+        }
+
+        // --- Step Specific Render/Update Functions ---
+
+        // Step 1: Cart
+        function renderCartItems() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p style="text-align: center; padding: 30px; color: #6B7280;">Your cart is empty. Start shopping!</p>';
+                document.getElementById('cart-next-btn').disabled = true;
+                document.getElementById('clear-cart-btn').disabled = true;
+                return;
+            }
+
+            cart.forEach(item => {
+                const product = getProductById(item.productId);
+                if (!product) return;
+
+                const itemEl = document.createElement('div');
+                itemEl.className = 'product-item';
+                itemEl.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.description}" />
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${formatCurrency(product.price)}</div>
+                        <div class="quantity-controls">
+                            <button class="decrease-quantity" data-product-id="${product.id}">-</button>
+                            <input type="number" value="${item.quantity}" min="1" class="quantity-input" data-product-id="${product.id}">
+                            <button class="increase-quantity" data-product-id="${product.id}">+</button>
+                        </div>
+                    </div>
+                    <span class="product-subtotal">${formatCurrency(product.price * item.quantity)}</span>
+                    <button class="remove-item-btn" data-product-id="${product.id}">Remove</button>
+                `;
+                cartItemsContainer.appendChild(itemEl);
+            });
+
+            attachCartEventListeners();
+            updateCartSummary();
+            initProductAnimations(); // Re-apply hover animations
+        }
+
+        function attachCartEventListeners() {
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.onclick = (e) => updateQuantity(e.target.dataset.productId, 1);
+            });
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.onclick = (e) => updateQuantity(e.target.dataset.productId, -1);
+            });
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.onchange = (e) => updateQuantity(e.target.dataset.productId, 0, parseInt(e.target.value));
+            });
+            document.querySelectorAll('.remove-item-btn').forEach(button => {
+                button.onclick = (e) => removeItemFromCart(e.target.dataset.productId);
+            });
+            document.querySelectorAll('.recommended-product button').forEach(button => {
+                button.onclick = (e) => addRecommendedProductToCart(e.target.dataset.productId);
+            });
+        }
+
+        function updateQuantity(productId, change, newValue = null) {
+            const itemIndex = cart.findIndex(item => item.productId === productId);
+            if (itemIndex > -1) {
+                let newQty = newValue !== null ? newValue : cart[itemIndex].quantity + change;
+                if (newQty < 1) newQty = 1; // Minimum quantity is 1
+                cart[itemIndex].quantity = newQty;
+                renderCartItems(); // Re-render to update UI and totals
+            }
+        }
+
+        function removeItemFromCart(productId) {
+            cart = cart.filter(item => item.productId !== productId);
+            renderCartItems();
+        }
+
+        function addRecommendedProductToCart(productId) {
+            const existingItem = cart.find(item => item.productId === productId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ productId: productId, quantity: 1 });
+            }
+            alert(`${getProductById(productId).name} added to cart!`);
+            renderCartItems();
+        }
+
+        function updateCartSummary() {
+            const totals = calculateCartTotals();
+            document.getElementById('cart-subtotal').textContent = formatCurrency(totals.subtotal);
+            document.getElementById('cart-discount').textContent = formatCurrency(totals.discount);
+            document.getElementById('cart-total').textContent = formatCurrency(totals.total);
+            // Shipping is dynamic, so keep placeholder for cart step
+            document.getElementById('cart-shipping').textContent = 'Calculated at next step';
+
+            // Enable/disable next button based on cart content
+            document.getElementById('cart-next-btn').disabled = cart.length === 0;
+            document.getElementById('clear-cart-btn').disabled = cart.length === 0;
+        }
+
+        function applyCoupon() {
+            const couponCode = document.getElementById('coupon-code').value.trim().toUpperCase();
+            if (couponCode === 'SAVEBIG') {
+                appliedCoupon = { code: 'SAVEBIG', discount: 3027 };
+                alert('Coupon "SAVEBIG" applied! You saved ₦3,027.');
+            } else if (couponCode === 'MEGA20') {
+                const totals = calculateCartTotals();
+                const discountAmount = totals.subtotal * 0.20; // 20% discount
+                appliedCoupon = { code: 'MEGA20', discount: discountAmount };
+                alert(`Coupon "MEGA20" applied! You saved ${formatCurrency(discountAmount)}.`);
+            } else if (couponCode === 'FREESHIP') {
+                // This coupon affects shipping cost, handled in calculateCartTotals
+                appliedCoupon = { code: 'FREESHIP', discount: 0 }; // No direct monetary discount
+                alert('Coupon "FREESHIP" applied! Enjoy free shipping on eligible orders.');
+            } else if (couponCode === 'WELCOME10') {
+                appliedCoupon = { code: 'WELCOME10', discount: 1000 };
+                alert('Coupon "WELCOME10" applied! You saved ₦1,000.');
+            }
+            else {
+                appliedCoupon = null;
+                alert('Invalid or expired coupon code.');
+            }
+            updateCartSummary();
+        }
+
+        function clearCart() {
+            if (confirm('Are you sure you want to clear your cart?')) {
+                cart = [];
+                appliedCoupon = null;
+                renderCartItems();
+            }
+        }
+
+        // Step 2: Review
+        function renderReviewDetails() {
+            const totals = calculateCartTotals();
+
+            // Shipping Address
+            const shippingName = document.getElementById('shipping-name').value;
+            const shippingAddress1 = document.getElementById('shipping-address1').value;
+            const shippingAddress2 = document.getElementById('shipping-address2').value;
+            const shippingCity = document.getElementById('shipping-city').value;
+            const shippingState = document.getElementById('shipping-state').value;
+            const shippingZip = document.getElementById('shipping-zip').value;
+            const shippingPhone = document.getElementById('shipping-phone').value;
+
+            const reviewShippingAddressEl = document.getElementById('review-shipping-address');
+            if (shippingName && shippingAddress1 && shippingCity && shippingState && shippingZip && shippingPhone) {
+                reviewShippingAddressEl.innerHTML = `
+                    <p><strong>${shippingName}</strong></p>
+                    <p>${shippingAddress1}</p>
+                    ${shippingAddress2 ? `<p>${shippingAddress2}</p>` : ''}
+                    <p>${shippingCity}, ${shippingState} ${shippingZip}</p>
+                    <p>Phone: ${shippingPhone}</p>
+                `;
+            } else {
+                reviewShippingAddressEl.innerHTML = '<p style="color: #EF4444;">Please fill in shipping address details.</p>';
+            }
+
+            // Billing Address
+            const sameAsShipping = document.getElementById('same-as-shipping').checked;
+            const reviewBillingAddressEl = document.getElementById('review-billing-address');
+            if (sameAsShipping) {
+                reviewBillingAddressEl.innerHTML = '<p>Same as shipping address.</p>';
+            } else {
+                const billingName = document.getElementById('billing-name').value;
+                const billingAddress1 = document.getElementById('billing-address1').value;
+                const billingAddress2 = document.getElementById('billing-address2').value;
+                const billingCity = document.getElementById('billing-city').value;
+                const billingState = document.getElementById('billing-state').value;
+                const billingZip = document.getElementById('billing-zip').value;
+                const billingPhone = document.getElementById('billing-phone').value;
+
+                if (billingName && billingAddress1 && billingCity && billingState && billingZip && billingPhone) {
+                    reviewBillingAddressEl.innerHTML = `
+                        <p><strong>${billingName}</strong></p>
+                        <p>${billingAddress1}</p>
+                        ${billingAddress2 ? `<p>${billingAddress2}</p>` : ''}
+                        <p>${billingCity}, ${billingState} ${billingZip}</p>
+                        <p>Phone: ${billingPhone}</p>
+                    `;
+                } else {
+                    reviewBillingAddressEl.innerHTML = '<p style="color: #EF4444;">Please fill in billing address details.</p>';
+                }
+            }
+
+            // Shipping Method
+            const selectedShippingRadio = document.querySelector('input[name="shipping-method"]:checked');
+            selectedShippingMethod = selectedShippingRadio ? selectedShippingRadio.value : 'standard';
+            let shippingMethodText = 'Standard Shipping';
+            if (selectedShippingMethod === 'express') {
+                shippingMethodText = 'Express Shipping (₦2,500)';
+            } else if (appliedCoupon && appliedCoupon.code === 'FREESHIP' && totals.subtotal >= 10000) {
+                shippingMethodText = 'Standard Shipping (Free with coupon)';
+            } else {
+                shippingMethodText = 'Standard Shipping (Free)';
+            }
+            document.getElementById('review-shipping-method').innerHTML = `<p>${shippingMethodText}</p>`;
+
+            // Order Summary
+            const reviewOrderSummaryContainer = document.getElementById('review-order-summary');
+            reviewOrderSummaryContainer.innerHTML = '';
+            cart.forEach(item => {
+                const product = getProductById(item.productId);
+                if (!product) return;
+                const itemEl = document.createElement('div');
+                itemEl.className = 'product-item';
+                itemEl.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.description}" />
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${formatCurrency(product.price)} <span class="quantity">× ${item.quantity}</span></div>
+                    </div>
+                    <span class="product-subtotal">${formatCurrency(product.price * item.quantity)}</span>
+                `;
+                reviewOrderSummaryContainer.appendChild(itemEl);
+            });
+
+            document.getElementById('review-subtotal').textContent = formatCurrency(totals.subtotal);
+            document.getElementById('review-discount').textContent = formatCurrency(totals.discount);
+            document.getElementById('review-shipping-cost').textContent = totals.shippingCost === 0 ? 'Free' : formatCurrency(totals.shippingCost);
+            document.getElementById('review-total').textContent = formatCurrency(totals.total);
+        }
+
+        function toggleBillingAddressFields() {
+            const sameAsShippingCheckbox = document.getElementById('same-as-shipping');
+            const billingAddressFields = document.getElementById('billing-address-fields');
+            const reviewBillingAddress = document.getElementById('review-billing-address');
+
+            if (sameAsShippingCheckbox.checked) {
+                billingAddressFields.style.display = 'none';
+                reviewBillingAddress.style.display = 'block';
+                // Clear billing fields if "same as shipping" is checked
+                document.querySelectorAll('#billing-address-fields .form-input').forEach(input => input.value = '');
+                document.querySelectorAll('#billing-address-fields .form-input').forEach(input => input.removeAttribute('required'));
+            } else {
+                billingAddressFields.style.display = 'block';
+                reviewBillingAddress.style.display = 'none';
+                document.querySelectorAll('#billing-address-fields .form-input').forEach(input => input.setAttribute('required', ''));
+            }
+        }
+
+        // --- Validation Functions ---
+        function validateCurrentStep(showAlerts = true) {
+            let isValid = true;
+            const currentStepId = getStepId(currentStep);
+            const currentStepElement = document.getElementById(currentStepId);
+
+            if (currentStep === 1) { // Cart Step Validation
+                if (cart.length === 0) {
+                    if (showAlerts) alert('Your cart is empty. Please add items before proceeding.');
+                    isValid = false;
+                }
+            } else if (currentStep === 2) { // Review Step Validation
+                // Validate Shipping Address
+                const shippingInputs = currentStepElement.querySelectorAll('#shipping-name, #shipping-address1, #shipping-city, #shipping-state, #shipping-zip, #shipping-phone');
+                for (const input of shippingInputs) {
+                    if (input.hasAttribute('required') && !input.value.trim()) {
+                        isValid = false;
+                        if (showAlerts) alert('Please fill in all required shipping address fields.');
+                        input.focus();
+                        return false; // Exit early on first error
+                    }
+                }
+
+                // Validate Billing Address if not same as shipping
+                const sameAsShipping = document.getElementById('same-as-shipping').checked;
+                if (!sameAsShipping) {
+                    const billingInputs = currentStepElement.querySelectorAll('#billing-name, #billing-address1, #billing-city, #billing-state, #billing-zip, #billing-phone');
+                    for (const input of billingInputs) {
+                        if (input.hasAttribute('required') && !input.value.trim()) {
+                            isValid = false;
+                            if (showAlerts) alert('Please fill in all required billing address fields.');
+                            input.focus();
+                            return false; // Exit early on first error
+                        }
+                    }
+                }
+
+                // Validate Terms and Conditions
+                const termsCheckbox = document.getElementById('terms-conditions');
+                if (!termsCheckbox.checked) {
+                    isValid = false;
+                    if (showAlerts) alert('You must agree to the Terms and Conditions to proceed.');
+                    termsCheckbox.focus();
+                }
+            } else if (currentStep === 3) { // Checkout Step Validation (Payment Form)
+                const paymentForm = document.getElementById('payment-form');
+                const inputs = paymentForm.querySelectorAll('input[required]');
+                for (const input of inputs) {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        if (showAlerts) alert(`Please fill in the ${input.previousElementSibling.textContent.replace(':', '')} field.`);
+                        input.focus();
+                        return false; // Exit early on first error
+                    }
+                }
+
+                // Basic card number length check (more robust validation needed for real app)
+                const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+                if (cardNumber.length < 16) {
+                    isValid = false;
+                    if (showAlerts) alert('Card number is too short.');
+                    document.getElementById('card-number').focus();
+                    return false;
+                }
+
+                // Basic expiry date format check (MM/YY)
+                const expiry = document.getElementById('expiry').value;
+                if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+                    isValid = false;
+                    if (showAlerts) alert('Please enter a valid expiration date (MM/YY).');
+                    document.getElementById('expiry').focus();
+                    return false;
+                } else {
+                    const [month, year] = expiry.split('/').map(Number);
+                    const currentYear = new Date().getFullYear() % 100; // Last two digits
+                    const currentMonth = new Date().getMonth() + 1; // 1-12
+
+                    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+                        isValid = false;
+                        if (showAlerts) alert('Expiration date cannot be in the past.');
+                        document.getElementById('expiry').focus();
+                        return false;
+                    }
+                }
+
+                // Basic CVV length check
+                const cvv = document.getElementById('cvv').value;
+                if (cvv.length < 3) {
+                    isValid = false;
+                    if (showAlerts) alert('CVV is too short.');
+                    document.getElementById('cvv').focus();
+                    return false;
+                }
+            }
+            return isValid;
+        }
+
+        // --- Navigation Logic ---
+        function goToNextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                    if (currentStep === 2) { // If moving to Review step
+                        renderReviewDetails();
+                    }
+                }
+            }
+        }
+
+        function goToPreviousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        function goToSpecificStep(stepNumber) {
+            if (stepNumber < currentStep) { // Allow going back freely
+                currentStep = stepNumber;
+                showStep(currentStep);
+            } else if (stepNumber === currentStep) {
+                // Do nothing, already on this step
+            } else { // Only allow going forward if validation passes
+                if (validateCurrentStep()) {
+                    currentStep = stepNumber;
+                    showStep(currentStep);
+                }
+            }
+        }
+
+        // --- Event Listeners & Initializations ---
+
+        // Animated background particles
+        function createParticles() {
+            const container = document.querySelector('.bg-particles');
+            const particleCount = 50;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Card number formatting
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            input.value = formattedValue;
+        }
+
+        // Expiry date formatting
+        function formatExpiryDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            input.value = value;
+        }
+
+        // Toggle save card option
+        function initToggle() {
+            const toggle = document.getElementById('save-toggle');
+            if (toggle) {
+                toggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            }
+        }
+
+        // Form validation and submission for Checkout
+        function initPaymentForm() {
+            const form = document.getElementById('payment-form');
+            const cardNumberInput = document.getElementById('card-number');
+            const expiryInput = document.getElementById('expiry');
+            const cvvInput = document.getElementById('cvv');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            if (!form) return; // Exit if not on checkout step
+
+            // Format inputs
+            cardNumberInput.addEventListener('input', function() {
+                formatCardNumber(this);
+            });
+
+            expiryInput.addEventListener('input', function() {
+                formatExpiryDate(this);
+            });
+
+            cvvInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
+
+            // Form submission
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                if (!validateCurrentStep()) {
+                    return;
+                }
+                
+                checkoutBtn.classList.add('loading');
+                checkoutBtn.textContent = '';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    checkoutBtn.classList.remove('loading');
+                    checkoutBtn.textContent = 'Payment Successful! ✓';
+                    checkoutBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+                    
+                    // Show success animation
+                    setTimeout(() => {
+                        showSuccessModal();
+                    }, 1000);
+                }, 2000);
+            };
+        }
+
+        // Success modal
+        function showSuccessModal() {
+            const totals = calculateCartTotals();
+            const shippingName = document.getElementById('shipping-name').value;
+            const shippingAddress1 = document.getElementById('shipping-address1').value;
+            const shippingCity = document.getElementById('shipping-city').value;
+            const shippingState = document.getElementById('shipping-state').value;
+            const shippingZip = document.getElementById('shipping-zip').value;
+
+            const estimatedDeliveryDate = new Date();
+            estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + (selectedShippingMethod === 'express' ? 2 : 7)); // 2 days for express, 7 for standard
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            const formattedDate = estimatedDeliveryDate.toLocaleDateString('en-US', options);
+
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5); display: flex; align-items: center;
+                justify-content: center; z-index: 1000;
+            `;
+            modal.innerHTML = `
+                <div class="success-modal-content">
+                    <div class="checkmark-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <h2>Payment Successful!</h2>
+                    <p>Your order has been processed successfully.</p>
+                    <p>Your order will be delivered by <strong>${formattedDate}</strong>.</p>
+                    
+                    <div class="success-modal-details">
+                        <p><strong>Delivery Address:</strong></p>
+                        <p>${shippingName}</p>
+                        <p>${shippingAddress1}, ${shippingCity}, ${shippingState} ${shippingZip}</p>
+                        <p><strong>Total Paid:</strong> ${formatCurrency(totals.total)}</p>
+                    </div>
+
+                    <button onclick="window.location.reload()">Buy More Products</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Input focus animations
+        function initInputAnimations() {
+            const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        }
+
+        // Product hover animations
+        function initProductAnimations() {
+            const products = document.querySelectorAll('.product-list .product-item');
+            products.forEach((product) => {
+                product.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(10px) scale(1.02)';
+                    this.style.boxShadow = '0 10px 25px rgba(139, 92, 246, 0.1)';
+                });
+                
+                product.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0) scale(1)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        }
+
+        // Set estimated delivery date for sidebar
+        function setEstimatedDeliveryDates() {
+            const today = new Date();
+            const expressDate = new Date(today);
+            expressDate.setDate(today.getDate() + 2); // 2 days from now
+            document.getElementById('express-delivery-date').textContent = expressDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        }
+
+        // Main DOMContentLoaded listener
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            initToggle();
+            initPaymentForm(); // Initialize payment form listeners
+            initInputAnimations(); // Apply to all initial inputs
+            initProductAnimations(); // Apply to initial products
+            setEstimatedDeliveryDates(); // Set initial delivery dates
+
+            // Initial render of cart
+            renderCartItems();
+            showStep(1); // Start at Cart step
+
+            // Navigation buttons
+            document.getElementById('cart-next-btn').addEventListener('click', goToNextStep);
+            document.getElementById('review-next-btn').addEventListener('click', goToNextStep);
+            document.querySelectorAll('.navigation-buttons .btn-back').forEach(button => {
+                button.addEventListener('click', (e) => goToSpecificStep(parseInt(e.target.dataset.targetStep)));
+            });
+
+            // Cart specific actions
+            document.getElementById('apply-coupon-btn').addEventListener('click', applyCoupon);
+            document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
+            document.getElementById('continue-shopping-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Redirecting to shopping page...'); // Placeholder for actual redirect
+            });
+
+            // Review step specific actions
+            document.getElementById('same-as-shipping').addEventListener('change', toggleBillingAddressFields);
+            document.querySelectorAll('input[name="shipping-method"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    selectedShippingMethod = radio.value;
+                    renderReviewDetails(); // Re-render to update shipping cost
+                    updateNavigationButtons(); // Re-validate next button
+                });
+            });
+
+            // Edit buttons in Review step
+            document.querySelectorAll('.review-section-block .edit-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const targetStep = parseInt(e.target.dataset.targetStep);
+                    goToSpecificStep(targetStep);
+                });
+            });
+
+            // Add input event listeners for validation on review step fields
+            document.querySelectorAll('#review-step .form-input, #review-step input[type="checkbox"]').forEach(input => {
+                input.addEventListener('input', updateNavigationButtons);
+                input.addEventListener('change', updateNavigationButtons); // For checkboxes/radios
+            });
+
+            // Initial call to update navigation buttons state
+            updateNavigationButtons();
+        });
+
+        // Add CSS for modal animation (already present, ensuring it's there)
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes modalPulse {
+                0% { transform: scale(0.8); opacity: 0; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+
