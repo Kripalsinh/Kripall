@@ -1,0 +1,1054 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - E-Commerce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-card: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --border-color: #4b5563;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border-radius: 12px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* Address Section */
+        .address-card {
+            position: relative;
+        }
+
+        .address-type {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .address-details {
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .edit-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .edit-btn:hover {
+            background: #0891b2;
+            transform: translateY(-1px);
+        }
+
+        /* Wishlist Section */
+        .wishlist-item {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: var(--bg-secondary);
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .product-price {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .remove-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        /* Order History */
+        .order-card {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-delivered {
+            background: #dcfce7;
+            color: var(--success-color);
+        }
+
+        .status-processing {
+            background: #fef3c7;
+            color: var(--warning-color);
+        }
+
+        .status-shipped {
+            background: #dbeafe;
+            color: var(--accent-color);
+        }
+
+        .order-items {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .order-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: var(--bg-secondary);
+        }
+
+        .order-item-info {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .order-item-details {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .order-total {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+
+        .view-details-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .view-details-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: scale(0.9) translateY(-20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        /* Marketing Cards */
+        .marketing-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .marketing-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+        }
+
+        .marketing-card:hover::before {
+            top: -60%;
+            right: -60%;
+        }
+
+        .marketing-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .marketing-description {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .marketing-btn {
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .marketing-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .marketing-card.accent {
+            background: linear-gradient(135deg, var(--accent-color), var(--success-color));
+        }
+
+        .marketing-card.warning {
+            background: linear-gradient(135deg, var(--warning-color), #f97316);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wishlist-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mb-20 { margin-bottom: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">ShopDash</div>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                <div class="user-info">
+                    <div class="user-avatar">JS</div>
+                    <span>John Smith</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('addresses')">Addresses</button>
+            <button class="nav-tab" onclick="showSection('wishlist')">Wishlist</button>
+            <button class="nav-tab" onclick="showSection('orders')">Order History</button>
+            <button class="nav-tab" onclick="showSection('marketing')">Offers & Deals</button>
+        </div>
+
+        <!-- User Addresses Section -->
+        <div id="addresses" class="section active">
+            <h2 class="section-title">Saved Addresses</h2>
+            <div class="card-grid">
+                <div class="card address-card">
+                    <div class="address-type">Shipping Address</div>
+                    <div class="address-details">
+                        <strong>John Smith</strong><br>
+                        123 Main Street, Apt 4B<br>
+                        New York, NY 10001<br>
+                        United States<br>
+                        Phone: (555) 123-4567
+                    </div>
+                    <button class="edit-btn" onclick="editAddress('shipping')">Edit Address</button>
+                </div>
+                
+                <div class="card address-card">
+                    <div class="address-type">Billing Address</div>
+                    <div class="address-details">
+                        <strong>John Smith</strong><br>
+                        456 Business Ave<br>
+                        Brooklyn, NY 11201<br>
+                        United States<br>
+                        Phone: (555) 987-6543
+                    </div>
+                    <button class="edit-btn" onclick="editAddress('billing')">Edit Address</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wishlist Section -->
+        <div id="wishlist" class="section">
+            <h2 class="section-title">My Wishlist</h2>
+            <div class="card-grid">
+                <div class="card wishlist-item">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/817a6452-a9df-4684-8f2c-cec7764f9e19.png" alt="Wireless Bluetooth headphones with active noise cancellation in sleek black design" class="product-image"/>
+                    <div class="product-info">
+                        <div class="product-title">Wireless Bluetooth Headphones</div>
+                        <div class="product-price">$199.99</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromWishlist(1)">Remove</button>
+                </div>
+                
+                <div class="card wishlist-item">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e44bdfd7-b4e1-4734-b20c-b5e61a64e5ed.png" alt="Premium leather laptop bag with multiple compartments in brown color" class="product-image"/>
+                    <div class="product-info">
+                        <div class="product-title">Premium Leather Laptop Bag</div>
+                        <div class="product-price">$149.99</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromWishlist(2)">Remove</button>
+                </div>
+                
+                <div class="card wishlist-item">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3c5dbb0a-2313-4976-8587-224f37aae5e5.png" alt="Smart fitness tracker watch with heart rate monitor and GPS in silver" class="product-image"/>
+                    <div class="product-info">
+                        <div class="product-title">Smart Fitness Tracker</div>
+                        <div class="product-price">$299.99</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromWishlist(3)">Remove</button>
+                </div>
+                
+                <div class="card wishlist-item">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/01be2db6-18d0-431a-96db-d654facf75a2.png" alt="Ergonomic office chair with lumbar support in charcoal gray fabric" class="product-image"/>
+                    <div class="product-info">
+                        <div class="product-title">Ergonomic Office Chair</div>
+                        <div class="product-price">$399.99</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromWishlist(4)">Remove</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order History Section -->
+        <div id="orders" class="section">
+            <h2 class="section-title">Order History</h2>
+            <div class="card-grid">
+                <div class="card order-card">
+                    <div class="order-header">
+                        <div class="order-id">Order #ORD-2024-001</div>
+                        <div class="order-status status-delivered">Delivered</div>
+                    </div>
+                    <div class="order-items">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a3ecbab1-26d7-4ef3-93ec-6e40afff7c07.png" alt="Modern smartphone with dual camera system and metallic finish" class="order-item-image"/>
+                        <div class="order-item-info">
+                            <div class="order-item-name">Smartphone Pro Max</div>
+                            <div class="order-item-details">Ordered: Jan 15, 2024 | Qty: 1</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">$999.99</div>
+                        <button class="view-details-btn" onclick="showOrderDetails('ORD-2024-001')">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="card order-card">
+                    <div class="order-header">
+                        <div class="order-id">Order #ORD-2024-002</div>
+                        <div class="order-status status-shipped">Shipped</div>
+                    </div>
+                    <div class="order-items">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ee50d237-c8ba-477b-89ea-2f7dd4409797.png" alt="High-performance gaming laptop with RGB keyboard and advanced graphics" class="order-item-image"/>
+                        <div class="order-item-info">
+                            <div class="order-item-name">Gaming Laptop RTX</div>
+                            <div class="order-item-details">Ordered: Jan 20, 2024 | Qty: 1</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">$1,499.99</div>
+                        <button class="view-details-btn" onclick="showOrderDetails('ORD-2024-002')">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="card order-card">
+                    <div class="order-header">
+                        <div class="order-id">Order #ORD-2024-003</div>
+                        <div class="order-status status-processing">Processing</div>
+                    </div>
+                    <div class="order-items">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b475b97d-6a30-4c0f-9e6b-56b2cf93d06e.png" alt="Vintage-style mechanical keyboard with cherry switches and retro keycaps" class="order-item-image"/>
+                        <div class="order-item-info">
+                            <div class="order-item-name">Mechanical Keyboard</div>
+                            <div class="order-item-details">Ordered: Jan 25, 2024 | Qty: 2</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">$239.98</div>
+                        <button class="view-details-btn" onclick="showOrderDetails('ORD-2024-003')">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marketing Section -->
+        <div id="marketing" class="section">
+            <h2 class="section-title">Special Offers & Deals</h2>
+            <div class="card-grid-2">
+                <div class="card marketing-card">
+                    <div class="marketing-title">New Arrivals</div>
+                    <div class="marketing-description">Discover the latest products just added to our collection</div>
+                    <button class="marketing-btn">Explore Now</button>
+                </div>
+                
+                <div class="card marketing-card accent">
+                    <div class="marketing-title">Trending Products</div>
+                    <div class="marketing-description">Shop what everyone is talking about right now</div>
+                    <button class="marketing-btn">Shop Trending</button>
+                </div>
+                
+                <div class="card marketing-card warning">
+                    <div class="marketing-title">Flash Sale</div>
+                    <div class="marketing-description">Up to 70% off on selected items. Limited time only!</div>
+                    <button class="marketing-btn">Shop Sale</button>
+                </div>
+                
+                <div class="card marketing-card">
+                    <div class="marketing-title">Member Exclusive</div>
+                    <div class="marketing-description">Special discounts just for our valued members</div>
+                    <button class="marketing-btn">Get Discount</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h3 class="modal-title">Order Details</h3>
+            <div id="orderModalContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample order data
+        const orderData = {
+            'ORD-2024-001': {
+                id: 'ORD-2024-001',
+                status: 'Delivered',
+                date: 'January 15, 2024',
+                deliveredDate: 'January 18, 2024',
+                items: [
+                    {
+                        name: 'Smartphone Pro Max',
+                        description: 'Latest flagship smartphone with 256GB storage',
+                        price: 999.99,
+                        quantity: 1,
+                        image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/587a8cc4-75a5-4c11-8831-11d269119c8c.png'
+                    }
+                ],
+                shipping: {
+                    address: '123 Main Street, Apt 4B, New York, NY 10001',
+                    method: 'Standard Shipping',
+                    cost: 0
+                },
+                total: 999.99
+            },
+            'ORD-2024-002': {
+                id: 'ORD-2024-002',
+                status: 'Shipped',
+                date: 'January 20, 2024',
+                trackingNumber: 'TRK123456789',
+                items: [
+                    {
+                        name: 'Gaming Laptop RTX',
+                        description: 'High-performance gaming laptop with RTX 4070',
+                        price: 1499.99,
+                        quantity: 1,
+                        image: 'https://placehold.co/100x100'
+                    }
+                ],
+                shipping: {
+                    address: '123 Main Street, Apt 4B, New York, NY 10001',
+                    method: 'Express Shipping',
+                    cost: 15.99
+                },
+                total: 1515.98
+            },
+            'ORD-2024-003': {
+                id: 'ORD-2024-003',
+                status: 'Processing',
+                date: 'January 25, 2024',
+                items: [
+                    {
+                        name: 'Mechanical Keyboard',
+                        description: 'Cherry MX switches, RGB backlit',
+                        price: 119.99,
+                        quantity: 2,
+                        image: 'https://placehold.co/100x100'
+                    }
+                ],
+                shipping: {
+                    address: '123 Main Street, Apt 4B, New York, NY 10001',
+                    method: 'Standard Shipping',
+                    cost: 0
+                },
+                total: 239.98
+            }
+        };
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            }
+        });
+
+        // Section navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Address editing functionality
+        function editAddress(type) {
+            alert(`Edit ${type} address functionality would be implemented here. This would typically open a form modal or navigate to an edit page.`);
+        }
+
+        // Wishlist functionality
+        function removeFromWishlist(itemId) {
+            if (confirm('Are you sure you want to remove this item from your wishlist?')) {
+                // In a real application, this would make an API call
+                event.target.closest('.card').style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => {
+                    event.target.closest('.card').remove();
+                }, 300);
+                
+                // Show success message
+                showNotification('Item removed from wishlist successfully!', 'success');
+            }
+        }
+
+        // Order details modal
+        function showOrderDetails(orderId) {
+            const order = orderData[orderId];
+            const modal = document.getElementById('orderModal');
+            const content = document.getElementById('orderModalContent');
+            
+            let itemsHtml = '';
+            order.items.forEach(item => {
+                itemsHtml += `
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+                        <img src="${item.image}" alt="${item.description}" style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;"/>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 5px;">${item.name}</h4>
+                            <p style="color: var(--text-secondary); margin-bottom: 10px;">${item.description}</p>
+                            <p><strong>Quantity:</strong> ${item.quantity}</p>
+                            <p style="color: var(--primary-color); font-weight: bold; font-size: 16px;">$${item.price.toFixed(2)} each</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <p><strong>Order ID:</strong> ${order.id}</p>
+                    <p><strong>Order Date:</strong> ${order.date}</p>
+                    <p><strong>Status:</strong> <span class="order-status status-${order.status.toLowerCase()}">${order.status}</span></p>
+                    ${order.deliveredDate ? `<p><strong>Delivered:</strong> ${order.deliveredDate}</p>` : ''}
+                    ${order.trackingNumber ? `<p><strong>Tracking:</strong> ${order.trackingNumber}</p>` : ''}
+                </div>
+                
+                <h4 style="margin-bottom: 15px;">Order Items</h4>
+                ${itemsHtml}
+                
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
+                    <h4 style="margin-bottom: 15px;">Shipping Information</h4>
+                    <p><strong>Address:</strong> ${order.shipping.address}</p>
+                    <p><strong>Method:</strong> ${order.shipping.method}</p>
+                    <p><strong>Shipping Cost:</strong> $${order.shipping.cost.toFixed(2)}</p>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color); text-align: center;">
+                    <h3 style="color: var(--primary-color);">Total: $${order.total.toFixed(2)}</h3>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('orderModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--error-color)' : 'var(--primary-color)'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 1001;
+                animation: slideInRight 0.3s ease forwards;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add keyframe animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(-100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Marketing card interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const marketingBtns = document.querySelectorAll('.marketing-btn');
+            marketingBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cardTitle = this.closest('.marketing-card').querySelector('.marketing-title').textContent;
+                    showNotification(`Redirecting to ${cardTitle} section...`, 'success');
+                });
+            });
+        });
+
+        // Add smooth scrolling and enhanced interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading states to buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (!this.classList.contains('loading')) {
+                        const originalText = this.textContent;
+                        this.classList.add('loading');
+                        this.innerHTML = '<span class="loading"></span>';
+                        
+                        setTimeout(() => {
+                            this.classList.remove('loading');
+                            this.textContent = originalText;
+                        }, 500);
+                    }
+                });
+            });
+            
+            // Add card hover effects
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
