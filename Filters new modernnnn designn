@@ -1,0 +1,1132 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shop With Category</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: #222;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a, button {
+    cursor: pointer;
+  }
+
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* Header */
+  header {
+    background: url('https://placehold.co/1920x200/png?text=Background+Pattern+Light+Gray+Triangles') no-repeat center/contain;
+    padding: 40px 0 30px;
+    text-align: center;
+  }
+
+  header h1 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #222;
+    margin: 0;
+  }
+
+  nav.breadcrumb {
+    margin-top: 6px;
+    font-size: 0.625rem;
+    color: #666;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  nav.breadcrumb span {
+    user-select: none;
+  }
+
+  nav.breadcrumb svg {
+    width: 8px;
+    height: 8px;
+    fill: #666;
+  }
+
+  /* Layout */
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  /* Sidebar Filters */
+  aside.filters {
+    flex: 0 0 240px;
+    font-size: 0.75rem;
+    color: #444;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  aside.filters label,
+  aside.filters p {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  /* Search */
+  .search-wrapper {
+    position: relative;
+  }
+
+  .search-wrapper input[type="text"] {
+    width: 100%;
+    padding: 6px 32px 6px 10px;
+    font-size: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+  }
+
+  .search-wrapper input[type="text"]:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 6px #22c55eaa;
+  }
+
+  .search-wrapper button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #22c55e;
+    font-size: 0.8rem;
+    padding: 0;
+  }
+
+  /* Price */
+  .price-range {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .price-range .labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.625rem;
+    color: #666;
+  }
+
+  .price-range input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #22c55e 0%, #22c55e 50%, #ddd 50%, #ddd 100%);
+    outline: none;
+    transition: background 0.3s ease;
+  }
+
+  .price-range input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #22c55e;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px #22c55eaa;
+    transition: background 0.3s ease;
+    margin-top: -5px;
+  }
+
+  .price-range input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #22c55e;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px #22c55eaa;
+    transition: background 0.3s ease;
+  }
+
+  /* Color */
+  .color-palette {
+    display: flex;
+    gap: 8px;
+  }
+
+  .color-palette button {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #ccc;
+    transition: border-color 0.3s ease;
+  }
+
+  .color-palette button:hover,
+  .color-palette button.selected {
+    border-color: #22c55e;
+  }
+
+  .color-gray { background: #9ca3af; }
+  .color-green { background: #22c55e; }
+  .color-red { background: #ef4444; }
+  .color-yellow { background: #facc15; }
+  .color-pink { background: #ec4899; }
+  .color-purple { background: #8b5cf6; }
+  .color-blue { background: #3b82f6; }
+  .color-teal { background: #14b8a6; }
+  .color-orange { background: #f97316; }
+
+  /* Size */
+  .size-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .size-grid button {
+    font-size: 0.625rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 0;
+    background: transparent;
+    color: #444;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .size-grid button.selected {
+    background-color: #111;
+    color: #fff;
+    border-color: #111;
+  }
+
+  .size-grid button:hover:not(.selected) {
+    background-color: #22c55e;
+    color: #fff;
+    border-color: #22c55e;
+  }
+
+  /* Category list */
+  .category-list {
+    font-size: 0.625rem;
+    color: #555;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .category-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .category-list li:hover {
+    color: #22c55e;
+  }
+
+  /* Tags */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tags button {
+    font-size: 0.625rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    background: transparent;
+    color: #444;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .tags button.selected {
+    background-color: #111;
+    color: #fff;
+    border-color: #111;
+  }
+
+  .tags button:hover:not(.selected) {
+    background-color: #22c55e;
+    color: #fff;
+    border-color: #22c55e;
+  }
+
+  /* Reset button */
+  .reset-btn {
+    background-color: #111;
+    color: #fff;
+    font-size: 0.625rem;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    width: fit-content;
+    transition: background-color 0.3s ease;
+  }
+
+  .reset-btn:hover {
+    background-color: #22c55e;
+  }
+
+  /* Main content */
+  section.main-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Category scroll */
+  .category-scroll {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+    scrollbar-width: thin;
+    scrollbar-color: #22c55e #f0f0f0;
+  }
+
+  .category-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .category-scroll::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+
+  .category-scroll::-webkit-scrollbar-thumb {
+    background-color: #22c55e;
+    border-radius: 3px;
+  }
+
+  .category-item {
+    flex: 0 0 80px;
+    text-align: center;
+    font-size: 0.625rem;
+    color: #555;
+    user-select: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .category-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+  }
+
+  .category-item:hover,
+  .category-item.active {
+    color: #22c55e;
+  }
+
+  .category-item:hover img,
+  .category-item.active img {
+    transform: scale(1.1);
+  }
+
+  /* Sorting and view controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-size: 0.625rem;
+    color: #666;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .controls-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .controls-left span,
+  .controls-left .tag {
+    font-weight: 600;
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    user-select: none;
+  }
+
+  .controls-left .tag {
+    border: 1px solid #ccc;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .controls-left .tag.selected {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+  }
+
+  .controls-left .tag:hover:not(.selected) {
+    background: #22c55e;
+    color: #fff;
+    border-color: #22c55e;
+  }
+
+  .controls-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  select {
+    font-size: 0.625rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #444;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+
+  select:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 6px #22c55eaa;
+  }
+
+  .view-btn {
+    font-size: 0.75rem;
+    color: #666;
+    background: transparent;
+    border: none;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .view-btn:hover,
+  .view-btn.active {
+    background-color: #22c55e;
+    color: white;
+  }
+
+  /* Products grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
+    gap: 20px;
+  }
+
+  article.product {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 12px;
+    position: relative;
+    box-shadow: 0 0 6px #00000010;
+    transition: box-shadow 0.3s ease;
+  }
+
+  article.product:hover {
+    box-shadow: 0 0 12px #22c55eaa;
+  }
+
+  /* Badges */
+  .badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 0.5rem;
+    font-weight: 700;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    user-select: none;
+    text-transform: uppercase;
+  }
+
+  .badge.sale {
+    background-color: #111;
+  }
+
+  .badge.discount {
+    background-color: #111;
+  }
+
+  .badge.featured {
+    background-color: #22c55e;
+    right: 8px;
+    left: auto;
+  }
+
+  /* Product image */
+  article.product img {
+    display: block;
+    margin: 0 auto 8px;
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: contain;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+  }
+
+  article.product:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Product title */
+  article.product h3 {
+    font-weight: 600;
+    font-size: 0.75rem;
+    margin: 0 0 6px;
+    color: #222;
+    min-height: 38px;
+  }
+
+  /* Price */
+  .price {
+    font-weight: 700;
+    color: #22c55e;
+    font-size: 0.75rem;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .price .old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-weight: 400;
+    font-size: 0.625rem;
+  }
+
+  /* Pagination */
+  nav.pagination {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.625rem;
+    color: #666;
+  }
+
+  nav.pagination span {
+    user-select: none;
+  }
+
+  nav.pagination button {
+    border: 1px solid #ccc;
+    background: white;
+    color: #666;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  nav.pagination button:hover {
+    background-color: #22c55e;
+    color: white;
+    border-color: #22c55e;
+  }
+
+  nav.pagination button.active {
+    background-color: #111;
+    color: white;
+    border-color: #111;
+  }
+
+  nav.pagination .next-btn {
+    font-weight: 700;
+    color: #111;
+    background: transparent;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+
+  nav.pagination .next-btn:hover {
+    color: #22c55e;
+  }
+
+  /* Footer info */
+  footer.info-section {
+    background: #f9fafb;
+    padding: 40px 16px;
+    margin-top: 64px;
+  }
+
+  footer.info-section .info-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 32px;
+    color: #666;
+    font-size: 0.625rem;
+  }
+
+  footer.info-section .info-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  footer.info-section .info-item .number {
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: #ccc;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  footer.info-section .info-item h4 {
+    margin: 0 0 6px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  footer.info-section .info-item p {
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    main {
+      flex-direction: column;
+    }
+    aside.filters {
+      width: 100%;
+      flex: none;
+      order: 2;
+    }
+    section.main-content {
+      order: 1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .category-scroll {
+      gap: 16px;
+    }
+    .category-item {
+      flex: 0 0 70px;
+      font-size: 0.55rem;
+    }
+    .category-item img {
+      width: 50px;
+      height: 50px;
+    }
+    .products-grid {
+      grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
+      gap: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Shop With Category</h1>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <span>Home</span>
+      <svg aria-hidden="true" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9L5 5L1 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Shop Standard</span>
+    </nav>
+  </div>
+</header>
+<main class="container" role="main">
+  <aside class="filters" aria-label="Product Filters">
+    <div>
+      <label for="search-product">Filters</label>
+      <div class="search-wrapper">
+        <input type="text" id="search-product" placeholder="Search Product" aria-label="Search Product" />
+        <button aria-label="Search"><svg aria-hidden="true" width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="5"/><line x1="11" y1="11" x2="14" y2="14"/></svg></button>
+      </div>
+    </div>
+    <div class="price-range">
+      <p>Price</p>
+      <div class="labels">
+        <span id="min-price-label">Min Price: $19</span>
+        <span id="max-price-label">Max Price: $346</span>
+      </div>
+      <input type="range" id="price-range" min="19" max="346" value="100" aria-labelledby="min-price-label max-price-label" />
+    </div>
+    <div>
+      <p>Color</p>
+      <div class="color-palette" role="list" aria-label="Color filter options">
+        <button class="color-gray" aria-label="Gray" data-color="gray" tabindex="0"></button>
+        <button class="color-green" aria-label="Green" data-color="green" tabindex="0"></button>
+        <button class="color-red" aria-label="Red" data-color="red" tabindex="0"></button>
+        <button class="color-yellow" aria-label="Yellow" data-color="yellow" tabindex="0"></button>
+        <button class="color-pink" aria-label="Pink" data-color="pink" tabindex="0"></button>
+        <button class="color-purple" aria-label="Purple" data-color="purple" tabindex="0"></button>
+        <button class="color-blue" aria-label="Blue" data-color="blue" tabindex="0"></button>
+        <button class="color-teal" aria-label="Teal" data-color="teal" tabindex="0"></button>
+        <button class="color-orange" aria-label="Orange" data-color="orange" tabindex="0"></button>
+      </div>
+    </div>
+    <div>
+      <p>Size</p>
+      <div class="size-grid" role="list" aria-label="Size filter options">
+        <button data-size="4" tabindex="0">4</button>
+        <button data-size="6" tabindex="0">6</button>
+        <button data-size="8" tabindex="0">8</button>
+        <button data-size="10" tabindex="0">10</button>
+        <button class="selected" data-size="12" tabindex="0">12</button>
+        <button data-size="14" tabindex="0">14</button>
+        <button data-size="16" tabindex="0">16</button>
+        <button data-size="18" tabindex="0">18</button>
+        <button data-size="20" tabindex="0">20</button>
+      </div>
+    </div>
+    <div>
+      <p>Category</p>
+      <ul class="category-list" role="list" aria-label="Category filter options">
+        <li>Yoga Mats <span>(15)</span></li>
+        <li>Yoga Accessories <span>(22)</span></li>
+        <li>Reusable Bags <span>(18)</span></li>
+        <li>Water Bottles <span>(10)</span></li>
+        <li>Bamboo Toothbrushes <span>(8)</span></li>
+        <li>Fitness Trackers <span>(2)</span></li>
+        <li>Home Fitness Equipment <span>(7)</span></li>
+      </ul>
+    </div>
+    <div>
+      <p>Tags</p>
+      <div class="tags" role="list" aria-label="Tags filter options">
+        <button data-tag="Mats" tabindex="0">Mats</button>
+        <button data-tag="Accessories" tabindex="0">Accessories</button>
+        <button data-tag="Bottles" tabindex="0">Bottles</button>
+        <button class="selected" data-tag="Bottles" tabindex="0">Bottles</button>
+        <button class="selected" data-tag="Trackers" tabindex="0">Trackers</button>
+        <button data-tag="Bags" tabindex="0">Bags</button>
+        <button data-tag="Cup" tabindex="0">Cup</button>
+        <button data-tag="Toothbrushes" tabindex="0">Toothbrushes</button>
+      </div>
+    </div>
+    <button class="reset-btn" id="reset-filters">RESET</button>
+  </aside>
+  <section class="main-content" aria-label="Product Listings">
+    <div class="category-scroll" role="list" aria-label="Product categories">
+      <div class="category-item active" role="listitem" tabindex="0" data-category="wooden-water-bottles">
+        <img src="https://storage.googleapis.com/a1aa/image/cbbc9710-1ad8-4161-e7e2-42628a1b8df8.jpg" alt="Gray wooden chair representing Wooden Water Bottles category" />
+        Wooden Water Bottles
+      </div>
+      <div class="category-item" role="listitem" tabindex="0" data-category="bamboo-toothbrushes">
+        <img src="https://storage.googleapis.com/a1aa/image/597e937e-4d81-409b-5680-9bba0888ee76.jpg" alt="Yellow bamboo toothbrushes" />
+        Bamboo toothbrushes
+      </div>
+      <div class="category-item" role="listitem" tabindex="0" data-category="eco-friendly-bags">
+        <img src="https://storage.googleapis.com/a1aa/image/a7633d1b-dcaf-41d9-578b-917cd435059e.jpg" alt="Red chair representing Eco friendly bags" />
+        Eco friendly bags
+      </div>
+      <div class="category-item" role="listitem" tabindex="0" data-category="wooden-cup">
+        <img src="https://storage.googleapis.com/a1aa/image/534715ba-0e22-425c-de3b-58431855b766.jpg" alt="Wooden cup" />
+        Wooden Cup
+      </div>
+      <div class="category-item" role="listitem" tabindex="0" data-category="bamboo-toothbrushes-2">
+        <img src="https://storage.googleapis.com/a1aa/image/1e07140e-fbe4-4cce-efc1-4ae58a2e5f99.jpg" alt="Red headphones representing Bamboo toothbrushes" />
+        Bamboo toothbrushes
+      </div>
+      <div class="category-item" role="listitem" tabindex="0" data-category="eco-friendly-bags-2">
+        <img src="https://storage.googleapis.com/a1aa/image/64c3d5cf-8841-41a5-8aac-6d969f30d48e.jpg" alt="Green water bottle representing Eco friendly bags" />
+        Eco friendly bags
+      </div>
+      <div class="category-item" role="listitem" tabindex="0" data-category="wooden-cup-2">
+        <img src="https://storage.googleapis.com/a1aa/image/8ffcee8d-de82-45b9-fc89-c785b3af79e1.jpg" alt="Green watch representing Wooden Cup" />
+        Wooden Cup
+      </div>
+    </div>
+    <div class="controls" aria-label="Sorting and view controls">
+      <div class="controls-left" role="list" aria-label="Selected filters">
+        <span class="tag" tabindex="0">BOTTLE</span>
+        <span class="tag" tabindex="0">WOODEN CUP</span>
+        <span class="tag" tabindex="0">BAGS</span>
+        <span>Showing 1-5 Of 50 Results</span>
+      </div>
+      <div class="controls-right">
+        <select aria-label="Default sorting" id="sort-select">
+          <option>Default sorting</option>
+          <option>Sort by popularity</option>
+          <option>Sort by average rating</option>
+          <option>Sort by latest</option>
+          <option>Sort by price: low to high</option>
+          <option>Sort by price: high to low</option>
+        </select>
+        <select aria-label="Categories" id="category-select">
+          <option>Categories</option>
+          <option>Category 1</option>
+          <option>Category 2</option>
+        </select>
+        <button class="view-btn active" aria-label="List view" data-view="list" title="List view" tabindex="0">
+          <svg aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="13" y2="6"/><line x1="3" y1="10" x2="13" y2="10"/><line x1="3" y1="14" x2="13" y2="14"/></svg>
+        </button>
+        <button class="view-btn" aria-label="Grid view" data-view="grid" title="Grid view" tabindex="0">
+          <svg aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="4" height="4"/><rect x="9" y="3" width="4" height="4"/><rect x="3" y="9" width="4" height="4"/><rect x="9" y="9" width="4" height="4"/></svg>
+        </button>
+        <button class="view-btn" aria-label="Grid view 2" data-view="grid2" title="Grid view 2" tabindex="0">
+          <svg aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="products-grid" id="products-grid" aria-live="polite" aria-label="Products">
+      <!-- Product cards inserted by JS -->
+    </div>
+    <nav class="pagination" aria-label="Pagination">
+      <span>Showing 1-5 Of 50 Results</span>
+      <button class="page-btn active" aria-current="page" tabindex="0">1</button>
+      <button class="page-btn" tabindex="0">2</button>
+      <button class="page-btn" tabindex="0">3</button>
+      <button class="next-btn" tabindex="0">NEXT</button>
+    </nav>
+  </section>
+</main>
+<footer class="info-section" aria-label="Information">
+  <div class="info-grid container">
+    <div class="info-item">
+      <div class="number">01</div>
+      <div>
+        <h4>Filter &amp; Discover</h4>
+        <p>Lorem ipsum is simply dummy text of the printing and typesetting</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="number">02</div>
+      <div>
+        <h4>Add to cart</h4>
+        <p>Lorem ipsum is simply dummy text of the printing and typesetting</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="number">03</div>
+      <div>
+        <h4>Fast Shipping</h4>
+        <p>Lorem ipsum is simply dummy text of the printing and typesetting</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="number">04</div>
+      <div>
+        <h4>Enjoy The Product</h4>
+        <p>Lorem ipsum is simply dummy text of the printing and typesetting</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Data for products
+  const products = [
+    {
+      id: 1,
+      title: "Wooden Water Bottles",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/a96aed52-5100-40ff-e950-56aa36cf1f59.jpg",
+      alt: "Red chair representing Wooden Water Bottles",
+      badges: ["sale"],
+    },
+    {
+      id: 2,
+      title: "Wooden Cup",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/ec8da0cf-f926-4c6c-2bae-a558bb44099f.jpg",
+      alt: "Rolled purple, yellow, and blue yoga mats representing Wooden Cup",
+      badges: ["discount", "featured"],
+    },
+    {
+      id: 3,
+      title: "Bamboo toothbrushes",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/ce3b9773-7c76-4f21-8f58-f61a0bcf1ad4.jpg",
+      alt: "Green watch representing Bamboo toothbrushes",
+      badges: ["discount"],
+    },
+    {
+      id: 4,
+      title: "Eco friendly bags",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/70d672af-a40a-46c2-4995-16d71ef35c21.jpg",
+      alt: "Brown paper bag representing Eco friendly bags",
+      badges: ["discount", "featured"],
+    },
+    {
+      id: 5,
+      title: "Bamboo toothbrushes",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/56e7b40b-b40d-4263-0580-b65b22ed0a5a.jpg",
+      alt: "Wooden brushes representing Bamboo toothbrushes",
+      badges: ["discount"],
+    },
+    {
+      id: 6,
+      title: "Eco friendly bags",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/ca8ccba5-e175-4a29-c9f2-629d146a1b45.jpg",
+      alt: "Yellow shoes representing Eco friendly bags",
+      badges: ["discount", "featured"],
+    },
+    {
+      id: 7,
+      title: "Wooden Water Bottles",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/d371aa55-3e64-4edf-d6e5-d9b649f101eb.jpg",
+      alt: "Red headphones representing Wooden Water Bottles",
+      badges: ["sale"],
+    },
+    {
+      id: 8,
+      title: "Wooden Cup",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/dc75b6ab-ae27-4a07-ac15-f031f70de2c8.jpg",
+      alt: "Beige bag representing Wooden Cup",
+      badges: ["discount", "featured"],
+    },
+    {
+      id: 9,
+      title: "Wooden Water Bottles",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/64ca65ca-3c9c-4f55-de75-bc59cf36fe64.jpg",
+      alt: "Gray sofa representing Wooden Water Bottles",
+      badges: ["sale"],
+    },
+    {
+      id: 10,
+      title: "Wooden Cup",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/534715ba-0e22-425c-de3b-58431855b766.jpg",
+      alt: "Wooden cup",
+      badges: ["discount", "featured"],
+    },
+    {
+      id: 11,
+      title: "Bamboo toothbrushes",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/c2e67e42-a2a9-4b1d-0c50-04305b726f22.jpg",
+      alt: "Gray chair representing Bamboo toothbrushes",
+      badges: ["discount"],
+    },
+    {
+      id: 12,
+      title: "Eco friendly bags",
+      price: 40.00,
+      oldPrice: 45.00,
+      img: "https://storage.googleapis.com/a1aa/image/64c3d5cf-8841-41a5-8aac-6d969f30d48e.jpg",
+      alt: "Green water bottle representing Eco friendly bags",
+      badges: ["discount", "featured"],
+    },
+  ];
+
+  const productsGrid = document.getElementById('products-grid');
+
+  // Render products
+  function renderProducts(view = 'grid') {
+    productsGrid.innerHTML = '';
+    productsGrid.className = 'products-grid';
+    if (view === 'list') {
+      productsGrid.style.gridTemplateColumns = '1fr';
+    } else if (view === 'grid2') {
+      productsGrid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(120px,1fr))';
+    } else {
+      productsGrid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(160px,1fr))';
+    }
+
+    products.forEach(product => {
+      const article = document.createElement('article');
+      article.className = 'product';
+      article.setAttribute('tabindex', '0');
+      article.setAttribute('aria-label', product.title + ', price $' + product.price.toFixed(2));
+
+      // Badges
+      product.badges.forEach(badge => {
+        const badgeEl = document.createElement('div');
+        badgeEl.className = 'badge ' + (badge === 'sale' ? 'sale' : badge === 'discount' ? 'discount' : '') + (badge === 'featured' ? ' featured' : '');
+        badgeEl.textContent = badge === 'sale' ? 'SALE' : badge === 'discount' ? '-31%' : badge === 'featured' ? 'FEATURED' : '';
+        article.appendChild(badgeEl);
+      });
+
+      // Image
+      const img = document.createElement('img');
+      img.src = product.img;
+      img.alt = product.alt;
+      article.appendChild(img);
+
+      // Title
+      const h3 = document.createElement('h3');
+      h3.textContent = product.title;
+      article.appendChild(h3);
+
+      // Price
+      const priceDiv = document.createElement('div');
+      priceDiv.className = 'price';
+      const newPrice = document.createElement('span');
+      newPrice.textContent = `$${product.price.toFixed(2)}`;
+      priceDiv.appendChild(newPrice);
+      if (product.oldPrice) {
+        const oldPrice = document.createElement('span');
+        oldPrice.className = 'old-price';
+        oldPrice.textContent = `$${product.oldPrice.toFixed(2)}`;
+        priceDiv.appendChild(oldPrice);
+      }
+      article.appendChild(priceDiv);
+
+      productsGrid.appendChild(article);
+    });
+  }
+
+  // Initial render
+  renderProducts();
+
+  // View buttons
+  const viewButtons = document.querySelectorAll('.view-btn');
+  viewButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      viewButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProducts(btn.dataset.view);
+    });
+  });
+
+  // Color selection
+  const colorButtons = document.querySelectorAll('.color-palette button');
+  colorButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      colorButtons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  // Size selection
+  const sizeButtons = document.querySelectorAll('.size-grid button');
+  sizeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sizeButtons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  // Tags selection
+  const tagButtons = document.querySelectorAll('.tags button');
+  tagButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('selected');
+    });
+  });
+
+  // Reset filters
+  document.getElementById('reset-filters').addEventListener('click', () => {
+    // Reset search
+    document.getElementById('search-product').value = '';
+    // Reset price range
+    const priceRange = document.getElementById('price-range');
+    priceRange.value = 100;
+    updatePriceRangeBackground(priceRange);
+    // Reset colors
+    colorButtons.forEach(b => b.classList.remove('selected'));
+    // Reset sizes
+    sizeButtons.forEach(b => b.classList.remove('selected'));
+    sizeButtons.forEach(b => {
+      if (b.dataset.size === '12') b.classList.add('selected');
+    });
+    // Reset tags
+    tagButtons.forEach(b => b.classList.remove('selected'));
+  });
+
+  // Price range background update
+  function updatePriceRangeBackground(range) {
+    const min = range.min;
+    const max = range.max;
+    const val = range.value;
+    const percent = ((val - min) / (max - min)) * 100;
+    range.style.background = `linear-gradient(to right, #22c55e 0%, #22c55e ${percent}%, #ddd ${percent}%, #ddd 100%)`;
+  }
+
+  const priceRangeInput = document.getElementById('price-range');
+  priceRangeInput.addEventListener('input', () => {
+    updatePriceRangeBackground(priceRangeInput);
+  });
+  updatePriceRangeBackground(priceRangeInput);
+
+  // Keyboard accessibility for category scroll items
+  const categoryItems = document.querySelectorAll('.category-item');
+  categoryItems.forEach(item => {
+    item.addEventListener('click', () => {
+      categoryItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        item.click();
+      }
+    });
+  });
+
+  // Keyboard accessibility for tags and sizes and colors
+  function addKeyboardToggle(buttons) {
+    buttons.forEach(btn => {
+      btn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+  }
+  addKeyboardToggle(tagButtons);
+  addKeyboardToggle(sizeButtons);
+  addKeyboardToggle(colorButtons);
+
+  // Pagination buttons (just highlight active for demo)
+  const pageButtons = document.querySelectorAll('.page-btn');
+  pageButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pageButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
