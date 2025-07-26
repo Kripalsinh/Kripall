@@ -1,0 +1,2999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Community Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #4a6741 100%);
+            --primary-color: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary-color: #f093fb;
+            --accent-color: #4facfe;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #a0aec0;
+            --bg-primary: #ffffff;
+            --bg-secondary: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --bg-tertiary: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --border-color: #e2e8f0;
+=======
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-light: #94a3b8;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --border-color: #475569;
+            --secondary-color: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-primary);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary-color);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.4s forwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Main Content */
+        main {
+            padding: 4rem 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .section-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .section-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+        }
+
+        /* Chat Section */
+        .chat-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: slideInLeft 0.3s ease forwards;
+        }
+
+        .message.own {
+            flex-direction: row-reverse;
+        }
+
+        .message.own .message-bubble {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .message-bubble {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            max-width: 70%;
+            position: relative;
+        }
+
+        .message-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .timestamp {
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+
+        .message-text {
+            font-size: 0.9rem;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .send-button {
+            padding: 0.75rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        /* News Section */
+        .news-grid {
+            display: grid;
+            gap: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .news-card {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .news-card:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(5px);
+        }
+
+        .news-image {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            overflow: hidden;
+        }
+
+        .news-content h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .news-summary {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .news-meta {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* Blog Section */
+        .blog-section {
+            grid-column: 1 / -1;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .featured-post {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .featured-post h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-post p {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .read-more:hover {
+            transform: translateX(5px);
+        }
+
+        .recent-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .post-card {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .post-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .post-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .post-meta {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            margin-top: 1rem;
+        }
+
+        .newsletter-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .newsletter-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 400px;
+            margin: 0 auto;
+            gap: 0.5rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .newsletter-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .newsletter-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .newsletter-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .typing-indicator.visible {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--text-light);
+            animation: pulse 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .chat-container {
+                height: 300px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-input {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+
+            .section-card {
+                padding: 1.5rem;
+            }
+
+            .hero {
+                padding: 2rem 0;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+
+            .send-button {
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading states */
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Chatbot Styles */
+        .chatbot-trigger {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .chatbot-trigger i {
+            font-size: 1.5rem;
+        }
+
+        .chatbot-popup {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 350px;
+            height: 500px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            z-index: 1001;
+            transform: translateY(100%) scale(0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-popup.active {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .chatbot-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chatbot-avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chatbot-info h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .chatbot-info span {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-left: auto;
+            border-radius: var(--radius-md);
+            transition: background 0.3s ease;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .chatbot-message {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+
+        .chatbot-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .chatbot-message-avatar img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .chatbot-message-content {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .chatbot-message.bot .chatbot-message-content {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .chatbot-message.user .chatbot-message-content {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .chatbot-input-container {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .chatbot-send {
+            padding: 0.75rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-send:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section Updates */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        .hero-bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button.primary {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-button.secondary:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* Community Features Styles */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-list {
+            list-style: none;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Community Stats Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--success-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-item:hover::before {
+            opacity: 0.1;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-color);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--warning-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Events Section Styles */
+        .events-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .event-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .event-card:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-color);
+        }
+
+        .event-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--warning-gradient);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            min-width: 60px;
+        }
+
+        .date-day {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .date-month {
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .event-content {
+            flex: 1;
+        }
+
+        .event-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .event-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .event-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .join-event-btn {
+            background: var(--success-gradient);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .join-event-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Resources Section Styles */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .resource-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--secondary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .resource-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--secondary-color);
+        }
+
+        .resource-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--secondary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.8rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .resource-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .resource-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .resource-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .resource-tags span {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Services Styles */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-item {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-color);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .service-item h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .service-item p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .service-item ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .service-item li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .service-item li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Communities Styles */
+        .communities-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .community-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .community-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .community-item.saved {
+            border-color: var(--accent-color);
+        }
+
+        .community-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-right: 1rem;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .community-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .community-info {
+            flex: 1;
+        }
+
+        .community-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .community-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .members-count {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .community-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-btn, .save-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .chat-btn {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .chat-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .save-btn {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .save-btn:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .save-btn.saved {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* Community Chat Popup */
+        .community-chat-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 900px;
+            height: 700px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            display: grid;
+            grid-template-rows: auto 1fr auto auto auto;
+            overflow: hidden;
+            border: 3px solid;
+            border-image: var(--primary-gradient) 1;
+        }
+
+        .community-chat-popup.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .chat-popup-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .chat-popup-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+        }
+
+        .chat-community-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chat-community-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-community-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .chat-community-details h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chat-community-details span {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chat-popup-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: background 0.3s ease;
+        }
+
+        .chat-popup-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-popup-messages {
+            padding: 1.5rem;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            background: var(--bg-secondary);
+        }
+
+        .chat-popup-online-users {
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--border-color);
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .online-users-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .online-users-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .online-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .online-user-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .chat-popup-input {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-popup-input-field {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-popup-input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .chat-popup-send {
+            padding: 1rem 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .chat-popup-send:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .popup-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideInLeft 0.3s ease forwards;
+        }
+
+        .popup-message.own {
+            flex-direction: row-reverse;
+        }
+
+        .popup-message.own .popup-message-bubble {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .popup-message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .popup-message-bubble {
+            background: var(--bg-primary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-lg);
+            max-width: 70%;
+            box-shadow: var(--shadow-md);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .popup-message-bubble::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0.1;
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        .popup-message-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-username {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .popup-timestamp {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .popup-message-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        /* Responsive Design for Community Chat */
+        @media (max-width: 768px) {
+            .community-chat-popup {
+                width: 95vw;
+                height: 90vh;
+                max-width: none;
+            }
+
+            .communities-container {
+                max-height: 300px;
+            }
+
+            .community-item {
+                padding: 0.75rem;
+            }
+
+            .community-icon {
+                width: 50px;
+                height: 50px;
+                margin-right: 0.75rem;
+            }
+
+            .chat-popup-online-users {
+                display: none;
+            }
+
+            .community-chat-popup {
+                grid-template-rows: auto 1fr auto auto;
+            }
+        }
+
+        /* Chat popup overlay */
+        .chat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .chat-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        =======
+
+        <section class="hero" id="home">
+            <div class="hero-background">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fc8de3e0-a485-4efa-890b-fc7b8eb23c1c.png" alt="Modern digital community space with connected people, gradients, and technology elements" class="hero-bg-image" />
+            </div>
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Welcome to TechCommunity Pro</h1>
+                    <p>Connect with developers, designers, and tech enthusiasts worldwide. Share knowledge, collaborate on projects, and grow together in our thriving community ecosystem.</p>
+                    <div class="hero-buttons">
+                        <a href="#communities" class="cta-button primary">
+                            <i class="fas fa-users"></i>
+                            Join Communities
+                        </a>
+                        <a href="#events" class="cta-button secondary">
+                            <i class="fas fa-calendar"></i>
+                            View Events
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="content-grid">
+                <!-- Chat Section -->
+                <section class="section-card fade-in-up" id="chat">
+                    <h2 class="section-title">
+                        <i class="fas fa-users"></i>
+                        Communities
+                    </h2>
+                    <div class="communities-container">
+                        <div class="community-item" data-community="general">
+                            <div class="community-icon">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/35894fd1-71c5-40e2-bf60-922faae0d16c.png" alt="General community chat with diverse group icons and colorful gradient background" />
+                            </div>
+                            <div class="community-info">
+                                <h3>General Discussion</h3>
+                                <p>Open chat for all topics</p>
+                                <span class="members-count">1.2k members</span>
+                            </div>
+                            <div class="community-actions">
+                                <button class="chat-btn" onclick="openCommunityChat('general')">
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                                <button class="save-btn" onclick="toggleSaveCommunity('general')">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="community-item" data-community="tech">
+                            <div class="community-icon">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1fc8482f-d6a9-468f-8cf3-989f35d5083d.png" alt="Technology community with coding symbols, circuits, and modern tech elements" />
+                            </div>
+                            <div class="community-info">
+                                <h3>Tech Talk</h3>
+                                <p>Latest in technology and development</p>
+                                <span class="members-count">850 members</span>
+                            </div>
+                            <div class="community-actions">
+                                <button class="chat-btn" onclick="openCommunityChat('tech')">
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                                <button class="save-btn" onclick="toggleSaveCommunity('tech')">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="community-item" data-community="design">
+                            <div class="community-icon">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bf5a2311-75aa-4830-b80d-ba112aa6f50a.png" alt="Creative design community with paintbrush, color palette, and artistic elements" />
+                            </div>
+                            <div class="community-info">
+                                <h3>Design Hub</h3>
+                                <p>UI/UX and creative discussions</p>
+                                <span class="members-count">620 members</span>
+                            </div>
+                            <div class="community-actions">
+                                <button class="chat-btn" onclick="openCommunityChat('design')">
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                                <button class="save-btn" onclick="toggleSaveCommunity('design')">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="community-item" data-community="startup">
+                            <div class="community-icon">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/78a724a3-5bfa-4ae0-b047-d64507d49830.png" alt="Startup community with rocket launch, growth charts, and entrepreneurial symbols" />
+                            </div>
+                            <div class="community-info">
+                                <h3>Startup Central</h3>
+                                <p>Entrepreneurs and business ideas</p>
+                                <span class="members-count">450 members</span>
+                            </div>
+                            <div class="community-actions">
+                                <button class="chat-btn" onclick="openCommunityChat('startup')">
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                                <button class="save-btn" onclick="toggleSaveCommunity('startup')">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="community-item" data-community="devops">
+                            <div class="community-icon">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/31a983b8-a7d6-4f42-942a-7fccf59ece22.png" alt="DevOps community with server automation, deployment pipelines, and cloud infrastructure" />
+                            </div>
+                            <div class="community-info">
+                                <h3>DevOps Engineers</h3>
+                                <p>Infrastructure, automation, and deployment</p>
+                                <span class="members-count">720 members</span>
+                            </div>
+                            <div class="community-actions">
+                                <button class="chat-btn" onclick="openCommunityChat('devops')">
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                                <button class="save-btn" onclick="toggleSaveCommunity('devops')">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="community-item" data-community="mobile">
+                            <div class="community-icon">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2fdd7fe0-0dce-4c48-bf1a-fa82c43cb04d.png" alt="Mobile development community with smartphone apps, React Native, and mobile UI designs" />
+                            </div>
+                            <div class="community-info">
+                                <h3>Mobile Developers</h3>
+                                <p>iOS, Android, and cross-platform development</p>
+                                <span class="members-count">920 members</span>
+                            </div>
+                            <div class="community-actions">
+                                <button class="chat-btn" onclick="openCommunityChat('mobile')">
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                                <button class="save-btn" onclick="toggleSaveCommunity('mobile')">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Community Chat Popup -->
+                    <div class="community-chat-popup" id="communityChatPopup">
+                        <div class="chat-popup-header">
+                            <div class="chat-community-info">
+                                <div class="chat-community-icon" id="chatCommunityIcon">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/67184f04-ec83-4f3e-82fd-7bdc6d4eeb66.png" alt="Active community chat room icon with vibrant colors and communication symbols" />
+                                </div>
+                                <div class="chat-community-details">
+                                    <h3 id="chatCommunityName">Community Chat</h3>
+                                    <span id="chatOnlineCount">24 online</span>
+                                </div>
+                            </div>
+                            <button class="chat-popup-close" onclick="closeCommunityChat()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="chat-popup-messages" id="chatPopupMessages">
+                            <!-- Messages will be dynamically inserted here -->
+                        </div>
+                        
+                        <div class="chat-popup-online-users">
+                            <div class="online-users-header">
+                                <i class="fas fa-circle" style="color: var(--accent-color);"></i>
+                                <span>Online Users</span>
+                            </div>
+                            <div class="online-users-list" id="onlineUsersList">
+                                <!-- Online users will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="typing-indicator" id="chatTypingIndicator">
+                            <span>Someone is typing</span>
+                            <div class="typing-dots">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-popup-input">
+                            <input type="text" class="chat-popup-input-field" id="chatPopupInput" placeholder="Type your message..." onkeypress="handleCommunityKeyPress(event)">
+                            <button class="chat-popup-send" onclick="sendCommunityMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- News Section -->
+                <section class="section-card fade-in-up" id="news">
+                    <h2 class="section-title">
+                        <i class="fas fa-newspaper"></i>
+                        Latest News
+                    </h2>
+                    <div class="news-grid" id="newsGrid">
+                        <div class="news-card" onclick="openNews('tech-trends')">
+                            <div class="news-image">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/44a938ad-e097-4a79-832c-db84209c99e2.png" alt="Modern technology devices and digital interfaces showcasing latest tech trends" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md);" />
+                            </div>
+                            <div class="news-content">
+                                <h3>10 Technology Trends Shaping 2024</h3>
+                                <p class="news-summary">Explore the cutting-edge technologies that are transforming industries worldwide.</p>
+                                <div class="news-meta">Tech News • 2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="news-card" onclick="openNews('ai-revolution')">
+                            <div class="news-image">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f79e6c49-e769-4413-a3ed-a15743b95e8d.png" alt="Artificial intelligence brain network with glowing neural connections and data flows" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md);" />
+                            </div>
+                            <div class="news-content">
+                                <h3>AI Revolution in Web Development</h3>
+                                <p class="news-summary">How artificial intelligence is changing the way we build and design websites.</p>
+                                <div class="news-meta">Development • 4 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="news-card" onclick="openNews('remote-work')">
+                            <div class="news-image">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0a6c320f-c101-465f-b958-a0a32a188981.png" alt="Modern home office setup with laptop, coffee, plants, and natural lighting for remote work" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md);" />
+                            </div>
+                            <div class="news-content">
+                                <h3>The Future of Remote Work</h3>
+                                <p class="news-summary">New insights into how remote work is evolving and what it means for teams.</p>
+                                <div class="news-meta">Business • 6 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="news-card" onclick="openNews('sustainability')">
+                            <div class="news-image">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6f74fcee-327a-46d3-936e-d7e96ca7b04d.png" alt="Green technology concept with renewable energy symbols, solar panels, and eco-friendly innovation" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md);" />
+                            </div>
+                            <div class="news-content">
+                                <h3>Green Tech Innovations</h3>
+                                <p class="news-summary">Sustainable technology solutions making a real difference in environmental protection.</p>
+                                <div class="news-meta">Environment • 8 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Community Features Section -->
+            <section class="section-card fade-in-up" id="features">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i>
+                    Community Features
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Real-time Chat</h3>
+                        <p>Connect instantly with community members through our advanced chat system with typing indicators and emoji support.</p>
+                        <ul class="feature-list">
+                            <li>Multiple chat rooms</li>
+                            <li>Private messaging</li>
+                            <li>File sharing</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>User Profiles</h3>
+                        <p>Create detailed profiles showcasing your interests, skills, and contributions to the community.</p>
+                        <ul class="feature-list">
+                            <li>Custom avatars</li>
+                            <li>Achievement badges</li>
+                            <li>Activity timeline</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Events & Meetups</h3>
+                        <p>Organize and participate in community events, workshops, and virtual meetups.</p>
+                        <ul class="feature-list">
+                            <li>Event calendar</li>
+                            <li>RSVP system</li>
+                            <li>Virtual rooms</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Stats Section -->
+            <section class="section-card fade-in-up" id="stats">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Community Statistics
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="stat-number" data-target="12500">0</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="stat-number" data-target="45600">0</div>
+                        <div class="stat-label">Messages Sent</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="stat-number" data-target="89">0</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="stat-number" data-target="234">0</div>
+                        <div class="stat-label">Events Hosted</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Events Section -->
+            <section class="section-card fade-in-up" id="events">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-star"></i>
+                    Upcoming Community Events
+                </h2>
+                <div class="events-grid">
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="date-day">25</span>
+                            <span class="date-month">DEC</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>Tech Talk: Future of AI</h3>
+                            <p>Join industry experts discussing the latest AI trends and their impact on development.</p>
+                            <div class="event-meta">
+                                <span><i class="fas fa-clock"></i> 7:00 PM UTC</span>
+                                <span><i class="fas fa-users"></i> 150 attending</span>
+                            </div>
+                        </div>
+                        <div class="event-action">
+                            <button class="join-event-btn">
+                                <i class="fas fa-calendar-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="date-day">28</span>
+                            <span class="date-month">DEC</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>Design Workshop: Modern UI</h3>
+                            <p>Hands-on workshop covering modern design principles and component libraries.</p>
+                            <div class="event-meta">
+                                <span><i class="fas fa-clock"></i> 6:30 PM UTC</span>
+                                <span><i class="fas fa-users"></i> 85 attending</span>
+                            </div>
+                        </div>
+                        <div class="event-action">
+                            <button class="join-event-btn">
+                                <i class="fas fa-calendar-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="date-day">02</span>
+                            <span class="date-month">JAN</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>Code Review Session</h3>
+                            <p>Community code review session where members share projects and get feedback.</p>
+                            <div class="event-meta">
+                                <span><i class="fas fa-clock"></i> 8:00 PM UTC</span>
+                                <span><i class="fas fa-users"></i> 120 attending</span>
+                            </div>
+                        </div>
+                        <div class="event-action">
+                            <button class="join-event-btn">
+                                <i class="fas fa-calendar-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Resources Section -->
+            <section class="section-card fade-in-up" id="resources">
+                <h2 class="section-title">
+                    <i class="fas fa-book"></i>
+                    Community Resources
+                </h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Learning Paths</h3>
+                        <p>Curated learning paths for different skill levels and technologies.</p>
+                        <div class="resource-tags">
+                            <span>Beginner</span>
+                            <span>Advanced</span>
+                            <span>Expert</span>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3>Tools & Libraries</h3>
+                        <p>Recommended tools, libraries, and frameworks used by our community.</p>
+                        <div class="resource-tags">
+                            <span>React</span>
+                            <span>Vue</span>
+                            <span>Node.js</span>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <h3>Open Source Projects</h3>
+                        <p>Collaborate on exciting open source projects with community members.</p>
+                        <div class="resource-tags">
+                            <span>JavaScript</span>
+                            <span>Python</span>
+                            <span>Go</span>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Video Tutorials</h3>
+                        <p>Access exclusive video content created by community experts.</p>
+                        <div class="resource-tags">
+                            <span>Free</span>
+                            <span>Premium</span>
+                            <span>Live</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog Section -->
+            <section class="blog-section fade-in-up" id="blog">
+                <h2 class="section-title">
+                    <i class="fas fa-blog"></i>
+                    Featured Content & Blog
+                </h2>
+                
+                <div class="featured-post">
+                    <h2>Building the Future of Web Applications</h2>
+                    <p>Discover the latest techniques and best practices for creating modern, scalable web applications that users love. From responsive design to performance optimization, we cover it all.</p>
+                    <a href="#" class="read-more">
+                        Read Full Article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="recent-posts">
+                    <div class="post-card">
+                        <h3>Mastering CSS Grid and Flexbox</h3>
+                        <p>Learn the fundamental differences between CSS Grid and Flexbox, and when to use each layout system for optimal results.</p>
+                        <div class="post-meta">
+                            <i class="fas fa-user"></i>
+                            <span>Sarah Johnson</span>
+                            <span>•</span>
+                            <span>Dec 15, 2024</span>
+                        </div>
+                    </div>
+                    <div class="post-card">
+                        <h3>JavaScript Performance Tips</h3>
+                        <p>Optimize your JavaScript code with these proven techniques that will make your applications faster and more efficient.</p>
+                        <div class="post-meta">
+                            <i class="fas fa-user"></i>
+                            <span>Mike Chen</span>
+                            <span>•</span>
+                            <span>Dec 12, 2024</span>
+                        </div>
+                    </div>
+                    <div class="post-card">
+                        <h3>Design System Best Practices</h3>
+                        <p>Build consistent, scalable design systems that empower your team to create beautiful user interfaces efficiently.</p>
+                        <div class="post-meta">
+                            <i class="fas fa-user"></i>
+                            <span>Emma Wilson</span>
+                            <span>•</span>
+                            <span>Dec 10, 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="newsletter-section">
+                    <h3>
+                        <i class="fas fa-envelope"></i>
+                        Stay Updated
+                    </h3>
+                    <p>Subscribe to our newsletter for the latest updates, tips, and exclusive content delivered directly to your inbox.</p>
+                    <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                        <button type="submit" class="newsletter-button">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+                <p>© 2024 CommunityHub. All rights reserved. Made with passion for connecting people.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle i');
+            
+            if (body.hasAttribute('data-theme')) {
+                body.removeAttribute('data-theme');
+                themeToggle.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.querySelector('.theme-toggle i');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeToggle.className = 'fas fa-sun';
+            }
+        }
+
+        // Chat functionality
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        const mockUsers = [
+            { name: 'Alex Rivera', avatar: 'AR', color: '#10b981' },
+            { name: 'Sam Thompson', avatar: 'ST', color: '#f59e0b' },
+            { name: 'Casey Morgan', avatar: 'CM', color: '#ef4444' },
+            { name: 'Jordan Lee', avatar: 'JL', color: '#8b5cf6' }
+        ];
+
+        const mockMessages = [
+            "That's a great point about responsive design!",
+            "I've been experimenting with that new CSS feature too.",
+            "Anyone else excited about the upcoming conference?",
+            "Just shared a helpful resource in the resources channel.",
+            "The weather app demo was really impressive!",
+            "Has anyone tried the new development tools yet?",
+            "Thanks for the feedback on my project!",
+            "Looking forward to the next community meetup."
+        ];
+
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function createMessage(text, isOwn = false, user = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            
+            const selectedUser = user || mockUsers[Math.floor(Math.random() * mockUsers.length)];
+            
+            messageDiv.innerHTML = `
+                <div class="avatar" style="background: ${isOwn ? 'var(--primary-color)' : selectedUser.color};">
+                    ${isOwn ? 'YO' : selectedUser.avatar}
+                </div>
+                <div class="message-bubble">
+                    <div class="message-info">
+                        <span class="username">${isOwn ? 'You' : selectedUser.name}</span>
+                        <span class="timestamp">${getCurrentTime()}</span>
+                    </div>
+                    <div class="message-text">${text}</div>
+                </div>
+            `;
+            
+            return messageDiv;
+        }
+
+        function addMessage(message) {
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // Add user message
+            const userMessage = createMessage(text, true);
+            addMessage(userMessage);
+            chatInput.value = '';
+
+            // Show typing indicator
+            typingIndicator.classList.add('visible');
+
+            // Simulate response after 1-3 seconds
+            setTimeout(() => {
+                typingIndicator.classList.remove('visible');
+                const responseText = mockMessages[Math.floor(Math.random() * mockMessages.length)];
+                const responseMessage = createMessage(responseText);
+                addMessage(responseMessage);
+            }, Math.random() * 2000 + 1000);
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Auto-generate messages periodically
+        function startAutoMessages() {
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30% chance every interval
+                    const messageText = mockMessages[Math.floor(Math.random() * mockMessages.length)];
+                    const message = createMessage(messageText);
+                    addMessage(message);
+                }
+            }, 10000); // Every 10 seconds
+        }
+
+        // News functionality
+        function openNews(newsId) {
+            // Simulate loading
+            event.currentTarget.classList.add('loading');
+            
+            setTimeout(() => {
+                event.currentTarget.classList.remove('loading');
+                alert(`Opening news article: ${newsId}\n\nThis would typically navigate to the full article or open a modal with the complete content.`);
+            }, 800);
+        }
+
+        // Newsletter subscription
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('.newsletter-input').value;
+            const button = event.target.querySelector('.newsletter-button');
+            
+            // Simulate subscription process
+            button.classList.add('loading');
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.classList.remove('loading');
+                button.disabled = false;
+                alert(`Thank you for subscribing with email: ${email}\n\nYou'll receive our latest updates and exclusive content!`);
+                event.target.reset();
+            }, 1500);
+        }
+
+        // Scroll animations
+        function observeElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.fade-in-up, .section-card').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Mobile menu functionality
+        function setupMobileMenu() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileMenuBtn?.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        // Add some variety to news loading
+        function loadMoreNews() {
+            const newsGrid = document.getElementById('newsGrid');
+            const additionalNews = [
+                {
+                    title: "Blockchain in Healthcare",
+                    summary: "Revolutionary applications of blockchain technology in medical record management.",
+                    category: "Healthcare",
+                    time: "1 day ago",
+                    alt: "Digital blockchain network connecting medical symbols and healthcare data in a secure environment"
+                },
+                {
+                    title: "Quantum Computing Breakthrough",
+                    summary: "Latest advances in quantum computing bring us closer to practical applications.",
+                    category: "Science",
+                    time: "2 days ago",
+                    alt: "Quantum computer with glowing qubits and complex mathematical equations in a futuristic laboratory"
+                }
+            ];
+
+            // Randomly add news items
+            if (Math.random() < 0.5) {
+                const randomNews = additionalNews[Math.floor(Math.random() * additionalNews.length)];
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card';
+                newsCard.style.opacity = '0';
+                newsCard.style.transform = 'translateY(20px)';
+                
+                newsCard.innerHTML = `
+                    <div class="news-image">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c257be64-8f34-4eb8-be75-9132822343eb.png" alt="${randomNews.alt}" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md);" />
+                    </div>
+                    <div class="news-content">
+                        <h3>${randomNews.title}</h3>
+                        <p class="news-summary">${randomNews.summary}</p>
+                        <div class="news-meta">${randomNews.category} • ${randomNews.time}</div>
+                    </div>
+                `;
+                
+                newsGrid.appendChild(newsCard);
+                
+                // Animate in
+                setTimeout(() => {
+                    newsCard.style.opacity = '1';
+                    newsCard.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        }
+
+        // Enhanced header scroll effect
+        function setupHeaderScroll() {
+            const header = document.querySelector('header');
+            let lastScroll = 0;
+
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    header.style.background = 'rgba(255, 255, 255, 0.95)';
+                    header.style.backdropFilter = 'blur(20px)';
+                } else {
+                    header.style.background = 'var(--bg-primary)';
+                    header.style.backdropFilter = 'blur(10px)';
+                }
+                
+                lastScroll = currentScroll;
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            observeElements();
+            setupSmoothScrolling();
+            setupMobileMenu();
+            setupHeaderScroll();
+            startAutoMessages();
+            
+            // Load more news periodically
+            setInterval(loadMoreNews, 30000); // Every 30 seconds
+            
+            console.log('🚀 Community Hub initialized successfully!');
+            
+            // Setup stats animation
+            setupStatsAnimation();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            // Adjust layout on mobile rotation
+            if (window.innerWidth > 768) {
+                document.querySelector('.nav-links').style.display = 'flex';
+            } else {
+                document.querySelector('.nav-links').style.display = 'none';
+            }
+        });
+
+        // Community Chat functionality
+        let currentCommunity = null;
+        let savedCommunities = new Set();
+        const communityChatPopup = document.getElementById('communityChatPopup');
+        const chatPopupMessages = document.getElementById('chatPopupMessages');
+        const chatPopupInput = document.getElementById('chatPopupInput');
+        const chatTypingIndicator = document.getElementById('chatTypingIndicator');
+
+        const communityData = {
+            general: {
+                name: 'General Discussion',
+                icon: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/81ae980f-5de1-4242-9937-9db4b36f46e2.png',
+                onlineCount: 24,
+                messages: [
+                    { user: 'Sarah Chen', avatar: 'SC', text: 'Welcome to the general chat! Feel free to discuss anything here.', time: '3:45 PM', own: false },
+                    { user: 'Mike Rodriguez', avatar: 'MR', text: 'Thanks! This community seems really active.', time: '3:47 PM', own: false }
+                ]
+            },
+            tech: {
+                name: 'Tech Talk',
+                icon: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1248a2e2-b822-42f2-864e-d315891d4420.png',
+                onlineCount: 18,
+                messages: [
+                    { user: 'Alex Kumar', avatar: 'AK', text: 'Has anyone tried the new React 18 features?', time: '2:30 PM', own: false },
+                    { user: 'Emma Wilson', avatar: 'EW', text: 'Yes! The concurrent features are amazing for performance.', time: '2:32 PM', own: false }
+                ]
+            },
+            design: {
+                name: 'Design Hub',
+                icon: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/482b3e11-a5ec-4d94-b85d-17f04a84f547.png',
+                onlineCount: 15,
+                messages: [
+                    { user: 'Jordan Lee', avatar: 'JL', text: 'Check out this new color palette tool I found!', time: '1:15 PM', own: false },
+                    { user: 'Casey Morgan', avatar: 'CM', text: 'That looks great for our next project!', time: '1:18 PM', own: false }
+                ]
+            },
+            startup: {
+                name: 'Startup Central',
+                icon: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1f11acff-4117-44b4-95ef-37cbb7423afe.png',
+                onlineCount: 12,
+                messages: [
+                    { user: 'Taylor Swift', avatar: 'TS', text: 'Looking for feedback on my MVP. Anyone interested?', time: '4:20 PM', own: false },
+                    { user: 'Ryan Chen', avatar: 'RC', text: 'I would love to take a look! DM me the details.', time: '4:22 PM', own: false }
+                ]
+            },
+            devops: {
+                name: 'DevOps Engineers',
+                icon: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7fa99bac-e224-4163-9544-4c1c427ab241.png',
+                onlineCount: 22,
+                messages: [
+                    { user: 'Lisa Wang', avatar: 'LW', text: 'Anyone using Kubernetes for container orchestration?', time: '1:20 PM', own: false },
+                    { user: 'David Park', avatar: 'DP', text: 'Yes! We migrated last month. Happy to share our experience.', time: '1:22 PM', own: false }
+                ]
+            },
+            mobile: {
+                name: 'Mobile Developers',
+                icon: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/323977bb-c989-4dde-af30-d55484654bfd.png',
+                onlineCount: 31,
+                messages: [
+                    { user: 'Maria Santos', avatar: 'MS', text: 'Working on a new React Native project. Any tips for navigation?', time: '2:15 PM', own: false },
+                    { user: 'Chris Taylor', avatar: 'CT', text: 'React Navigation v6 is fantastic! I can share some examples.', time: '2:17 PM', own: false }
+                ]
+            }
+        };
+
+        const onlineUsers = [
+            'Alex Rivera', 'Sarah Johnson', 'Mike Chen', 'Emma Wilson', 'Jordan Lee',
+            'Casey Morgan', 'Taylor Swift', 'Ryan Chen', 'Sam Thompson', 'Alex Kumar'
+        ];
+
+        function openCommunityChat(communityId) {
+            currentCommunity = communityId;
+            const community = communityData[communityId];
+            if (!community) return;
+
+            // Update popup header
+            document.getElementById('chatCommunityName').textContent = community.name;
+            document.getElementById('chatOnlineCount').textContent = `${community.onlineCount} online`;
+            document.getElementById('chatCommunityIcon').innerHTML = `<img src="${community.icon}" alt="Community chat icon for ${community.name}" />`;
+
+            // Clear and populate messages
+            chatPopupMessages.innerHTML = '';
+            community.messages.forEach(msg => {
+                const messageEl = createCommunityMessage(msg.text, msg.own, msg.user, msg.avatar, msg.time);
+                chatPopupMessages.appendChild(messageEl);
+            });
+
+            // Populate online users
+            populateOnlineUsers();
+
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'chat-overlay';
+            overlay.onclick = closeCommunityChat;
+            document.body.appendChild(overlay);
+
+            // Show popup
+            setTimeout(() => {
+                overlay.classList.add('active');
+                communityChatPopup.classList.add('active');
+                chatPopupInput.focus();
+            }, 10);
+        }
+
+        function closeCommunityChat() {
+            communityChatPopup.classList.remove('active');
+            const overlay = document.querySelector('.chat-overlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    overlay.remove();
+                }, 300);
+            }
+            currentCommunity = null;
+        }
+
+        function createCommunityMessage(text, isOwn = false, username = 'You', avatar = 'YO', time = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `popup-message ${isOwn ? 'own' : ''}`;
+            
+            const currentTime = time || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const bgColor = isOwn ? 'var(--primary-color)' : getRandomColor();
+            
+            messageDiv.innerHTML = `
+                <div class="popup-message-avatar" style="background: ${bgColor};">
+                    ${avatar}
+                </div>
+                <div class="popup-message-bubble">
+                    <div class="popup-message-info">
+                        <span class="popup-username">${username}</span>
+                        <span class="popup-timestamp">${currentTime}</span>
+                    </div>
+                    <div class="popup-message-text">${text}</div>
+                </div>
+            `;
+            
+            return messageDiv;
+        }
+
+        function getRandomColor() {
+            const colors = ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function populateOnlineUsers() {
+            const usersList = document.getElementById('onlineUsersList');
+            usersList.innerHTML = '';
+            
+            const shuffledUsers = [...onlineUsers].sort(() => 0.5 - Math.random()).slice(0, 8);
+            shuffledUsers.forEach(username => {
+                const userEl = document.createElement('div');
+                userEl.className = 'online-user';
+                const initials = username.split(' ').map(n => n[0]).join('');
+                userEl.innerHTML = `
+                    <div class="online-user-avatar">${initials}</div>
+                    <span>${username}</span>
+                `;
+                usersList.appendChild(userEl);
+            });
+        }
+
+        function sendCommunityMessage() {
+            const text = chatPopupInput.value.trim();
+            if (!text || !currentCommunity) return;
+
+            // Add user message
+            const userMessage = createCommunityMessage(text, true);
+            chatPopupMessages.appendChild(userMessage);
+            chatPopupInput.value = '';
+            chatPopupMessages.scrollTop = chatPopupMessages.scrollHeight;
+
+            // Show typing indicator
+            chatTypingIndicator.classList.add('visible');
+
+            // Simulate response after 1-3 seconds
+            setTimeout(() => {
+                chatTypingIndicator.classList.remove('visible');
+                const responses = [
+                    "That's a great point!",
+                    "I completely agree with that perspective.",
+                    "Thanks for sharing that insight!",
+                    "Interesting approach, I hadn't thought of that.",
+                    "Great question! Let me think about that.",
+                    "That's exactly what I was looking for!",
+                    "Really helpful information, thank you!",
+                    "I love how active this community is!"
+                ];
+                const responseText = responses[Math.floor(Math.random() * responses.length)];
+                const randomUser = onlineUsers[Math.floor(Math.random() * onlineUsers.length)];
+                const initials = randomUser.split(' ').map(n => n[0]).join('');
+                const responseMessage = createCommunityMessage(responseText, false, randomUser, initials);
+                chatPopupMessages.appendChild(responseMessage);
+                chatPopupMessages.scrollTop = chatPopupMessages.scrollHeight;
+            }, Math.random() * 2000 + 1000);
+        }
+
+        function handleCommunityKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendCommunityMessage();
+            }
+        }
+
+        // Animate stats numbers
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            const animateNumber = (element, target) => {
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    element.textContent = Math.floor(current).toLocaleString();
+                    
+                    if (current >= target) {
+                        element.textContent = target.toLocaleString();
+                        clearInterval(timer);
+                    }
+                }, 20);
+            };
+
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.dataset.target);
+                animateNumber(stat, target);
+            });
+        }
+
+        // Start stats animation when section is visible
+        function setupStatsAnimation() {
+            const statsSection = document.getElementById('stats');
+            if (!statsSection) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateStats();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            observer.observe(statsSection);
+        }
+
+        function toggleSaveCommunity(communityId) {
+            const saveBtn = document.querySelector(`[data-community="${communityId}"] .save-btn`);
+            const communityItem = document.querySelector(`[data-community="${communityId}"]`);
+            
+            if (savedCommunities.has(communityId)) {
+                savedCommunities.delete(communityId);
+                saveBtn.classList.remove('saved');
+                saveBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
+                communityItem.classList.remove('saved');
+            } else {
+                savedCommunities.add(communityId);
+                saveBtn.classList.add('saved');
+                saveBtn.innerHTML = '<i class="fas fa-bookmark" style="color: white;"></i>';
+                communityItem.classList.add('saved');
+            }
+        }
+
+        // Close community chat on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && communityChatPopup.classList.contains('active')) {
+                closeCommunityChat();
+            }
+        });
+
+        // Add some Easter eggs
+        let clickCount = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    clickCount++;
+                    if (clickCount === 5) {
+                        this.style.animation = 'pulse 0.5s ease';
+                        setTimeout(() => {
+                            this.style.animation = '';
+                            clickCount = 0;
+                        }, 500);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
