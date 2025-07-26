@@ -1,0 +1,2792 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghunda Cricket Association - GCA</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff7b7b 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/96f08ddd-13d7-4bee-910b-9e00651bb0e8.png') center/cover;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.3) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: slideInUp 1s ease;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #e8f4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease 0.2s both;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            animation: slideInUp 1s ease 0.4s both;
+        }
+
+        .hero-stat {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            display: block;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 0;
+            margin-top: 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: white;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Matches Section */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .match-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .match-date {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .match-teams {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .match-result {
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .match-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Players Section */
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .player-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .player-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .player-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .player-role {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        /* Gallery Section */
+        .gallery-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .gallery-slider {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            height: 400px;
+        }
+
+        .gallery-slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .gallery-slide.active {
+            display: block;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+            z-index: 1;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            color: white;
+            z-index: 2;
+        }
+
+        .slide-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #667eea;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .gallery-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .gallery-prev {
+            left: 1rem;
+        }
+
+        .gallery-next {
+            right: 1rem;
+        }
+
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-dot.active {
+            background: white;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .upload-card {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-card:hover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* Add New Styles */
+        .add-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 1rem;
+            font-size: 1rem;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .view-toggle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .view-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* List View Styles */
+        .list-view {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .list-view.active {
+            display: block;
+        }
+
+        .list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .list-table th,
+        .list-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .list-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .list-table tr:hover {
+            background: #f8f9fa;
+            cursor: pointer;
+        }
+
+        .list-table tr:nth-child(even) {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .photo-upload {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1rem;
+            border: 2px dashed #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .photo-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .edit-btn {
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            margin-left: 0.5rem;
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.4);
+        }
+
+        .scorecard-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .scorecard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .scorecard-table th,
+        .scorecard-table td {
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .scorecard-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .scorecard-table tr:nth-child(even) {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .player-scorecard-item {
+            background: white;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .upload-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .upload-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .match-selector {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .match-selector select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .detailed-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .detailed-stat-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .detailed-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .detailed-stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .bowling-figures {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .bowling-figure {
+            text-align: center;
+            padding: 0.5rem;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .match-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .match-history-table th,
+        .match-history-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .match-history-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .match-history-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .performance-chart {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .matches-grid,
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .matches-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scale-in {
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-baseball-ball"></i>
+                <span>GCA</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="scrollToSection('home')">Home</a></li>
+                <li><a href="#matches" onclick="scrollToSection('matches')">Matches</a></li>
+                <li><a href="#players" onclick="scrollToSection('players')">Players</a></li>
+                <li><a href="#gallery" onclick="scrollToSection('gallery')">Gallery</a></li>
+                <li><a href="#upload" onclick="scrollToSection('upload')">Upload</a></li>
+            </ul>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Ghunda Cricket Association</h1>
+            <p>Excellence in Cricket, Unity in Spirit</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">25+</span>
+                    <span class="hero-stat-label">Matches Played</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">18</span>
+                    <span class="hero-stat-label">Victories</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">12+</span>
+                    <span class="hero-stat-label">Star Players</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">3</span>
+                    <span class="hero-stat-label">Championships</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Matches Section -->
+    <section id="matches" class="container">
+        <h2 class="section-title">Match Management</h2>
+        
+        <div class="view-toggle-buttons">
+            <button class="view-btn active" onclick="toggleMatchView('grid')">Grid View</button>
+            <button class="view-btn" onclick="toggleMatchView('list')">List View</button>
+            <button class="add-btn" onclick="showAddMatchForm()">
+                <i class="fas fa-plus"></i> Add New Match
+            </button>
+        </div>
+        
+        <div class="matches-grid" id="matchesGrid">
+            <!-- Sample match cards will be loaded here -->
+        </div>
+        
+        <div class="list-view" id="matchesListView">
+            <table class="list-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Teams</th>
+                        <th>Venue</th>
+                        <th>Result</th>
+                        <th>GCA Score</th>
+                        <th>Opponent Score</th>
+                    </tr>
+                </thead>
+                <tbody id="matchesListBody">
+                    <!-- Match rows will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Players Section -->
+    <section id="players" class="container">
+        <h2 class="section-title">Player Management</h2>
+        
+        <div class="view-toggle-buttons">
+            <button class="view-btn active" onclick="togglePlayerView('grid')">Grid View</button>
+            <button class="view-btn" onclick="togglePlayerView('list')">List View</button>
+            <button class="add-btn" onclick="showAddPlayerForm()">
+                <i class="fas fa-plus"></i> Add New Player
+            </button>
+        </div>
+        
+        <div class="players-grid" id="playersGrid">
+            <!-- Sample player cards will be loaded here -->
+        </div>
+        
+        <div class="list-view" id="playersListView">
+            <table class="list-table">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Matches</th>
+                        <th>Runs</th>
+                        <th>Wickets</th>
+                        <th>Average</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="playersListBody">
+                    <!-- Player rows will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="container">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery-container">
+            <div class="gallery-slider" id="gallerySlider">
+                <!-- Gallery slides will be loaded here -->
+            </div>
+            <button class="gallery-nav gallery-prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="gallery-nav gallery-next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="gallery-dots" id="galleryDots">
+                <!-- Dots will be generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload" class="container">
+        <h2 class="section-title">Upload Files</h2>
+        <div class="upload-section">
+            <div class="upload-grid">
+                <!-- Match Data Upload -->
+                <div class="upload-card" onclick="document.getElementById('matchFile').click()">
+                    <i class="fas fa-file-excel upload-icon"></i>
+                    <h3 class="upload-title">Match Scorecard</h3>
+                    <p class="upload-description">Upload Excel/Word files with match data</p>
+                    <input type="file" id="matchFile" class="file-input" accept=".xlsx,.xls,.docx,.doc" onchange="handleMatchUpload(event)">
+                    <button class="upload-btn">Choose File</button>
+                </div>
+
+                <!-- Match Images Upload -->
+                <div class="upload-card" onclick="document.getElementById('matchImages').click()">
+                    <i class="fas fa-camera upload-icon"></i>
+                    <h3 class="upload-title">Match Images</h3>
+                    <p class="upload-description">Upload images for specific matches</p>
+                    <input type="file" id="matchImages" class="file-input" accept="image/*" multiple onchange="handleImageUpload(event, 'match')">
+                    <button class="upload-btn">Choose Images</button>
+                </div>
+
+                <!-- Gallery Images Upload -->
+                <div class="upload-card" onclick="document.getElementById('galleryImages').click()">
+                    <i class="fas fa-images upload-icon"></i>
+                    <h3 class="upload-title">Gallery Images</h3>
+                    <p class="upload-description">Upload general team/ground images</p>
+                    <input type="file" id="galleryImages" class="file-input" accept="image/*,video/*" multiple onchange="handleImageUpload(event, 'gallery')">
+                    <button class="upload-btn">Choose Files</button>
+                </div>
+            </div>
+            <div id="uploadMessage"></div>
+            <div class="progress-bar" id="progressBar" style="display: none;">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            // Replace with your Firebase config
+            apiKey: "demo-key",
+            authDomain: "gca-demo.firebaseapp.com",
+            projectId: "gca-demo",
+            storageBucket: "gca-demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "demo-app-id"
+        };
+
+        // Initialize Firebase (for demo purposes, using localStorage)
+        let firebase, db, storage;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            storage = firebase.storage();
+        } catch (error) {
+            console.log("Firebase not configured, using localStorage");
+        }
+
+        // Sample Data
+        let sampleMatches = [
+            {
+                id: 1,
+                teams: "GCA vs Mumbai Warriors",
+                date: "2024-01-15",
+                result: "GCA won by 45 runs",
+                venue: "GCA Ground",
+                gcaScore: "185/6 (20 overs)",
+                opponentScore: "140/8 (20 overs)",
+                manOfMatch: "Rohit Sharma",
+                images: []
+            },
+            {
+                id: 2,
+                teams: "GCA vs Delhi Knights",
+                date: "2024-01-08",
+                result: "GCA won by 7 wickets",
+                venue: "Delhi Cricket Stadium",
+                gcaScore: "156/3 (18.2 overs)",
+                opponentScore: "155/9 (20 overs)",
+                manOfMatch: "Virat Kohli",
+                images: []
+            },
+            {
+                id: 3,
+                teams: "GCA vs Chennai Tigers",
+                date: "2024-01-01",
+                result: "Match tied",
+                venue: "GCA Ground",
+                gcaScore: "174/7 (20 overs)",
+                opponentScore: "174/6 (20 overs)",
+                manOfMatch: "MS Dhoni",
+                images: []
+            }
+        ];
+
+        let samplePlayers = [
+            {
+                id: 1,
+                name: "Rohit Sharma",
+                role: "Captain/Batsman",
+                matches: 15,
+                runs: 650,
+                wickets: 2,
+                average: 43.33,
+                strikeRate: 142.5,
+                highestScore: 89,
+                fifties: 4,
+                hundreds: 1,
+                catches: 8,
+                image: null,
+                recentMatches: [
+                    { vs: "Mumbai Warriors", runs: 89, balls: 52, result: "Won" },
+                    { vs: "Delhi Knights", runs: 45, balls: 32, result: "Won" },
+                    { vs: "Chennai Tigers", runs: 34, balls: 28, result: "Tied" },
+                    { vs: "Royal Challengers", runs: 67, balls: 41, result: "Won" },
+                    { vs: "Punjab Kings", runs: 23, balls: 19, result: "Lost" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Virat Kohli",
+                role: "Batsman",
+                matches: 14,
+                runs: 580,
+                wickets: 0,
+                average: 41.43,
+                strikeRate: 135.8,
+                highestScore: 78,
+                fifties: 5,
+                hundreds: 0,
+                catches: 6,
+                image: null,
+                recentMatches: [
+                    { vs: "Delhi Knights", runs: 67, balls: 45, result: "Won" },
+                    { vs: "Mumbai Warriors", runs: 34, balls: 29, result: "Won" },
+                    { vs: "Chennai Tigers", runs: 56, balls: 42, result: "Tied" },
+                    { vs: "Royal Challengers", runs: 45, balls: 38, result: "Won" },
+                    { vs: "Punjab Kings", runs: 12, balls: 15, result: "Lost" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Jasprit Bumrah",
+                role: "Bowler",
+                matches: 13,
+                runs: 45,
+                wickets: 22,
+                average: 15.45,
+                economy: 6.8,
+                bestFigures: "4/25",
+                fourWickets: 2,
+                fiveWickets: 0,
+                maidens: 3,
+                image: null,
+                recentMatches: [
+                    { vs: "Mumbai Warriors", wickets: 4, overs: "4.0", economy: 6.25, result: "Won" },
+                    { vs: "Delhi Knights", wickets: 1, overs: "4.0", economy: 7.50, result: "Won" },
+                    { vs: "Chennai Tigers", wickets: 2, overs: "4.0", economy: 6.75, result: "Tied" }
+                ]
+            },
+            {
+                id: 4,
+                name: "MS Dhoni",
+                role: "Wicket Keeper",
+                matches: 12,
+                runs: 320,
+                wickets: 0,
+                average: 26.67,
+                strikeRate: 125.0,
+                highestScore: 75,
+                fifties: 2,
+                hundreds: 0,
+                catches: 12,
+                stumpings: 4,
+                image: null,
+                recentMatches: [
+                    { vs: "Chennai Tigers", runs: 75, balls: 48, result: "Tied" },
+                    { vs: "Mumbai Warriors", runs: 23, balls: 18, result: "Won" },
+                    { vs: "Delhi Knights", runs: 34, balls: 26, result: "Won" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Ravindra Jadeja",
+                role: "All Rounder",
+                matches: 14,
+                runs: 280,
+                wickets: 18,
+                average: 23.33,
+                strikeRate: 130.0,
+                economy: 6.2,
+                bestFigures: "3/23",
+                catches: 10,
+                image: null,
+                recentMatches: [
+                    { vs: "Delhi Knights", runs: 12, wickets: 3, result: "Won" },
+                    { vs: "Mumbai Warriors", runs: 34, wickets: 1, result: "Won" },
+                    { vs: "Chennai Tigers", runs: 28, wickets: 2, result: "Tied" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Hardik Pandya",
+                role: "All Rounder",
+                matches: 13,
+                runs: 390,
+                wickets: 15,
+                average: 30.00,
+                strikeRate: 145.5,
+                economy: 7.8,
+                bestFigures: "3/21",
+                catches: 7,
+                image: null,
+                recentMatches: [
+                    { vs: "Mumbai Warriors", runs: 45, wickets: 1, result: "Won" },
+                    { vs: "Delhi Knights", runs: 23, wickets: 2, result: "Won" },
+                    { vs: "Chennai Tigers", runs: 67, wickets: 0, result: "Tied" }
+                ]
+            }
+        ];
+
+        let galleryImages = [
+            {
+                id: 1,
+                src: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/dcc08c22-5194-4f6f-91f4-ae21f7e1c418.png",
+                alt: "Professional cricket ground with well-maintained pitch and stadium lights during golden hour",
+                title: "GCA Ground",
+                description: "Our home ground where legends are made"
+            },
+            {
+                id: 2,
+                src: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2c64e1a4-8bbc-4460-a93f-c0c9ef413d2b.png", 
+                alt: "Cricket team group photo with players in blue uniforms celebrating championship victory",
+                title: "Championship Victory",
+                description: "GCA team celebrating another successful season"
+            },
+            {
+                id: 3,
+                src: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4688f0a1-af80-46ab-a77c-5a0d9ecc892e.png",
+                alt: "Cricket match action shot of batsman hitting a six with crowd cheering in background",
+                title: "Match Action",
+                description: "Intense moments from our recent matches"
+            },
+            {
+                id: 4,
+                src: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de42e323-acd3-4c42-9f66-155e1479c0b5.png",
+                alt: "Cricket training session with young players practicing batting techniques on practice nets",
+                title: "Training Session", 
+                description: "Building future champions through dedicated training"
+            }
+        ];
+
+        let currentSlide = 0;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMatches();
+            loadPlayers();
+            loadGallery();
+            
+            // Load data from localStorage if available
+            loadFromStorage();
+            
+            // Smooth scrolling for navigation
+            setupSmoothScrolling();
+            
+            // Add scroll animations
+            setupScrollAnimations();
+        });
+
+        // Navigation functions
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const elementPosition = element.offsetTop - headerHeight;
+            
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+            
+            // Close mobile menu if open
+            document.getElementById('navLinks').classList.remove('active');
+        }
+
+        // Load matches
+        function loadMatches() {
+            const matchesGrid = document.getElementById('matchesGrid');
+            const matchesListBody = document.getElementById('matchesListBody');
+            
+            matchesGrid.innerHTML = '';
+            if (matchesListBody) {
+                matchesListBody.innerHTML = '';
+            }
+            
+            sampleMatches.forEach(match => {
+                // Grid view
+                const matchCard = document.createElement('div');
+                matchCard.className = 'card match-card fade-in';
+                matchCard.onclick = () => showMatchDetails(match);
+                
+                matchCard.innerHTML = `
+                    <div class="match-header">
+                        <span class="match-date">${formatDate(match.date)}</span>
+                        <span style="font-weight: 600; color: #667eea;">${match.venue}</span>
+                    </div>
+                    <div class="match-teams">${match.teams}</div>
+                    <div class="match-result">${match.result}</div>
+                    <div class="match-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">GCA Score</div>
+                            <div class="stat-value">${match.gcaScore}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Opponent Score</div>
+                            <div class="stat-value">${match.opponentScore}</div>
+                        </div>
+                    </div>
+                `;
+                
+                matchesGrid.appendChild(matchCard);
+                
+                // List view
+                if (matchesListBody) {
+                    const listRow = document.createElement('tr');
+                    listRow.onclick = () => showMatchDetails(match);
+                    listRow.innerHTML = `
+                        <td>${formatDate(match.date)}</td>
+                        <td>${match.teams}</td>
+                        <td>${match.venue}</td>
+                        <td>${match.result}</td>
+                        <td>${match.gcaScore}</td>
+                        <td>${match.opponentScore}</td>
+                    `;
+                    matchesListBody.appendChild(listRow);
+                }
+            });
+        }
+
+        // Load players
+        function loadPlayers() {
+            const playersGrid = document.getElementById('playersGrid');
+            const playersListBody = document.getElementById('playersListBody');
+            
+            playersGrid.innerHTML = '';
+            if (playersListBody) {
+                playersListBody.innerHTML = '';
+            }
+            
+            samplePlayers.forEach(player => {
+                // Grid view
+                const playerCard = document.createElement('div');
+                playerCard.className = 'card player-card fade-in';
+                playerCard.onclick = () => showPlayerDetails(player);
+                
+                const avatarContent = player.image ? 
+                    `<img src="${player.image}" alt="${player.name}" class="player-image">` :
+                    `<i class="fas fa-user"></i>`;
+                
+                playerCard.innerHTML = `
+                    <div class="player-avatar">${avatarContent}</div>
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-role">${player.role}</div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Matches</div>
+                            <div class="stat-value">${player.matches}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">${player.role.includes('Bowler') ? 'Wickets' : 'Runs'}</div>
+                            <div class="stat-value">${player.role.includes('Bowler') ? player.wickets : player.runs}</div>
+                        </div>
+                    </div>
+                `;
+                
+                playersGrid.appendChild(playerCard);
+                
+                // List view
+                if (playersListBody) {
+                    const listRow = document.createElement('tr');
+                    const photoContent = player.image ? 
+                        `<img src="${player.image}" alt="${player.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">` :
+                        `<div style="width: 40px; height: 40px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem;"><i class="fas fa-user"></i></div>`;
+                    
+                    listRow.innerHTML = `
+                        <td style="text-align: center;">${photoContent}</td>
+                        <td onclick="showPlayerDetails(player)" style="cursor: pointer;">${player.name}</td>
+                        <td>${player.role}</td>
+                        <td>${player.matches}</td>
+                        <td>${player.runs || 0}</td>
+                        <td>${player.wickets || 0}</td>
+                        <td>${player.average || 'N/A'}</td>
+                        <td>
+                            <button class="edit-btn" onclick="editPlayer(${player.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </td>
+                    `;
+                    playersListBody.appendChild(listRow);
+                }
+            });
+        }
+
+        // Load gallery
+        function loadGallery() {
+            const gallerySlider = document.getElementById('gallerySlider');
+            const galleryDots = document.getElementById('galleryDots');
+            
+            gallerySlider.innerHTML = '';
+            galleryDots.innerHTML = '';
+            
+            galleryImages.forEach((image, index) => {
+                // Create slide
+                const slide = document.createElement('div');
+                slide.className = `gallery-slide ${index === 0 ? 'active' : ''}`;
+                slide.innerHTML = `
+                    <img src="${image.src}" alt="${image.alt}">
+                    <div class="slide-content">
+                        <div class="slide-title">${image.title}</div>
+                        <div class="slide-description">${image.description}</div>
+                    </div>
+                `;
+                gallerySlider.appendChild(slide);
+                
+                // Create dot
+                const dot = document.createElement('div');
+                dot.className = `gallery-dot ${index === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(index);
+                galleryDots.appendChild(dot);
+            });
+        }
+
+        // Gallery navigation
+        function changeSlide(direction) {
+            const slides = document.querySelectorAll('.gallery-slide');
+            const dots = document.querySelectorAll('.gallery-dot');
+            
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide += direction;
+            
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function goToSlide(slideIndex) {
+            const slides = document.querySelectorAll('.gallery-slide');
+            const dots = document.querySelectorAll('.gallery-dot');
+            
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = slideIndex;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        // Auto-play gallery
+        setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+
+        // Modal functions
+        function showMatchDetails(match) {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <h2 class="modal-title">${match.teams}</h2>
+                <p><strong>Date:</strong> ${formatDate(match.date)}</p>
+                <p><strong>Venue:</strong> ${match.venue}</p>
+                <p><strong>Result:</strong> ${match.result}</p>
+                <div style="margin: 1.5rem 0;">
+                    <h3 style="margin-bottom: 1rem;">Match Summary</h3>
+                    <div class="match-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">GCA Score</div>
+                            <div class="stat-value">${match.gcaScore}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Opponent Score</div>
+                            <div class="stat-value">${match.opponentScore}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Man of Match</div>
+                            <div class="stat-value">${match.manOfMatch}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Venue</div>
+                            <div class="stat-value">${match.venue}</div>
+                        </div>
+                    </div>
+                </div>
+                ${match.images && match.images.length > 0 ? `
+                    <div style="margin-top: 1.5rem;">
+                        <h3>Match Images</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            ${match.images.map(img => `<img src="${img}" alt="Match moment" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function showPlayerDetails(player) {
+            const modalBody = document.getElementById('modalBody');
+            const avatarContent = player.image ? 
+                `<img src="${player.image}" alt="${player.name}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin: 0 auto 1rem;">` :
+                `<div style="width: 150px; height: 150px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: white; margin: 0 auto 1rem;"><i class="fas fa-user"></i></div>`;
+            
+            const isBowler = player.role.includes('Bowler');
+            const isAllRounder = player.role.includes('All Rounder');
+            
+            modalBody.innerHTML = `
+                <div style="text-align: center;">
+                    ${avatarContent}
+                    <h2 class="modal-title">${player.name}</h2>
+                    <p style="color: #667eea; font-weight: 600; font-size: 1.1rem; margin-bottom: 2rem;">${player.role}</p>
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h3 style="margin-bottom: 1rem;">Career Statistics</h3>
+                    <div class="detailed-stats">
+                        <div class="detailed-stat-card">
+                            <div class="detailed-stat-value">${player.matches}</div>
+                            <div class="detailed-stat-label">Matches</div>
+                        </div>
+                        ${!isBowler ? `
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.runs}</div>
+                                <div class="detailed-stat-label">Total Runs</div>
+                            </div>
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.average}</div>
+                                <div class="detailed-stat-label">Batting Avg</div>
+                            </div>
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.strikeRate || 'N/A'}</div>
+                                <div class="detailed-stat-label">Strike Rate</div>
+                            </div>
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.highestScore || 'N/A'}</div>
+                                <div class="detailed-stat-label">Highest Score</div>
+                            </div>
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${(player.fifties || 0) + (player.hundreds || 0)}</div>
+                                <div class="detailed-stat-label">50s + 100s</div>
+                            </div>
+                        ` : ''}
+                        ${isBowler || isAllRounder ? `
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.wickets}</div>
+                                <div class="detailed-stat-label">Total Wickets</div>
+                            </div>
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.economy || 'N/A'}</div>
+                                <div class="detailed-stat-label">Economy Rate</div>
+                            </div>
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.bestFigures || 'N/A'}</div>
+                                <div class="detailed-stat-label">Best Figures</div>
+                            </div>
+                        ` : ''}
+                        ${player.catches ? `
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.catches}</div>
+                                <div class="detailed-stat-label">Catches</div>
+                            </div>
+                        ` : ''}
+                        ${player.stumpings ? `
+                            <div class="detailed-stat-card">
+                                <div class="detailed-stat-value">${player.stumpings}</div>
+                                <div class="detailed-stat-label">Stumpings</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                ${player.recentMatches && player.recentMatches.length > 0 ? `
+                    <div style="margin: 2rem 0;">
+                        <h3 style="margin-bottom: 1rem;">Recent Match Performance</h3>
+                        <table class="match-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Opponent</th>
+                                    ${!isBowler ? '<th>Runs (Balls)</th>' : '<th>Wickets</th><th>Economy</th>'}
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${player.recentMatches.slice(0, 5).map(match => `
+                                    <tr>
+                                        <td>${match.vs}</td>
+                                        ${!isBowler ? 
+                                            `<td>${match.runs} (${match.balls})</td>` : 
+                                            `<td>${match.wickets}</td><td>${match.economy}</td>`
+                                        }
+                                        <td style="color: ${match.result === 'Won' ? '#28a745' : match.result === 'Lost' ? '#dc3545' : '#ffc107'}">${match.result}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                ` : ''}
+
+                ${player.matchScores && player.matchScores.length > 0 ? `
+                    <div style="margin: 2rem 0;">
+                        <h3 style="margin-bottom: 1rem;">Match-wise Performance</h3>
+                        <div class="scorecard-section">
+                            ${player.matchScores.map(score => `
+                                <div class="player-scorecard-item">
+                                    <div>
+                                        <strong>${score.match}</strong> - ${score.date}
+                                    </div>
+                                    <div>
+                                        ${score.runs !== undefined ? `${score.runs} runs (${score.balls} balls)` : ''}
+                                        ${score.wickets !== undefined ? ` | ${score.wickets} wickets` : ''}
+                                        ${score.catches ? ` | ${score.catches} catches` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Performance Highlights</h3>
+                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding: 0.8rem 0; border-bottom: 1px solid #dee2e6; display: flex; align-items: center;">
+                                <i class="fas fa-trophy" style="color: #667eea; margin-right: 1rem; width: 20px;"></i>
+                                <span><strong>Best Performance:</strong> ${
+                                    isBowler ? (player.bestFigures || '4/25 vs Mumbai Warriors') :
+                                    `${player.highestScore || 89}* vs Mumbai Warriors`
+                                }</span>
+                            </li>
+                            <li style="padding: 0.8rem 0; border-bottom: 1px solid #dee2e6; display: flex; align-items: center;">
+                                <i class="fas fa-star" style="color: #667eea; margin-right: 1rem; width: 20px;"></i>
+                                <span><strong>Man of Match Awards:</strong> ${Math.floor(Math.random() * 5) + 1}</span>
+                            </li>
+                            <li style="padding: 0.8rem 0; border-bottom: 1px solid #dee2e6; display: flex; align-items: center;">
+                                <i class="fas fa-medal" style="color: #667eea; margin-right: 1rem; width: 20px;"></i>
+                                <span><strong>Team Championships:</strong> 3</span>
+                            </li>
+                            <li style="padding: 0.8rem 0; display: flex; align-items: center;">
+                                <i class="fas fa-chart-line" style="color: #667eea; margin-right: 1rem; width: 20px;"></i>
+                                <span><strong>Current Form:</strong> ${
+                                    player.recentMatches ? 
+                                    (player.recentMatches.slice(0, 3).filter(m => m.result === 'Won').length >= 2 ? 'Excellent' : 'Good') :
+                                    'Excellent'
+                                }</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <button class="btn-primary" onclick="editPlayer(${player.id})">
+                        <i class="fas fa-edit"></i> Edit Player Details
+                    </button>
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // File upload functions
+        function handleMatchUpload(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            showMessage(`Uploading match data: ${file.name}`, 'success');
+            showProgress(true);
+            
+            // Simulate file processing
+            simulateProgress(() => {
+                // Process match data (in real app, parse Excel/Word file)
+                const newMatch = {
+                    id: Date.now(),
+                    teams: "GCA vs " + generateRandomTeam(),
+                    date: new Date().toISOString().split('T')[0],
+                    result: "GCA won by " + (Math.floor(Math.random() * 50) + 1) + " runs",
+                    venue: "GCA Ground",
+                    gcaScore: `${Math.floor(Math.random() * 100) + 150}/${Math.floor(Math.random() * 8) + 2} (20 overs)`,
+                    opponentScore: `${Math.floor(Math.random() * 100) + 120}/${Math.floor(Math.random() * 8) + 2} (20 overs)`,
+                    manOfMatch: samplePlayers[Math.floor(Math.random() * samplePlayers.length)].name,
+                    images: []
+                };
+                
+                sampleMatches.unshift(newMatch);
+                saveToStorage();
+                loadMatches();
+                showMessage('Match data uploaded successfully!', 'success');
+                showProgress(false);
+            });
+        }
+
+        function handleImageUpload(event, type) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+            
+            if (type === 'match') {
+                // Show match selector modal
+                showMatchSelector(files);
+                return;
+            }
+            
+            showMessage(`Uploading ${files.length} file(s)...`, 'success');
+            showProgress(true);
+            
+            // Simulate file upload
+            simulateProgress(() => {
+                if (type === 'gallery') {
+                    // Add to gallery
+                    Array.from(files).forEach((file, index) => {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const newImage = {
+                                id: Date.now() + index,
+                                src: e.target.result,
+                                alt: `User uploaded image - ${file.name}`,
+                                title: file.name.split('.')[0],
+                                description: "User uploaded content"
+                            };
+                            galleryImages.push(newImage);
+                            if (index === files.length - 1) {
+                                saveToStorage();
+                                loadGallery();
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+                
+                showMessage(`${files.length} file(s) uploaded successfully!`, 'success');
+                showProgress(false);
+            });
+        }
+
+        function showMatchSelector(files) {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <h2 class="modal-title">Select Match for Images</h2>
+                <p>Choose which match these images belong to:</p>
+                <div class="match-selector">
+                    <select id="matchSelect" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+                        <option value="">Select a match...</option>
+                        ${sampleMatches.map(match => `
+                            <option value="${match.id}">${match.teams} - ${formatDate(match.date)}</option>
+                        `).join('')}
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button onclick="uploadMatchImages()" style="flex: 1; background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Upload to Match</button>
+                    <button onclick="closeModal()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+            window.selectedFiles = files;
+        }
+
+        function uploadMatchImages() {
+            const matchId = document.getElementById('matchSelect').value;
+            if (!matchId) {
+                showMessage('Please select a match first!', 'error');
+                return;
+            }
+
+            const files = window.selectedFiles;
+            showMessage(`Uploading ${files.length} image(s) to match...`, 'success');
+            showProgress(true);
+            closeModal();
+
+            simulateProgress(() => {
+                const matchIndex = sampleMatches.findIndex(m => m.id == matchId);
+                if (matchIndex !== -1) {
+                    Array.from(files).forEach((file, index) => {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            if (!sampleMatches[matchIndex].images) {
+                                sampleMatches[matchIndex].images = [];
+                            }
+                            sampleMatches[matchIndex].images.push(e.target.result);
+                            
+                            if (index === files.length - 1) {
+                                saveToStorage();
+                                loadMatches();
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+                
+                showMessage(`${files.length} image(s) added to match successfully!`, 'success');
+                showProgress(false);
+                delete window.selectedFiles;
+            });
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        function generateRandomTeam() {
+            const teams = ["Royal Challengers", "Mumbai Indians", "Chennai Super Kings", "Delhi Capitals", "Kolkata Knight Riders", "Punjab Kings"];
+            return teams[Math.floor(Math.random() * teams.length)];
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('uploadMessage');
+            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+            messageDiv.querySelector('.message').classList.add('show');
+            
+            setTimeout(() => {
+                const msg = messageDiv.querySelector('.message');
+                if (msg) {
+                    msg.classList.remove('show');
+                    setTimeout(() => messageDiv.innerHTML = '', 300);
+                }
+            }, 3000);
+        }
+
+        function showProgress(show) {
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (show) {
+                progressBar.style.display = 'block';
+                progressFill.style.width = '0%';
+            } else {
+                progressBar.style.display = 'none';
+            }
+        }
+
+        function simulateProgress(callback) {
+            const progressFill = document.getElementById('progressFill');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 30;
+                if (progress >= 100) {
+                    progress = 100;
+                    progressFill.style.width = '100%';
+                    clearInterval(interval);
+                    setTimeout(callback, 500);
+                } else {
+                    progressFill.style.width = progress + '%';
+                }
+            }, 200);
+        }
+
+        // Local storage functions
+        function saveToStorage() {
+            localStorage.setItem('gcaMatches', JSON.stringify(sampleMatches));
+            localStorage.setItem('gcaPlayers', JSON.stringify(samplePlayers));
+            localStorage.setItem('gcaGallery', JSON.stringify(galleryImages));
+        }
+
+        function loadFromStorage() {
+            const savedMatches = localStorage.getItem('gcaMatches');
+            const savedPlayers = localStorage.getItem('gcaPlayers');
+            const savedGallery = localStorage.getItem('gcaGallery');
+            
+            if (savedMatches) sampleMatches = JSON.parse(savedMatches);
+            if (savedPlayers) samplePlayers = JSON.parse(savedPlayers);
+            if (savedGallery) galleryImages = JSON.parse(savedGallery);
+        }
+
+        // Smooth scrolling setup
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const elementPosition = target.offsetTop - headerHeight;
+                        
+                        window.scrollTo({
+                            top: elementPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Scroll animations
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards
+            document.querySelectorAll('.card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Keyboard navigation for gallery
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Touch/swipe support for gallery
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('gallerySlider').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('gallerySlider').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);
+            if (touchEndX > touchStartX + 50) changeSlide(-1);
+        }
+
+        // View toggle functions
+        function toggleMatchView(view) {
+            const gridView = document.getElementById('matchesGrid');
+            const listView = document.getElementById('matchesListView');
+            const gridBtn = document.querySelector('.view-toggle-buttons .view-btn:first-child');
+            const listBtn = document.querySelector('.view-toggle-buttons .view-btn:nth-child(2)');
+
+            if (view === 'grid') {
+                gridView.style.display = 'grid';
+                listView.classList.remove('active');
+                gridBtn.classList.add('active');
+                listBtn.classList.remove('active');
+            } else {
+                gridView.style.display = 'none';
+                listView.classList.add('active');
+                gridBtn.classList.remove('active');
+                listBtn.classList.add('active');
+            }
+        }
+
+        function togglePlayerView(view) {
+            const gridView = document.getElementById('playersGrid');
+            const listView = document.getElementById('playersListView');
+            const gridBtn = document.querySelectorAll('.view-toggle-buttons')[1].querySelector('.view-btn:first-child');
+            const listBtn = document.querySelectorAll('.view-toggle-buttons')[1].querySelector('.view-btn:nth-child(2)');
+
+            if (view === 'grid') {
+                gridView.style.display = 'grid';
+                listView.classList.remove('active');
+                gridBtn.classList.add('active');
+                listBtn.classList.remove('active');
+            } else {
+                gridView.style.display = 'none';
+                listView.classList.add('active');
+                gridBtn.classList.remove('active');
+                listBtn.classList.add('active');
+            }
+        }
+
+        // Add Match Form
+        function showAddMatchForm() {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <h2 class="modal-title">Add New Match</h2>
+                <form id="addMatchForm" onsubmit="handleAddMatch(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Match Date</label>
+                            <input type="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Opponent Team</label>
+                            <input type="text" name="opponent" placeholder="e.g., Mumbai Warriors" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Venue</label>
+                            <input type="text" name="venue" placeholder="e.g., GCA Ground" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Match Type</label>
+                            <select name="matchType" required>
+                                <option value="">Select Type</option>
+                                <option value="T20">T20</option>
+                                <option value="ODI">ODI</option>
+                                <option value="Test">Test</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>GCA Score</label>
+                            <input type="text" name="gcaScore" placeholder="e.g., 185/6 (20 overs)" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Opponent Score</label>
+                            <input type="text" name="opponentScore" placeholder="e.g., 140/8 (20 overs)" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Result</label>
+                            <select name="result" required>
+                                <option value="">Select Result</option>
+                                <option value="won">GCA Won</option>
+                                <option value="lost">GCA Lost</option>
+                                <option value="tied">Match Tied</option>
+                                <option value="no-result">No Result</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Margin (if won/lost)</label>
+                            <input type="text" name="margin" placeholder="e.g., 45 runs or 7 wickets">
+                        </div>
+                        <div class="form-group">
+                            <label>Man of the Match</label>
+                            <input type="text" name="manOfMatch" placeholder="Player name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Toss Winner</label>
+                            <select name="tossWinner">
+                                <option value="">Select</option>
+                                <option value="GCA">GCA</option>
+                                <option value="Opponent">Opponent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Toss Decision</label>
+                            <select name="tossDecision">
+                                <option value="">Select</option>
+                                <option value="Bat">Bat First</option>
+                                <option value="Bowl">Bowl First</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Weather</label>
+                            <input type="text" name="weather" placeholder="e.g., Sunny, Cloudy">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Add Match</button>
+                        <button type="button" class="btn-primary" onclick="closeModal(); setTimeout(showScorecardForm, 100);">Add Team Scorecard</button>
+                    </div>
+                </form>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function handleAddMatch(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            const newMatch = {
+                id: Date.now(),
+                teams: `GCA vs ${formData.get('opponent')}`,
+                date: formData.get('date'),
+                venue: formData.get('venue'),
+                matchType: formData.get('matchType'),
+                gcaScore: formData.get('gcaScore'),
+                opponentScore: formData.get('opponentScore'),
+                result: generateResultText(formData.get('result'), formData.get('margin')),
+                manOfMatch: formData.get('manOfMatch'),
+                tossWinner: formData.get('tossWinner'),
+                tossDecision: formData.get('tossDecision'),
+                weather: formData.get('weather'),
+                images: []
+            };
+
+            sampleMatches.unshift(newMatch);
+            saveToStorage();
+            loadMatches();
+            closeModal();
+            showMessage('Match added successfully!', 'success');
+        }
+
+        function generateResultText(result, margin) {
+            if (result === 'won') {
+                return `GCA won${margin ? ' by ' + margin : ''}`;
+            } else if (result === 'lost') {
+                return `GCA lost${margin ? ' by ' + margin : ''}`;
+            } else if (result === 'tied') {
+                return 'Match tied';
+            } else {
+                return 'No result';
+            }
+        }
+
+        // Add Player Form
+        function showAddPlayerForm() {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <h2 class="modal-title">Add New Player</h2>
+                <form id="addPlayerForm" onsubmit="handleAddPlayer(event)">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="photo-upload" onclick="document.getElementById('playerPhoto').click()">
+                            <span id="photoPlaceholder">
+                                <i class="fas fa-camera" style="font-size: 2rem; color: #ddd;"></i>
+                                <div style="margin-top: 0.5rem; color: #666;">Add Photo</div>
+                            </span>
+                        </div>
+                        <input type="file" id="playerPhoto" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Player Name *</label>
+                            <input type="text" name="name" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role *</label>
+                            <select name="role" required>
+                                <option value="">Select Role</option>
+                                <option value="Batsman">Batsman</option>
+                                <option value="Bowler">Bowler</option>
+                                <option value="All Rounder">All Rounder</option>
+                                <option value="Wicket Keeper">Wicket Keeper</option>
+                                <option value="Captain/Batsman">Captain/Batsman</option>
+                                <option value="Captain/All Rounder">Captain/All Rounder</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Jersey Number</label>
+                            <input type="number" name="jerseyNumber" placeholder="e.g., 18" min="1" max="99">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" name="dob">
+                        </div>
+                        <div class="form-group">
+                            <label>Batting Style</label>
+                            <select name="battingStyle">
+                                <option value="">Select</option>
+                                <option value="Right-handed">Right-handed</option>
+                                <option value="Left-handed">Left-handed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Bowling Style</label>
+                            <select name="bowlingStyle">
+                                <option value="">Select</option>
+                                <option value="Right-arm fast">Right-arm fast</option>
+                                <option value="Left-arm fast">Left-arm fast</option>
+                                <option value="Right-arm medium">Right-arm medium</option>
+                                <option value="Left-arm medium">Left-arm medium</option>
+                                <option value="Right-arm off-spin">Right-arm off-spin</option>
+                                <option value="Left-arm orthodox">Left-arm orthodox</option>
+                                <option value="Right-arm leg-spin">Right-arm leg-spin</option>
+                                <option value="Left-arm chinaman">Left-arm chinaman</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Total Runs</label>
+                            <input type="number" name="runs" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Wickets</label>
+                            <input type="number" name="wickets" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Matches Played</label>
+                            <input type="number" name="matches" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Highest Score</label>
+                            <input type="number" name="highestScore" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Best Bowling Figures</label>
+                            <input type="text" name="bestFigures" placeholder="e.g., 4/25">
+                        </div>
+                        <div class="form-group">
+                            <label>Strike Rate</label>
+                            <input type="number" name="strikeRate" placeholder="0.0" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Economy Rate</label>
+                            <input type="number" name="economy" placeholder="0.0" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Catches</label>
+                            <input type="number" name="catches" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Stumpings (if WK)</label>
+                            <input type="number" name="stumpings" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Add Player</button>
+                    </div>
+                </form>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const placeholder = document.getElementById('photoPlaceholder');
+                    placeholder.innerHTML = `<img src="${e.target.result}" class="photo-preview" alt="Player photo">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleAddPlayer(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            const runs = parseInt(formData.get('runs')) || 0;
+            const matches = parseInt(formData.get('matches')) || 1;
+            const average = runs > 0 && matches > 0 ? (runs / matches).toFixed(2) : 0;
+            
+            const photoImg = document.querySelector('.photo-preview');
+            
+            const newPlayer = {
+                id: Date.now(),
+                name: formData.get('name'),
+                role: formData.get('role'),
+                jerseyNumber: formData.get('jerseyNumber'),
+                dob: formData.get('dob'),
+                battingStyle: formData.get('battingStyle'),
+                bowlingStyle: formData.get('bowlingStyle'),
+                runs: runs,
+                wickets: parseInt(formData.get('wickets')) || 0,
+                matches: matches,
+                average: parseFloat(average),
+                highestScore: parseInt(formData.get('highestScore')) || 0,
+                bestFigures: formData.get('bestFigures'),
+                strikeRate: parseFloat(formData.get('strikeRate')) || 0,
+                economy: parseFloat(formData.get('economy')) || 0,
+                catches: parseInt(formData.get('catches')) || 0,
+                stumpings: parseInt(formData.get('stumpings')) || 0,
+                image: photoImg ? photoImg.src : null,
+                recentMatches: []
+            };
+
+            samplePlayers.push(newPlayer);
+            saveToStorage();
+            loadPlayers();
+            closeModal();
+            showMessage('Player added successfully!', 'success');
+        }
+
+        // Edit Player Function
+        function editPlayer(playerId) {
+            const player = samplePlayers.find(p => p.id === playerId);
+            if (!player) return;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <h2 class="modal-title">Edit Player Details</h2>
+                <form id="editPlayerForm" onsubmit="handleEditPlayer(event, ${playerId})">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="photo-upload" onclick="document.getElementById('editPlayerPhoto').click()">
+                            <span id="editPhotoPlaceholder">
+                                ${player.image ? 
+                                    `<img src="${player.image}" class="photo-preview" alt="Player photo">` :
+                                    `<i class="fas fa-camera" style="font-size: 2rem; color: #ddd;"></i>
+                                     <div style="margin-top: 0.5rem; color: #666;">Add Photo</div>`
+                                }
+                            </span>
+                        </div>
+                        <input type="file" id="editPlayerPhoto" accept="image/*" style="display: none;" onchange="handleEditPhotoUpload(event)">
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Player Name *</label>
+                            <input type="text" name="name" value="${player.name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role *</label>
+                            <select name="role" required>
+                                <option value="Batsman" ${player.role === 'Batsman' ? 'selected' : ''}>Batsman</option>
+                                <option value="Bowler" ${player.role === 'Bowler' ? 'selected' : ''}>Bowler</option>
+                                <option value="All Rounder" ${player.role === 'All Rounder' ? 'selected' : ''}>All Rounder</option>
+                                <option value="Wicket Keeper" ${player.role === 'Wicket Keeper' ? 'selected' : ''}>Wicket Keeper</option>
+                                <option value="Captain/Batsman" ${player.role === 'Captain/Batsman' ? 'selected' : ''}>Captain/Batsman</option>
+                                <option value="Captain/All Rounder" ${player.role === 'Captain/All Rounder' ? 'selected' : ''}>Captain/All Rounder</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Total Runs</label>
+                            <input type="number" name="runs" value="${player.runs || 0}" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Wickets</label>
+                            <input type="number" name="wickets" value="${player.wickets || 0}" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Matches Played</label>
+                            <input type="number" name="matches" value="${player.matches || 0}" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Highest Score</label>
+                            <input type="number" name="highestScore" value="${player.highestScore || 0}" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Strike Rate</label>
+                            <input type="number" name="strikeRate" value="${player.strikeRate || 0}" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Economy Rate</label>
+                            <input type="number" name="economy" value="${player.economy || 0}" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Catches</label>
+                            <input type="number" name="catches" value="${player.catches || 0}" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Stumpings</label>
+                            <input type="number" name="stumpings" value="${player.stumpings || 0}" min="0">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Update Player</button>
+                    </div>
+                </form>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function handleEditPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const placeholder = document.getElementById('editPhotoPlaceholder');
+                    placeholder.innerHTML = `<img src="${e.target.result}" class="photo-preview" alt="Player photo">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleEditPlayer(event, playerId) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            const playerIndex = samplePlayers.findIndex(p => p.id === playerId);
+            if (playerIndex === -1) return;
+
+            const runs = parseInt(formData.get('runs')) || 0;
+            const matches = parseInt(formData.get('matches')) || 1;
+            const average = runs > 0 && matches > 0 ? (runs / matches).toFixed(2) : 0;
+            
+            const photoImg = document.querySelector('#editPhotoPlaceholder .photo-preview');
+            
+            // Update player data
+            samplePlayers[playerIndex] = {
+                ...samplePlayers[playerIndex],
+                name: formData.get('name'),
+                role: formData.get('role'),
+                runs: runs,
+                wickets: parseInt(formData.get('wickets')) || 0,
+                matches: matches,
+                average: parseFloat(average),
+                highestScore: parseInt(formData.get('highestScore')) || 0,
+                strikeRate: parseFloat(formData.get('strikeRate')) || 0,
+                economy: parseFloat(formData.get('economy')) || 0,
+                catches: parseInt(formData.get('catches')) || 0,
+                stumpings: parseInt(formData.get('stumpings')) || 0,
+                image: photoImg ? photoImg.src : samplePlayers[playerIndex].image
+            };
+
+            saveToStorage();
+            loadPlayers();
+            closeModal();
+            showMessage('Player updated successfully!', 'success');
+        }
+
+        // Add Scorecard function
+        function showScorecardForm() {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <h2 class="modal-title">Add Team Scorecard</h2>
+                <div class="form-group">
+                    <label>Select Match</label>
+                    <select id="scorecardMatch" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                        <option value="">Choose a match...</option>
+                        ${sampleMatches.map(match => `
+                            <option value="${match.id}">${match.teams} - ${formatDate(match.date)}</option>
+                        `).join('')}
+                    </select>
+                </div>
+
+                <div id="playerScoreInputs" style="display: none;">
+                    <h3 style="margin: 1.5rem 0 1rem 0;">Player Performances</h3>
+                    <div class="scorecard-section">
+                        <table class="scorecard-table">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Runs</th>
+                                    <th>Balls</th>
+                                    <th>Wickets</th>
+                                    <th>Catches</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scorecardTableBody">
+                                ${samplePlayers.map(player => `
+                                    <tr>
+                                        <td><strong>${player.name}</strong></td>
+                                        <td><input type="number" name="runs_${player.id}" placeholder="0" style="width: 60px; padding: 0.3rem;"></td>
+                                        <td><input type="number" name="balls_${player.id}" placeholder="0" style="width: 60px; padding: 0.3rem;"></td>
+                                        <td><input type="number" name="wickets_${player.id}" placeholder="0" style="width: 60px; padding: 0.3rem;"></td>
+                                        <td><input type="number" name="catches_${player.id}" placeholder="0" style="width: 60px; padding: 0.3rem;"></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-primary" onclick="saveScorecard()">Save Scorecard</button>
+                </div>
+            `;
+            
+            // Add event listener for match selection
+            setTimeout(() => {
+                document.getElementById('scorecardMatch').addEventListener('change', function() {
+                    const playerInputs = document.getElementById('playerScoreInputs');
+                    if (this.value) {
+                        playerInputs.style.display = 'block';
+                    } else {
+                        playerInputs.style.display = 'none';
+                    }
+                });
+            }, 100);
+            
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function saveScorecard() {
+            const matchId = document.getElementById('scorecardMatch').value;
+            if (!matchId) {
+                showMessage('Please select a match first!', 'error');
+                return;
+            }
+
+            const match = sampleMatches.find(m => m.id == matchId);
+            if (!match) return;
+
+            // Save scorecard data to each player
+            samplePlayers.forEach(player => {
+                const runs = document.querySelector(`input[name="runs_${player.id}"]`)?.value;
+                const balls = document.querySelector(`input[name="balls_${player.id}"]`)?.value;
+                const wickets = document.querySelector(`input[name="wickets_${player.id}"]`)?.value;
+                const catches = document.querySelector(`input[name="catches_${player.id}"]`)?.value;
+
+                if (runs || balls || wickets || catches) {
+                    if (!player.matchScores) {
+                        player.matchScores = [];
+                    }
+                    
+                    // Remove existing entry for this match if any
+                    player.matchScores = player.matchScores.filter(score => score.matchId !== matchId);
+                    
+                    // Add new entry
+                    player.matchScores.push({
+                        matchId: matchId,
+                        match: match.teams,
+                        date: formatDate(match.date),
+                        runs: runs ? parseInt(runs) : undefined,
+                        balls: balls ? parseInt(balls) : undefined,
+                        wickets: wickets ? parseInt(wickets) : undefined,
+                        catches: catches ? parseInt(catches) : undefined
+                    });
+                }
+            });
+
+            saveToStorage();
+            closeModal();
+            showMessage('Scorecard saved successfully!', 'success');
+        }
+    </script>
+</body>
+</html>
+
