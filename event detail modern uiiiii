@@ -1,0 +1,982 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - Founder Institute Dhaka Graduate Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
+        }
+
+        .notification {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification:hover {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .event-section {
+            background: white;
+        }
+
+        .event-banner {
+            position: relative;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .event-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .event-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 30px;
+        }
+
+        .event-badge {
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .event-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .share-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .facebook { background: #3b5998; color: white; }
+        .twitter { background: #1da1f2; color: white; }
+        .linkedin { background: #0077b5; color: white; }
+
+        .event-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .attendees {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .attendee-avatars {
+            display: flex;
+            margin-left: -10px;
+        }
+
+        .attendee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid white;
+            margin-left: -10px;
+        }
+
+        .attendee-count {
+            margin-left: 10px;
+            color: #666;
+        }
+
+        .event-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 30px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 30px;
+        }
+
+        .tab-button {
+            padding: 15px 0;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: #e74c3c;
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e74c3c;
+            border-radius: 2px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .schedule-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .schedule-item:hover {
+            border-color: #e74c3c;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .schedule-time {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .schedule-details h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .schedule-speaker {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .schedule-duration {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .speaker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .speaker-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .speaker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .speaker-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+        }
+
+        .speaker-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .speaker-title {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .sponsor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .sponsor-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sponsor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-logo {
+            width: 100px;
+            height: 60px;
+            margin: 0 auto 15px;
+            object-fit: contain;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            height: fit-content;
+        }
+
+        .edit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+        }
+
+        .attendee-stats {
+            margin-bottom: 25px;
+        }
+
+        .stats-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+
+        .stats-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats-value {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .event-tags {
+            margin-bottom: 25px;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .price-section {
+            margin-bottom: 25px;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .price-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .price-value {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 18px;
+        }
+
+        .booking-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            background: #e74c3c;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #c0392b;
+        }
+
+        .quantity-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .quantity-display {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .price-display {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 16px;
+        }
+
+        .book-now-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .book-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+        }
+
+        .location-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .location-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .map-container {
+            height: 150px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .location-details {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab-buttons {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .speaker-grid, .sponsor-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Party Pipes</div>
+            <div class="user-profile">
+                <div class="notification">🔔</div>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9224d44f-6c89-46e3-9c44-a4b79d45490c.png" alt="User profile avatar showing a professional headshot" class="profile-avatar">
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="event-section">
+                <div class="event-banner">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d36f3537-40da-485f-85c4-3a9b2d66a3fe.png" alt="Vibrant digital art background with flowing colorful gradients from red to orange to yellow, creating an energetic and dynamic atmosphere for a tech startup event">
+                    <div class="event-overlay">
+                        <div class="event-badge">Paid</div>
+                    </div>
+                </div>
+
+                <div class="event-meta">
+                    <div class="event-date">7th Mar, 2019 | 6:30 AM</div>
+                    <div class="share-buttons">
+                        <span>Share:</span>
+                        <button class="share-btn facebook">f</button>
+                        <button class="share-btn twitter">t</button>
+                        <button class="share-btn linkedin">in</button>
+                    </div>
+                </div>
+
+                <h1 class="event-title">Founder Institute Dhaka Graduate Showcase & Networking Event</h1>
+
+                <div class="attendees">
+                    <div class="attendee-avatars">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8459827f-dd0b-4ebb-8528-36657e30f016.png" alt="Event attendee profile picture showing diverse professional individual" class="attendee-avatar">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a8aeb95e-e374-4112-9183-1e5dbf9dca56.png" alt="Event attendee profile picture showing diverse professional individual" class="attendee-avatar">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e043ab21-095b-4dd4-b682-88946e62fccf.png" alt="Event attendee profile picture showing diverse professional individual" class="attendee-avatar">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/80d7ff71-2b82-444b-9eb0-3fbd096b5248.png" alt="Event attendee profile picture showing diverse professional individual" class="attendee-avatar">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c3be5e4c-f1a8-4d15-8fb5-7f45ec01897a.png" alt="Event attendee profile picture showing diverse professional individual" class="attendee-avatar">
+                    </div>
+                    <div class="attendee-count">+47 others attending</div>
+                </div>
+
+                <div class="event-description">
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomized words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.</p>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="details">Details</button>
+                        <button class="tab-button" data-tab="speakers">Speakers</button>
+                        <button class="tab-button" data-tab="sponsors">Sponsors</button>
+                        <button class="tab-button" data-tab="sessions">Sessions</button>
+                    </div>
+                </div>
+
+                <div class="tab-content active" id="details">
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>9:00</div>
+                            <div>AM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Opening ceremony</h4>
+                            <div class="schedule-speaker">By Gala Bachmann</div>
+                            <div class="schedule-duration">9:00 AM - 9:30 AM</div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>9:30</div>
+                            <div>AM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Principles of User Interface design</h4>
+                            <div class="schedule-speaker">By Erika Lebovskyte</div>
+                            <div class="schedule-duration">9:30 AM - 10:30 AM</div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>10:45</div>
+                            <div>AM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Case Study - scratch to final</h4>
+                            <div class="schedule-speaker">By Zhanna Panatyuk</div>
+                            <div class="schedule-duration">10:45 AM - 12:45 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>12:45</div>
+                            <div>PM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Lunch Break</h4>
+                            <div class="schedule-duration">12:45 PM - 2:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="speakers">
+                    <div class="speaker-grid">
+                        <div class="speaker-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/17ed951d-7910-4983-a064-8e38892dc4d5.png" alt="Professional headshot of keynote speaker, smiling woman in business attire" class="speaker-avatar">
+                            <div class="speaker-name">Sarah Johnson</div>
+                            <div class="speaker-title">CEO, TechStart Inc.</div>
+                        </div>
+                        <div class="speaker-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6975482d-388e-45b7-9594-6b2092daf513.png" alt="Professional headshot of keynote speaker, confident man in suit and tie" class="speaker-avatar">
+                            <div class="speaker-name">Michael Chen</div>
+                            <div class="speaker-title">CTO, Innovation Labs</div>
+                        </div>
+                        <div class="speaker-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bef2d96a-197a-4d1f-ab86-24808fa8c29d.png" alt="Professional headshot of keynote speaker, professional woman with glasses" class="speaker-avatar">
+                            <div class="speaker-name">Emily Rodriguez</div>
+                            <div class="speaker-title">Founder, StartupHub</div>
+                        </div>
+                        <div class="speaker-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/36955868-1711-48bc-8ffc-5332c00a863b.png" alt="Professional headshot of keynote speaker, young entrepreneur in casual business wear" class="speaker-avatar">
+                            <div class="speaker-name">David Kim</div>
+                            <div class="speaker-title">Director, Venture Capital</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="sponsors">
+                    <div class="sponsor-grid">
+                        <div class="sponsor-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/eeeb7254-516b-4465-b63f-25972f899b8e.png" alt="Modern tech company logo with clean typography and geometric design elements" class="sponsor-logo">
+                            <div class="sponsor-name">TechCorp</div>
+                        </div>
+                        <div class="sponsor-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d496efc6-e6e6-4b65-8252-7376af468df1.png" alt="Professional financial services logo with elegant corporate branding" class="sponsor-logo">
+                            <div class="sponsor-name">InnovateFund</div>
+                        </div>
+                        <div class="sponsor-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3b96d4a4-5a02-4f6b-9b38-cf82b90aa2f2.png" alt="Creative startup accelerator logo with bold modern design" class="sponsor-logo">
+                            <div class="sponsor-name">StartupBoost</div>
+                        </div>
+                        <div class="sponsor-card">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/06e324af-6fe2-4e2b-bf9a-bf603312f4f5.png" alt="Global venture capital logo with international corporate identity" class="sponsor-logo">
+                            <div class="sponsor-name">Global Ventures</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="sessions">
+                    <div class="booking-controls">
+                        <div style="font-weight: bold; color: #333;">Select Tickets:</div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="decreaseQuantity()">−</button>
+                            <span class="quantity-display" id="quantity">1</span>
+                            <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                        </div>
+                        <div class="price-display" id="totalPrice">$50</div>
+                    </div>
+                    
+                    <button class="book-now-btn" onclick="bookNow()">Book Now</button>
+                    
+                    <div style="margin: 20px 0; border-top: 2px solid #f0f0f0; padding-top: 20px;">
+                        <h3 style="margin-bottom: 15px; color: #333;">Session Schedule</h3>
+                    </div>
+
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>2:00</div>
+                            <div>PM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Scaling Your Startup: Lessons from Silicon Valley</h4>
+                            <div class="schedule-speaker">By Sarah Johnson</div>
+                            <div class="schedule-duration">2:00 PM - 3:00 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>3:15</div>
+                            <div>PM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Building MVP in 30 Days</h4>
+                            <div class="schedule-speaker">By Michael Chen</div>
+                            <div class="schedule-duration">3:15 PM - 4:15 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>4:30</div>
+                            <div>PM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Funding Your Dream: Investor Pitch Workshop</h4>
+                            <div class="schedule-speaker">By Emily Rodriguez</div>
+                            <div class="schedule-duration">4:30 PM - 5:30 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <div>5:45</div>
+                            <div>PM</div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Networking & Closing Ceremony</h4>
+                            <div class="schedule-duration">5:45 PM - 7:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <button class="edit-btn">Edit event</button>
+
+                <div class="attendee-stats">
+                    <div class="stats-title">Event Statistics</div>
+                    <div class="stats-item">
+                        <span class="stats-label">Total Attendees</span>
+                        <span class="stats-value">827</span>
+                    </div>
+                    <div class="stats-item">
+                        <span class="stats-label">Available Seats</span>
+                        <span class="stats-value">173</span>
+                    </div>
+                    <div class="stats-item">
+                        <span class="stats-label">Speakers</span>
+                        <span class="stats-value">8</span>
+                    </div>
+                    <div class="stats-item">
+                        <span class="stats-label">Sessions</span>
+                        <span class="stats-value">12</span>
+                    </div>
+                </div>
+
+                <div class="event-tags">
+                    <div class="stats-title">Event Tags</div>
+                    <div class="tags-container">
+                        <span class="tag">Startup</span>
+                        <span class="tag">Networking</span>
+                        <span class="tag">Technology</span>
+                        <span class="tag">Innovation</span>
+                        <span class="tag">Business</span>
+                        <span class="tag">Entrepreneurship</span>
+                    </div>
+                </div>
+
+                <div class="price-section">
+                    <div class="stats-title">Pricing</div>
+                    <div class="price-item">
+                        <span class="price-label">Early Bird</span>
+                        <span class="price-value">$40</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Regular</span>
+                        <span class="price-value">$50</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">VIP Access</span>
+                        <span class="price-value">$75</span>
+                    </div>
+                </div>
+
+                <div class="chart-section">
+                    <div class="chart-title">Fundrise</div>
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="font-size: 24px; font-weight: bold; color: #333;">$23,763</div>
+                        <div style="color: #666; font-size: 14px;">$45,000</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #666; font-size: 12px;">
+                        <span>Today sale: $980</span>
+                        <span>Last 7 days: $6690</span>
+                    </div>
+                </div>
+
+                <div class="location-section">
+                    <div class="location-title">Location & Time</div>
+                    <div class="map-container">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ca7808e2-ebe4-403e-9dd1-8e1fc88e5ba3.png" alt="Interactive map showing event location with pin marker at Dhaka, Bangladesh venue coordinates">
+                    </div>
+                    <div class="location-details">
+                        <strong>ULAB Campus B Seminar Room</strong><br>
+                        House 56, Road 7/A, Satmasjid Road<br>
+                        Dhanmondi R/A,<br>
+                        Dhaka, Bangladesh - 1207
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Animate schedule items on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all schedule items
+            document.querySelectorAll('.schedule-item').forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(30px)';
+                item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(item);
+            });
+
+            // Animate speaker and sponsor cards
+            document.querySelectorAll('.speaker-card, .sponsor-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // Interactive hover effects for buttons
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Share button functionality
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const platform = this.classList[1]; // facebook, twitter, linkedin
+                    const url = window.location.href;
+                    const title = 'Founder Institute Dhaka Graduate Showcase & Networking Event';
+                    
+                    let shareUrl = '';
+                    switch(platform) {
+                        case 'facebook':
+                            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                            break;
+                        case 'twitter':
+                            shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+                            break;
+                        case 'linkedin':
+                            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+                            break;
+                    }
+                    
+                    if (shareUrl) {
+                        window.open(shareUrl, '_blank', 'width=600,height=400');
+                    }
+                });
+            });
+        });
+
+        // Booking functionality
+        let quantity = 1;
+        const pricePerTicket = 50;
+
+        function updateDisplay() {
+            document.getElementById('quantity').textContent = quantity;
+            document.getElementById('totalPrice').textContent = '
+</body>
+</html>
+
