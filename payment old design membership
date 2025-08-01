@@ -1,0 +1,213 @@
+<div id="i4y93z" class="row sectionBlockLayout text-start" style="display: flex; flex-wrap: wrap; margin: 0px; min-height: auto; padding: 8px;">
+  <div id="i6b7a5" class="container" style="padding: 0px; display: flex; flex-wrap: wrap;"><div class="col-lg-12 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 250px;"><div id="WebFormControl_b9ac6978614c4dd9928c69875ff737c4">
+	<div class="row"><div id="WebFormControl_b9ac6978614c4dd9928c69875ff737c4_ProgressIndicator">
+		<ol class="progress list-group top"><li class="list-group-item active">Payment Process</li></ol>
+	<div id="Payment" process="" class="sr-only" aria-live="assertive">Payment Process</div></div><div id="WebFormPanel" class="crmEntityFormView" role="form" aria-label="Basic Form">
+		<div id="EntityFormView" class="form-readonly entity-form" readonly="readonly">
+			<input type="hidden" name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityName" id="EntityFormView_EntityName" value="sc_membershipplan"><input type="hidden" name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityID" id="EntityFormView_EntityID" value="4a84a8f5-5669-f011-bec1-7c1e521be83c"><input type="hidden" name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityState" id="EntityFormView_EntityState" value="0"><input type="hidden" name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityStatus" id="EntityFormView_EntityStatus" value="1"><span id="EntityFormView_EntityLayoutConfig" data-form-layout="{&quot;EntityName&quot;:&quot;sc_membershipplan&quot;,&quot;Id&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;SubmitActionLink&quot;:{&quot;Modal&quot;:{},&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;b925a954-19f0-4790-b9a5-0264fec208f5&quot;},&quot;PreviousActionLink&quot;:{&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;0b8e0dea-8d43-4ca6-ae47-2130b8c96d94&quot;},&quot;NextActionLink&quot;:{&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;88a38aba-3a3f-4c31-9d19-5dc0758d37de&quot;},&quot;CreateRelatedRecordActionLink&quot;:{&quot;Modal&quot;:{},&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;1bf3a1b7-1392-415c-8fb6-c05fa434d423&quot;},&quot;EnableEntityPermissions&quot;:false,&quot;LanguageCode&quot;:0,&quot;EnableActions&quot;:false,&quot;ShowActionButtonContainer&quot;:0,&quot;AutoGenerateSteps&quot;:false}"></span><div id="ValidationSummaryEntityFormView" class="validation-summary alert alert-error alert-danger alert-block" readonly="readonly" style="display:none;" tabindex="0">
+
+			</div><div class="tab clearfix"><div class="tab-column" style="width:100%;"><div><fieldset aria-label="General" aria-labelledby="Payment Process"><table role="presentation" class="section"><colgroup></colgroup><tbody><tr>
+				<td colspan="1" rowspan="1" class="clearfix cell text form-control-cell"><div class="table-info required"><label for="sc_membershipplan_id" id="sc_membershipplan_id_label" class="field-label" readonly="readonly">Membership Plan ID</label><div class="validators"><span id="RequiredFieldValidatorsc_membershipplan_id" readonly="readonly" style="display:none;">*</span><span id="MaximumLengthValidatorsc_membershipplan_id" readonly="readonly" style="visibility:hidden;">*</span></div></div><div class="control"><input name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_membershipplan_id" type="text" value="IND-PLAN-007" maxlength="850" id="sc_membershipplan_id" class="text form-control " onchange="setIsDirty(this.id);" aria-required="true" title="Membership Plan ID is a required field." aria-label="Membership Plan ID" readonly="readonly" onkeypress="javascript:return LengthError(this, event);"></div></td>
+				<td class="cell zero-cell"></td>
+			</tr>
+			<tr>
+				<td colspan="1" rowspan="1" class="clearfix cell lookup form-control-cell"><div class="table-info"><label id="sc_product_label" class="field-label" readonly="readonly">Product</label><div class="validators"></div></div><div class="control" tabindex="0"><div><input name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_product_name" type="text" value="Platinum Membership" id="sc_product_name" disabled="disabled" class="aspNetDisabled text form-control lookup form-control " readonly="readonly" aria-readonly="true" aria-labelledby="sc_product_label" aria-label="Product" aria-disabled="true"><input name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_product" type="hidden" id="sc_product" value="ebad0d0b-0f6a-f011-bec2-6045bdec3286"><input name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_product_entityname" type="hidden" id="sc_product_entityname" value="product"></div></div></td>
+				<td class="cell zero-cell"></td>
+			</tr>
+			<tr>
+				<td colspan="1" rowspan="1" class="clearfix cell money form-control-cell"><div class="table-info"><label for="sc_price" id="sc_price_label" class="field-label" readonly="readonly">Price</label><div class="validators"><span id="RangeValidatorsc_price" readonly="readonly" style="visibility:hidden;">*</span></div></div><div class="control"><div class="input-group"><span class="input-group-text">₹</span><input name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_price" type="text" value="50.00" id="sc_price" class="text money form-control " onchange="setIsDirty(this.id);" readonly="readonly"></div></div></td>
+				<td class="cell zero-cell"></td>
+			</tr>
+			<tr>
+				<td colspan="1" rowspan="1" class="clearfix cell"></td>
+				<td class="cell zero-cell"></td>
+			</tr>
+			</tbody></table></fieldset></div></div></div>
+		</div><div class="payment-elements"><div id="payment-element" class="StripeElement" style="max-width: 486px; padding: 0px 28px 20px;"><div class="__PrivateStripeElement" style="margin: -4px 0px !important; padding: 0px !important; border: none !important; display: block !important; background: transparent !important; position: relative !important; opacity: 1 !important; clear: both !important; transition: height 0.35s !important;"><iframe name="__privateStripeFrame8934" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *; publickey-credentials-get *" src="https://js.stripe.com/v3/elements-inner-payment-5722bde9ba88bbade4380643e98e5952.html#__shared_params__[version]=v3&amp;wait=false&amp;rtl=false&amp;publicOptions[layout]=tabs&amp;elementsInitSource=stripe.elements&amp;elementId=payment-e35b5b1d-7f40-47a1-885f-d35710fde25e&amp;componentName=payment&amp;keyMode=test&amp;apiKey=pk_test_51RqwcIPrVHrSQJ720eMkbwW0gaLRDVv8oAaz6UuRWhVMn6Fs5DXQTkBDEwDRz6iJ50z6fjD3m3IGl8CgAbiJMJXu007hVz5XUu&amp;frameMessagingStrategy=direct&amp;referrer=https%3A%2F%2Fdemov1.powerappsportals.com%2Fpayment_processing%2F%3Fid%3Dfd873a9f-d26e-f011-bec2-6045bdec3614%26membershipPlanID%3D4a84a8f5-5669-f011-bec1-7c1e521be83c&amp;controllerId=__privateStripeController8931" title="Secure payment input frame" style="border: 0px !important; margin: -4px; padding: 0px !important; width: calc(100% + 8px); min-width: 100% !important; overflow: hidden !important; display: block !important; user-select: none !important; transform: translate(0px) !important; color-scheme: light only !important; height: 281.583px; opacity: 1; transition: height 0.35s, opacity 0.4s 0.1s;"></iframe></div></div></div><div id="PaymentMessageSummary" class="validation-summary alert alert-error alert-danger alert-block" style="visibility:hidden;" tabindex="0"></div><div>
+
+
+
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script type="text/javascript" id="stripeInlineScript">
+$(document).ready(function () {
+    async function initializeStripe() {
+        try {
+            var blockPerfTracker = ClientLogWrapper.getLogger().getBlockPerfTracker();
+            blockPerfTracker.start("RenderPaymentElements", "Payment_Provider");
+            const appearance =
+            {
+                theme: 'stripe',
+                 rules: {
+                     '.Tab':
+                         {
+                         backgroundColor: getCssPropertyValueFromVariable('--portalThemeColor7'),
+                         color: getCssPropertyValueFromVariable('--portalThemeOnColor7')
+                     },
+                     '.Tab:hover' :
+                         {
+                         backgroundColor: getCssPropertyValueFromVariable('--portalThemeColor7'),
+                         color: getCssPropertyValueFromVariable('--portalThemeOnColor7')
+                     },
+                     '.Tab:focus' :
+                         {
+                         backgroundColor: getCssPropertyValueFromVariable('--portalThemeColor7'),
+                         color: getCssPropertyValueFromVariable('--portalThemeOnColor7')
+                     },
+                     '.Tab:active': {
+                         backgroundColor: getCssPropertyValueFromVariable('--portalThemeColor7'),
+                         color: getCssPropertyValueFromVariable('--portalThemeOnColor7')
+                     },
+                     '.Tab--selected': {
+                        border: '1px solid #2f5fef',
+                        boxShadow:'none'
+                     },
+                     '.Tab--selected:hover': {
+                        border: '1px solid #2f5fef',
+                        boxShadow:'none'
+                     },
+                     '.Tab--selected:focus': {
+                        border: '1px solid #2f5fef',
+                        boxShadow:'none'
+                     },
+                     '.Tab--selected:active': {
+                        border: '1px solid #2f5fef',
+                        boxShadow:'none'
+                     },
+                     '.Input': {
+                         border: '1px solid var(--colorText)',
+                         borderRadius: 0,
+                         fontSize: '15px'
+                     },
+                     '.Input:focus': {
+                         border: '1px solid #114975',
+                         boxShadow: 'inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(17, 73, 117, .6)',
+                         fontSize: '15px'
+                     },
+                     '.Label': {
+                          display: 'inline-block',
+                          maxWidth: '100%',
+                          marginBottom: '5px',
+                          fontWeight: 'bold',
+                          color: getCssPropertyValueFromVariable("--portalThemeColor8")
+                     },
+                     '.SecondaryLink:focus': {
+                         outline: '1px solid #484848',
+                         boxShadow: 'inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(72, 72, 72, .6)',
+                         fontSize: '15px'
+                     },
+                     '.Link:focus': {
+                         outline: '1px solid #484848',
+                         boxShadow: 'inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(72, 72, 72, .6)',
+                         fontSize: '15px'
+                     }, 
+                 },
+                variables: {
+                    colorPrimary: getCssPropertyValueFromVariable("--portalThemeColor8"),
+                    colorBackground: getCssPropertyValueFromVariable('--portalThemeColor7'),
+                    colorPrimaryText: getCssPropertyValueFromVariable("--portalThemeOnColor7"),
+                    colorBackgroundText: getCssPropertyValueFromVariable('--portalThemeOnColor7'),
+                    colorText: getCssPropertyValueFromVariable('--portalThemeOnColor7'),
+                    colorTextSecondary: getCssPropertyValueFromVariable('--portalThemeOnColor7'),
+                    colorDanger: '#A80000',
+                    borderRadius: '2px',
+                    fontFamily: '"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSizeSm: '15px',
+                    fontSizeXs: '14px'
+                }
+            };
+
+            elements = stripe.elements({ appearance, clientSecret: 'pi_3RrKgEPrVHrSQJ722XCEilFU_secret_YnRUlXKg41JwRooyuLMJQlc6R' });
+
+            const paymentElementOptions =
+            {
+                layout: "tabs",
+            };
+
+            document.querySelector("#payment-element").style.maxWidth = '486px';
+            document.querySelector("#payment-element").style.padding = '0 28px 20px';
+            const paymentElement = elements.create("payment", paymentElementOptions);
+            paymentElement.mount("#payment-element");
+        }
+        finally {
+            blockPerfTracker.stop();
+        }
+    }
+
+    window.handleStripePayment = async () => {
+        document.querySelector("#PaymentMessageSummary").style.visibility = "hidden";
+        setLoading(true);
+        var buttonName = document.querySelector("#PaymentButton").getAttribute('name');
+        var event = window.event;
+        try {
+            var blockPerfTracker = ClientLogWrapper.getLogger().getBlockPerfTracker();
+            blockPerfTracker.start("HandleStripePayment", "Payment_Provider");
+            const { error, paymentIntent } = await stripe.confirmPayment({
+                elements,
+                confirmParams:
+                {
+                    return_url: window.location.href
+                },
+                redirect: 'if_required'
+            });
+
+            if (error) {
+                ClientLogWrapper.getLogger().traceError("Stripe Payment Failed- " + error?.message, "Payment_Provider");
+                setLoading(false);
+                document.querySelector("#PaymentMessageSummary").style.visibility = "visible";
+                document.querySelector("#PaymentMessageSummary").innerHTML = "<span role='presentation' style='vertical-align: middle;'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'><path d = 'M9.56195 3.26181C9.75109 2.91271 10.2521 2.91273 10.4412 3.26186L16.9418 15.2628C17.1222 15.5959 16.881 16.0009 16.5021 16.0009H3.49942C3.12051 16.0009 2.8793 15.5959 3.0598 15.2627L9.56195 3.26181ZM11.3205 2.78557C10.7532 1.73821 9.25014 1.73813 8.68271 2.78544L2.18056 14.7864C1.63905 15.7858 2.3627 17.0009 3.49942 17.0009H16.5021C17.6388 17.0009 18.3624 15.786 17.821 14.7865L11.3205 2.78557ZM10.5 7.50023C10.5 7.22409 10.2761 7.00023 9.99996 7.00023C9.72382 7.00023 9.49996 7.22409 9.49996 7.50023V11.5002C9.49996 11.7764 9.72382 12.0002 9.99996 12.0002C10.2761 12.0002 10.5 11.7764 10.5 11.5002V7.50023ZM10.75 13.7502C10.75 14.1644 10.4142 14.5002 9.99996 14.5002C9.58575 14.5002 9.24996 14.1644 9.24996 13.7502C9.24996 13.336 9.58575 13.0002 9.99996 13.0002C10.4142 13.0002 10.75 13.336 10.75 13.7502Z' fill ='#D83B01'></path></svg></span>" + error?.message;
+            }
+            else if (paymentIntent) {
+                 window.event = event;
+                 var message = '';
+                 if(paymentIntent.status === "succeeded")
+                 {
+                    message = 'Successful Payment'
+                    ClientLogWrapper.getLogger().traceInfo("Stripe Payment Succeeded", "Payment_Provider");
+                 }
+                 __doPostBack(buttonName, message);
+            }
+        }
+        catch (error) {
+            setLoading(false);
+            document.querySelector("#PaymentMessageSummary").style.visibility = "visible";
+            document.querySelector("#PaymentMessageSummary").innerHTML = "<span role='presentation' style='vertical-align: middle;'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'><path d = 'M9.56195 3.26181C9.75109 2.91271 10.2521 2.91273 10.4412 3.26186L16.9418 15.2628C17.1222 15.5959 16.881 16.0009 16.5021 16.0009H3.49942C3.12051 16.0009 2.8793 15.5959 3.0598 15.2627L9.56195 3.26181ZM11.3205 2.78557C10.7532 1.73821 9.25014 1.73813 8.68271 2.78544L2.18056 14.7864C1.63905 15.7858 2.3627 17.0009 3.49942 17.0009H16.5021C17.6388 17.0009 18.3624 15.786 17.821 14.7865L11.3205 2.78557ZM10.5 7.50023C10.5 7.22409 10.2761 7.00023 9.99996 7.00023C9.72382 7.00023 9.49996 7.22409 9.49996 7.50023V11.5002C9.49996 11.7764 9.72382 12.0002 9.99996 12.0002C10.2761 12.0002 10.5 11.7764 10.5 11.5002V7.50023ZM10.75 13.7502C10.75 14.1644 10.4142 14.5002 9.99996 14.5002C9.58575 14.5002 9.24996 14.1644 9.24996 13.7502C9.24996 13.336 9.58575 13.0002 9.99996 13.0002C10.4142 13.0002 10.75 13.336 10.75 13.7502Z' fill ='#D83B01'></path></svg></span>" + error?.message;
+        }
+        finally {
+            blockPerfTracker.stop();
+        }
+    }
+
+    function setLoading(isLoading) {
+        var inputs = document.getElementsByTagName("input");
+
+        for (var i = 0, j = inputs.length; i < j; i++) {
+            if (inputs[i].type === 'submit' || inputs[i].type === 'button') {
+                inputs[i].disabled = isLoading;
+            }
+        }
+
+        if (isLoading) {
+            document.querySelector("#PaymentButton").value = 'Processing...';
+        }
+        else {
+            document.querySelector("#PaymentButton").value = 'Pay Now';
+        }
+    }
+
+    function getCssPropertyValueFromVariable(variableName) {
+        var computedStyles = getComputedStyle(rootCss);
+        return computedStyles.getPropertyValue(variableName);
+    }
+
+    var rootCss = document.querySelector(':root');
+    var stripe = Stripe('pk_test_51RqwcIPrVHrSQJ720eMkbwW0gaLRDVv8oAaz6UuRWhVMn6Fs5DXQTkBDEwDRz6iJ50z6fjD3m3IGl8CgAbiJMJXu007hVz5XUu');
+    initializeStripe();
+});
+</script></div><div class="actions"><div class="col-md-6 clearfix">
+			<div role="group" class="btn-group entity-action-button"><input type="button" name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$PaymentButton" value="Pay Now" onclick="javascript:var paymentPromise = window.handleStripePayment(); return false;WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$PaymentButton&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))" id="PaymentButton" class="btn btn-primary button next submit-btn" nonactionlinkbutton="true"></div>
+		</div></div>
+	</div></div>
+</div></div></div>
+</div>
