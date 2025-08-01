@@ -1,0 +1,161 @@
+i have payment screen design with stripe integration.now design is dynamically crated from stripe.i will give you html ,you have well design it without changing html by adding css to html by only adding css.note this you cant change html.i am also giving you image for refrence that currenly it is looking like this.
+
+html
+<div id="i4y93z" class="row sectionBlockLayout text-start"
+    style="display: flex; flex-wrap: wrap; margin: 0px; min-height: auto; padding: 8px;">
+    <div id="i6b7a5" class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
+        <div class="col-lg-12 columnBlockLayout"
+            style="flex-grow: 1; display: flex; flex-direction: column; min-width: 250px;">
+            <div id="WebFormControl_b9ac6978614c4dd9928c69875ff737c4">
+                <div class="row">
+                    <div id="WebFormControl_b9ac6978614c4dd9928c69875ff737c4_ProgressIndicator">
+                        <ol class="progress list-group top">
+                            <li class="list-group-item active">Payment Process</li>
+                        </ol>
+                        <div id="Payment" process="" class="sr-only" aria-live="assertive">Payment Process</div>
+                    </div>
+                    <div id="WebFormPanel" class="crmEntityFormView" role="form" aria-label="Basic Form">
+                        <div id="EntityFormView" class="form-readonly entity-form" readonly="readonly">
+                            <input type="hidden"
+                                name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityName"
+                                id="EntityFormView_EntityName" value="sc_membershipplan"><input type="hidden"
+                                name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityID"
+                                id="EntityFormView_EntityID" value="4a84a8f5-5669-f011-bec1-7c1e521be83c"><input
+                                type="hidden"
+                                name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityState"
+                                id="EntityFormView_EntityState" value="0"><input type="hidden"
+                                name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$EntityFormView_EntityStatus"
+                                id="EntityFormView_EntityStatus" value="1"><span id="EntityFormView_EntityLayoutConfig"
+                                data-form-layout="{&quot;EntityName&quot;:&quot;sc_membershipplan&quot;,&quot;Id&quot;:&quot;00000000-0000-0000-0000-000000000000&quot;,&quot;SubmitActionLink&quot;:{&quot;Modal&quot;:{},&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;b925a954-19f0-4790-b9a5-0264fec208f5&quot;},&quot;PreviousActionLink&quot;:{&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;0b8e0dea-8d43-4ca6-ae47-2130b8c96d94&quot;},&quot;NextActionLink&quot;:{&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;88a38aba-3a3f-4c31-9d19-5dc0758d37de&quot;},&quot;CreateRelatedRecordActionLink&quot;:{&quot;Modal&quot;:{},&quot;Type&quot;:0,&quot;Enabled&quot;:false,&quot;ShowModal&quot;:0,&quot;FilterCriteriaId&quot;:&quot;1bf3a1b7-1392-415c-8fb6-c05fa434d423&quot;},&quot;EnableEntityPermissions&quot;:false,&quot;LanguageCode&quot;:0,&quot;EnableActions&quot;:false,&quot;ShowActionButtonContainer&quot;:0,&quot;AutoGenerateSteps&quot;:false}"></span>
+                            <div id="ValidationSummaryEntityFormView"
+                                class="validation-summary alert alert-error alert-danger alert-block"
+                                readonly="readonly" style="display:none;" tabindex="0">
+
+                            </div>
+                            <div class="tab clearfix">
+                                <div class="tab-column" style="width:100%;">
+                                    <div>
+                                        <fieldset aria-label="General" aria-labelledby="Payment Process">
+                                            <table role="presentation" class="section">
+                                                <colgroup></colgroup>
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="1" rowspan="1"
+                                                            class="clearfix cell text form-control-cell">
+                                                            <div class="table-info required"><label
+                                                                    for="sc_membershipplan_id"
+                                                                    id="sc_membershipplan_id_label" class="field-label"
+                                                                    readonly="readonly">Membership Plan ID</label>
+                                                                <div class="validators"><span
+                                                                        id="RequiredFieldValidatorsc_membershipplan_id"
+                                                                        readonly="readonly"
+                                                                        style="display:none;">*</span><span
+                                                                        id="MaximumLengthValidatorsc_membershipplan_id"
+                                                                        readonly="readonly"
+                                                                        style="visibility:hidden;">*</span></div>
+                                                            </div>
+                                                            <div class="control"><input
+                                                                    name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_membershipplan_id"
+                                                                    type="text" value="IND-PLAN-007" maxlength="850"
+                                                                    id="sc_membershipplan_id" class="text form-control "
+                                                                    onchange="setIsDirty(this.id);" aria-required="true"
+                                                                    title="Membership Plan ID is a required field."
+                                                                    aria-label="Membership Plan ID" readonly="readonly"
+                                                                    onkeypress="javascript:return LengthError(this, event);">
+                                                            </div>
+                                                        </td>
+                                                        <td class="cell zero-cell"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="1" rowspan="1"
+                                                            class="clearfix cell lookup form-control-cell">
+                                                            <div class="table-info"><label id="sc_product_label"
+                                                                    class="field-label"
+                                                                    readonly="readonly">Product</label>
+                                                                <div class="validators"></div>
+                                                            </div>
+                                                            <div class="control" tabindex="0">
+                                                                <div><input
+                                                                        name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_product_name"
+                                                                        type="text" value="Platinum Membership"
+                                                                        id="sc_product_name" disabled="disabled"
+                                                                        class="aspNetDisabled text form-control lookup form-control "
+                                                                        readonly="readonly" aria-readonly="true"
+                                                                        aria-labelledby="sc_product_label"
+                                                                        aria-label="Product" aria-disabled="true"><input
+                                                                        name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_product"
+                                                                        type="hidden" id="sc_product"
+                                                                        value="ebad0d0b-0f6a-f011-bec2-6045bdec3286"><input
+                                                                        name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_product_entityname"
+                                                                        type="hidden" id="sc_product_entityname"
+                                                                        value="product"></div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="cell zero-cell"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="1" rowspan="1"
+                                                            class="clearfix cell money form-control-cell">
+                                                            <div class="table-info"><label for="sc_price"
+                                                                    id="sc_price_label" class="field-label"
+                                                                    readonly="readonly">Price</label>
+                                                                <div class="validators"><span
+                                                                        id="RangeValidatorsc_price" readonly="readonly"
+                                                                        style="visibility:hidden;">*</span></div>
+                                                            </div>
+                                                            <div class="control">
+                                                                <div class="input-group"><span
+                                                                        class="input-group-text">₹</span><input
+                                                                        name="ctl00$ContentContainer$WebFormControl_b9ac6978614c4dd9928c69875ff737c4$EntityFormView$sc_price"
+                                                                        type="text" value="50.00" id="sc_price"
+                                                                        class="text money form-control "
+                                                                        onchange="setIsDirty(this.id);"
+                                                                        readonly="readonly"></div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="cell zero-cell"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="1" rowspan="1" class="clearfix cell"></td>
+                                                        <td class="cell zero-cell"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-elements">
+                            <div id="payment-element" class="StripeElement"
+                                style="max-width: 486px; padding: 0px 28px 20px;">
+                                <div class="__PrivateStripeElement"
+                                    style="margin: -4px 0px !important; padding: 0px !important; border: none !important; display: block !important; background: transparent !important; position: relative !important; opacity: 1 !important; clear: both !important; transition: height 0.35s !important;">
+                                    <iframe name="__privateStripeFrame8934" frameborder="0" allowtransparency="true"
+                                        scrolling="no" role="presentation"
+                                        allow="payment *; publickey-credentials-get *"
+                                        src="https://js.stripe.com/v3/elements-inner-payment-5722bde9ba88bbade4380643e98e5952.html#__shared_params__[version]=v3&amp;wait=false&amp;rtl=false&amp;publicOptions[layout]=tabs&amp;elementsInitSource=stripe.elements&amp;elementId=payment-e35b5b1d-7f40-47a1-885f-d35710fde25e&amp;componentName=payment&amp;keyMode=test&amp;apiKey=pk_test_51RqwcIPrVHrSQJ720eMkbwW0gaLRDVv8oAaz6UuRWhVMn6Fs5DXQTkBDEwDRz6iJ50z6fjD3m3IGl8CgAbiJMJXu007hVz5XUu&amp;frameMessagingStrategy=direct&amp;referrer=https%3A%2F%2Fdemov1.powerappsportals.com%2Fpayment_processing%2F%3Fid%3Dfd873a9f-d26e-f011-bec2-6045bdec3614%26membershipPlanID%3D4a84a8f5-5669-f011-bec1-7c1e521be83c&amp;controllerId=__privateStripeController8931"
+                                        title="Secure payment input frame"
+                                        style="border: 0px !important; margin: -4px; padding: 0px !important; width: calc(100% + 8px); min-width: 100% !important; overflow: hidden !important; display: block !important; user-select: none !important; transform: translate(0px) !important; color-scheme: light only !important; height: 281.583px; opacity: 1; transition: height 0.35s, opacity 0.4s 0.1s;"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="PaymentMessageSummary"
+                            class="validation-summary alert alert-error alert-danger alert-block"
+                            style="visibility:hidden;" tabindex="0"></div>
+                        <div>
+
+
+
+
+                            <script src="https://js.stripe.com/v3/"></script>
+
+                     
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
